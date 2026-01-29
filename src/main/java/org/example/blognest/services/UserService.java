@@ -36,10 +36,10 @@ public class UserService {
         }
     }
 
-    public void deleteUser(User user){
+    public void deleteUser(int userId){
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            User u = session.get(User.class, user.getId());
+            User u = session.get(User.class, userId);
             if (u != null) {
                 session.delete(u);
             }

@@ -1,16 +1,12 @@
 package org.example.blognest.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
 public class User {
 
     @Id
@@ -41,6 +37,26 @@ public class User {
     // ✅ Owning side is Subscription
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Subscription subscription;
+
+
+    public User(Long id, String name, String email, String password, String role, List<Post> posts, List<Comment> comments, Subscription subscription) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.posts = posts;
+        this.comments = comments;
+        this.subscription = subscription;
+    }
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User() {}
 
     // Getters and setters
     public Long getId() { return id; }

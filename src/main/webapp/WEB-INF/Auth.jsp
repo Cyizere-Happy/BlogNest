@@ -11,12 +11,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
             rel="stylesheet">
     <style>
         :root {
-            --primary-color: #38b2ac;
-            --primary-dark: #2d8a8a;
+            --primary-color: #000000;
+            /* Black for BlogNest */
+            --primary-dark: #1a1a1a;
+            --secondary-color: #38b2ac;
+            /* Original teal for accents */
             --text-color: #2d3748;
             --text-light: #718096;
             --bg-light: #f7fafc;
@@ -27,8 +30,10 @@
         }
 
         .dark-theme {
-            --primary-color: #4fd1c5;
-            --primary-dark: #38b2ac;
+            --primary-color: #ffffff;
+            /* White for BlogNest */
+            --primary-dark: #f0f0f0;
+            --secondary-color: #4fd1c5;
             --text-color: #f7fafc;
             --text-light: #cbd5e0;
             --bg-light: #1a202c;
@@ -50,9 +55,8 @@
         }
 
         body {
-            font-family: 'Jost', sans-serif;
+            font-family: 'Outfit', 'Jost', sans-serif;
             background: var(--bg-light);
-            background-image: radial-gradient(circle at 10% 20%, rgba(56, 178, 172, 0.1) 0%, var(--bg-light) 90%);
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
@@ -139,7 +143,7 @@
         }
 
         .tab.active {
-            color: var(--primary-dark);
+            color: var(--secondary-color);
         }
 
         .tab.active::after {
@@ -149,7 +153,7 @@
             left: 0;
             width: 60%;
             height: 4px;
-            background-color: var(--primary-color);
+            background-color: var(--secondary-color);
             border-radius: 2px;
         }
 
@@ -172,7 +176,7 @@
         .input-group .icon {
             position: absolute;
             left: 1.2rem;
-            color: var(--primary-color);
+            color: var(--secondary-color);
             opacity: 0.7;
         }
 
@@ -194,7 +198,7 @@
         }
 
         .input-group input:focus {
-            border-color: var(--primary-color);
+            border-color: var(--secondary-color);
             box-shadow: 0 4px 15px rgba(56, 178, 172, 0.1);
         }
 
@@ -216,7 +220,7 @@
         }
 
         .btn-login {
-            background: var(--primary-color);
+            background: var(--secondary-color);
             color: white;
             border: none;
             padding: 0.9rem 4rem;

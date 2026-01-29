@@ -1,0 +1,255 @@
+/* Read Blog Page Styles */
+
+/* Base Layout */
+.read-blog-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1rem 5% 4rem;
+    /* Drastically reduced top padding */
+    display: grid;
+    grid-template-columns: 200px 1fr 220px;
+    /* Reduced Sidebar width to give content more space */
+    gap: 3rem;
+    /* Reduced gap to pull sidebar closer to left */
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Column 1: Hero Image */
+.hero-column {
+    position: sticky;
+    top: 8rem;
+    height: fit-content;
+}
+
+.article-hero-img {
+    width: 100%;
+    height: 300px;
+    /* Small, compact book-cover size */
+    background-color: #f7fafc;
+    border-radius: 8px;
+    /* Slightly sharper corners */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    /* Deep shadow like a book cover */
+    overflow: hidden;
+    position: relative;
+}
+
+.article-hero-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Column 2: Main Content Area */
+.article-content {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    /* Align text visually */
+}
+
+.article-header {
+    margin-bottom: 3rem;
+    text-align: left;
+}
+
+.article-category {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.article-title {
+    font-family: 'Jost', sans-serif;
+    /* Serif-like elegance */
+    font-size: 3.5rem;
+    font-weight: 300;
+    /* Light weight for elegance */
+    color: var(--primary-color);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+}
+
+/* Metadata Grid */
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    /* Auto width cols */
+    gap: 3rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+.meta-item h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+.meta-item p {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.dark-theme .meta-grid {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Article Body Text */
+.article-body {
+    font-family: 'Jost', sans-serif;
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    max-width: 90%;
+}
+
+.article-body p {
+    margin-bottom: 1.5rem;
+}
+
+.article-body h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    margin: 2.5rem 0 1rem;
+    font-weight: 700;
+}
+
+/* Sidebar "Bookshelf" Style */
+.blog-sidebar {
+    position: sticky;
+    top: 8rem;
+    height: fit-content;
+    padding-left: 2rem;
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme .blog-sidebar {
+    border-left-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    position: absolute;
+    left: -1rem;
+    top: 0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-light);
+    height: 200px;
+    text-align: right;
+}
+
+.sidebar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sidebar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-item:hover {
+    transform: translateX(-5px);
+}
+
+.sidebar-thumb {
+    width: 100px;
+    /* Small book-like width */
+    height: 140px;
+    background-color: var(--secondary-color);
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.3;
+}
+
+/* Comments Section */
+.comments-section {
+    margin-top: 6rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .comments-section {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.comments-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    background: transparent;
+    font-family: inherit;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    resize: vertical;
+    min-height: 120px;
+    color: var(--text-color);
+}
+
+.dark-theme .comment-form textarea {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+}
+
+.comment-form textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .read-blog-container {
+        grid-template-columns: 1fr;
+        padding-top: 6rem;
+    }
+
+    .blog-sidebar {
+        display: none;
+        /* Hide sidebar on mobile for focus */
+    }
+
+    .article-title {
+        font-size: 2.5rem;
+    }
+
+    .meta-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}

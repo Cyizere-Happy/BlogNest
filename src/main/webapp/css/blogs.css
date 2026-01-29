@@ -1,0 +1,221 @@
+/* Blog "Discovery" Marquee Styles */
+.blog-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    overflow-x: hidden;
+}
+
+.discovery-header {
+    text-align: center;
+    padding: 2rem 5% 1rem 5%;
+    margin-bottom: 2rem;
+}
+
+.discovery-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.discovery-title {
+    font-size: 5rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    letter-spacing: -2px;
+    line-height: 1;
+}
+
+.marquee-section {
+    width: 100%;
+    padding: 2rem 0 6rem 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee-track {
+    display: inline-flex;
+    gap: 4rem;
+    animation: marquee-scroll 40s linear infinite;
+    padding-left: 5%;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Complex Card Design */
+.discovery-card {
+    width: 280px;
+    display: inline-flex;
+    flex-direction: column;
+    white-space: normal;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.discovery-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-visuals {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    margin-bottom: 1.5rem;
+}
+
+.main-img {
+    width: 100%;
+    height: 100%;
+    background-color: #f7fafc;
+    border-radius: 12px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.thumb-img {
+    width: 120px;
+    height: 90px;
+    background-color: var(--secondary-color);
+    position: absolute;
+    bottom: 20px;
+    left: -15px;
+    z-index: 2;
+    border-radius: 8px;
+    border: 4px solid var(--white);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-info h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.card-info p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.5;
+    max-width: 90%;
+    margin-bottom: 1rem;
+}
+
+.read-more {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.read-more:hover {
+    color: var(--primary-color);
+}
+
+/* About Section */
+.about-section {
+    padding: 6rem 5%;
+    background: rgba(255, 255, 255, 0.6);
+    /* Semi-transparent white for light mode frost */
+    backdrop-filter: blur(12px);
+    /* Glass effect */
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Subtle white border */
+    border-radius: 16px;
+    /* Rounded corners for the glass card */
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    max-width: 800px;
+    margin: 4rem auto 6rem;
+    /* Added margin to separate from content */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    /* Soft shadow for depth */
+}
+
+.about-content h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.about-content h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 40px;
+    height: 3px;
+    background: var(--secondary-color);
+}
+
+.about-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-light);
+}
+
+.about-content strong {
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+/* Blog Page Specific Style - Split Background */
+.blog-body {
+    background: linear-gradient(90deg, #ffffff 40%, #e6fffa 40%);
+    /* Split background: White / Light Teal */
+    background-attachment: fixed;
+}
+
+.dark-theme.blog-body {
+    background: linear-gradient(90deg, #1a202c 40%, #132222 40%);
+    /* Split background: Dark Slate / Deep Dark Teal */
+    background-attachment: fixed;
+}
+
+.dark-theme .about-section {
+    background: rgba(255, 255, 255, 0.03);
+    /* Ultra subtle transparency */
+    backdrop-filter: blur(12px);
+    /* Glass effect */
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}

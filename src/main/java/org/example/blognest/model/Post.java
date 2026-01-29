@@ -19,6 +19,8 @@ public class Post {
     @Column(nullable = false)
     private String title;
 
+    private String description;
+
     @Lob
     @Column(nullable = false)
     private String content;

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlogNest - Stories</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/blogs.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -14,10 +15,10 @@
             rel="stylesheet">
 </head>
 
-<body>
+<body class="blog-body">
 <nav class="floating-navbar">
     <div class="pill-nav">
-        <div class="nav-logo"><a href="${pageContext.request.contextPath}/blog">BlogNest</a></div>
+        <div class="nav-logo"><a href="${pageContext.request.contextPath}/blog" style="text-decoration: none;   color: inherit;">BlogNest</a></div>
         <div class="nav-theme-toggle" id="theme-toggle">
             <svg id="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,7 +66,7 @@
                     <div class="card-info">
                         <h3>Designing for Humans</h3>
                         <p>Exploring the intersection of aesthetics and usability in digital products.</p>
-                        <a href="#" class="read-more">Read Story &rarr;</a>
+                        <a href="${pageContext.request.contextPath}/ReadBlog" style="text-decoration: none;   color: inherit;" class="read-more">Read Story &rarr;</a>
                     </div>
                 </div>
 
@@ -78,7 +79,7 @@
                     <div class="card-info">
                         <h3>The Code Chronicles</h3>
                         <p>My journey through full-stack development and the lessons learned along the way.</p>
-                        <a href="#" class="read-more">Read Story &rarr;</a>
+                        <a href="${pageContext.request.contextPath}/ReadBlog" style="text-decoration: none;   color: inherit;" class="read-more">Read Story &rarr;</a>
                     </div>
                 </div>
 
@@ -91,7 +92,7 @@
                     <div class="card-info">
                         <h3>Visual Storytelling</h3>
                         <p>How to craft immersive narratives through visual design and creative direction.</p>
-                        <a href="#" class="read-more">Read Story &rarr;</a>
+                        <a href="${pageContext.request.contextPath}/ReadBlog" style="text-decoration: none;   color: inherit;" class="read-more">Read Story &rarr;</a>
                     </div>
                 </div>
 
@@ -104,7 +105,7 @@
                     <div class="card-info">
                         <h3>Life in Techno-Color</h3>
                         <p>Reflections on creativity, technology, and the future of digital art.</p>
-                        <a href="#" class="read-more">Read Story &rarr;</a>
+                        <a href="${pageContext.request.contextPath}/ReadBlog" style="text-decoration: none;   color: inherit;" class="read-more">Read Story &rarr;</a>
                     </div>
                 </div>
 

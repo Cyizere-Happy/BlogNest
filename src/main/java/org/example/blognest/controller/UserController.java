@@ -19,18 +19,26 @@ public class UserController extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response){
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
         String name = request.getParameter("name");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String confirmPassword = request.getParameter("confirm_password");
 
-        if(password.equals(confirmPassword)){
-            User user = new User(name, email, password);
-            userService.addUser(user);
-        }else{
-
+        // Basic validation
+        if (password == null || confirmPassword == null || !password.equals(confirmPassword)) {
+            request.setAttribute("error", "Passwords do not match!");
+            request.getRequestDispatcher("/WEB-INF/auth.jsp").forward(request, response);
+            return;
         }
 
+        User user = new User(name, email, password);
+        userService.addUser(user);
+
+        // redirect after successful registration
+        response.sendRedirect(request.getContextPath() + "/auth");
     }
+
 }

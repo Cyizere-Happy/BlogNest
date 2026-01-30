@@ -1,7 +1,9 @@
 package org.example.blognest.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Post {
 
     @Id
@@ -19,11 +23,18 @@ public class Post {
     @Column(nullable = false)
     private String title;
 
-    private String description;
+    private String description; // Summary
 
     @Lob
     @Column(nullable = false)
     private String content;
+
+    private String thumbnail_url;
+
+    private String category;
+
+    @Column(columnDefinition = "integer default 0")
+    private int views;
 
     private LocalDateTime createdAt;
 
@@ -33,7 +44,7 @@ public class Post {
     private User author;
 
     //  One post → many comments
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @PrePersist
@@ -41,80 +52,17 @@ public class Post {
         createdAt = LocalDateTime.now();
     }
 
-    public Post() {}
-
-    public Post(String title, String content, LocalDateTime createdAt, User author, List<Comment> comments) {
+    public Post(String title, String content, User author) {
         this.title = title;
         this.content = content;
-        this.createdAt = createdAt;
-        this.author = author;
-        this.comments = comments;
-    }
-
-    public Post(String title, String content, LocalDateTime createdAt, User author) {
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
         this.author = author;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", createdAt=" + createdAt +
-                ", author=" + author +
-                ", comments=" + comments +
-                '}';
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public User getAuthor() {
-        return author;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
+    public Post(String title, String description, String content, String category, User author) {
         this.title = title;
-    }
-
-    public void setContent(String content) {
+        this.description = description;
         this.content = content;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setAuthor(User author) {
+        this.category = category;
         this.author = author;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 }

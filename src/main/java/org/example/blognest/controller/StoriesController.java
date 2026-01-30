@@ -8,12 +8,14 @@ import org.example.blognest.services.PostService;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/blog")
-public class BlogController extends HttpServlet {
+@WebServlet("/stories")
+public class StoriesController extends HttpServlet {
     private final PostService postService = PostService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/Blog.jsp").forward(req, resp);
+        List<Post> posts = postService.getAllPosts();
+        req.setAttribute("posts", posts);
+        req.getRequestDispatcher("/WEB-INF/Blogs.jsp").forward(req, resp);
     }
 }

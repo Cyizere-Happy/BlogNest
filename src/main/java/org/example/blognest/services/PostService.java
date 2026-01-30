@@ -1,15 +1,19 @@
 package org.example.blognest.services;
 
+import org.example.blognest.model.Comment;
 import org.example.blognest.model.Post;
+import org.example.blognest.model.User;
 import org.example.blognest.util.HibernateUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 import java.util.List;
 
 public class PostService {
-    public static final SessionFactory sf = HibernateUtil.getSessionFactory();
-    public static PostService instance;
+    private static final SessionFactory sf = HibernateUtil.getSessionFactory();
+    private static PostService instance;
+
+    private PostService() {}
 
     public static PostService getInstance() {
         if (instance == null) {
@@ -17,44 +21,54 @@ public class PostService {
         }
         return instance;
     }
-    private PostService() {}
 
-    public void addPost(Post post) {
+    public void createPost(Post post) {
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            session.save(post);
-            session.getTransaction().commit();
-        }
-    }
-
-    public void updatePost(Post post) {
-        try (Session session = sf.openSession()) {
-            session.beginTransaction();
-            session.update(post);
-            session.getTransaction().commit();
-        }
-    }
-
-    public void deletePost(int postId) {
-        try (Session session = sf.openSession()) {
-            session.beginTransaction();
-            Post p = session.get(Post.class, postId);
-            if (p != null) {
-                session.delete(p);
-            }
+            session.persist(post);
             session.getTransaction().commit();
         }
     }
 
     public List<Post> getAllPosts() {
-        try(Session session = sf.openSession()) {
-            return session.createQuery("from Post").list();
+        try (Session session = sf.openSession()) {
+            return session.createQuery("FROM Post ORDER BY createdAt DESC", Post.class).list();
         }
     }
 
-    public Post getPostById(int postId) {
+    public Post getPostById(Long id) {
         try (Session session = sf.openSession()) {
-            return session.get(Post.class, postId);
+            Post post = session.get(Post.class, id);
+            if (post != null) {
+                // Initialize comments to prevent LazyInitializationException
+                Hibernate.initialize(post.getComments());
+            }
+            return post;
+        }
+    }
+
+    public void addComment(Long postId, Long userId, String content) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            Post post = session.get(Post.class, postId);
+            User user = session.get(User.class, userId);
+            
+            if (post != null && user != null) {
+                Comment comment = new Comment(content, user, post);
+                session.persist(comment);
+            }
+            session.getTransaction().commit();
+        }
+    }
+    
+    public void deletePost(Long id) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            Post post = session.get(Post.class, id);
+            if (post != null) {
+                session.remove(post);
+            }
+            session.getTransaction().commit();
         }
     }
 }

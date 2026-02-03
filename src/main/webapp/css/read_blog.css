@@ -5,10 +5,9 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem 40px 4rem;
-    /* Use px for padding stability */
     display: grid;
-    grid-template-columns: 350px 1fr 220px;
-    gap: 0;
+    grid-template-columns: 320px 1fr 200px;
+    gap: 40px;
     position: relative;
     min-height: 100vh;
 }
@@ -23,16 +22,14 @@
 .article-hero-img {
     width: 100%;
     height: 480px;
-    /* Larger hero image */
     background-color: #f7fafc;
     border-radius: 12px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
     overflow: hidden;
     position: relative;
     z-index: 10;
-    /* Image in front of words */
-    transform: translateX(40px);
-    /* Push into the main content area for overlap */
+    transform: translateX(20px);
+    /* Reduced translation */
 }
 
 .article-hero-img img {
@@ -69,13 +66,15 @@
     font-family: 'Jost', sans-serif;
     font-size: 64px;
     /* Convert rem to px for stability */
-    font-weight: 800;
+    font-weight: 300;
+    /* Use light weight to match local look */
     color: var(--primary-color);
     line-height: 1.1;
     margin-bottom: 2rem;
     position: relative;
     z-index: 1;
-    margin-left: -50px;
+    margin-left: -20px;
+    /* Reduced negative margin to prevent excessive overlap */
     max-width: 900px;
     /* Cap width to prevent excessive growth */
 }
@@ -115,6 +114,8 @@
     font-family: 'Jost', sans-serif;
     font-size: 18px;
     /* Standardize font size */
+    font-weight: 300;
+    /* Lighter weight for article body */
     line-height: 1.8;
     color: var(--text-color);
     max-width: 800px;

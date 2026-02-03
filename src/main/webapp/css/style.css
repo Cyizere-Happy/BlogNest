@@ -26,6 +26,11 @@
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+html {
+    font-size: 16px;
+    /* Normalize rem calculations across environments */
+}
+
 * {
     margin: 0;
     padding: 0;

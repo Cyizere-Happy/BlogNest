@@ -4,12 +4,11 @@
 .read-blog-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem 5% 4rem;
+    padding: 2rem 40px 4rem;
+    /* Use px for padding stability */
     display: grid;
     grid-template-columns: 350px 1fr 220px;
-    /* Increased hero column width */
     gap: 0;
-    /* Removed gap for overlap potential */
     position: relative;
     min-height: 100vh;
 }
@@ -68,18 +67,17 @@
 
 .article-title {
     font-family: 'Jost', sans-serif;
-    font-size: 4.5rem;
-    /* Larger title */
+    font-size: 64px;
+    /* Convert rem to px for stability */
     font-weight: 800;
-    /* Bolder */
     color: var(--primary-color);
-    line-height: 1.0;
+    line-height: 1.1;
     margin-bottom: 2rem;
     position: relative;
     z-index: 1;
-    /* Title behind image overlap */
     margin-left: -50px;
-    /* Pull towards image */
+    max-width: 900px;
+    /* Cap width to prevent excessive growth */
 }
 
 /* Metadata Grid */
@@ -115,12 +113,13 @@
 /* Article Body Text */
 .article-body {
     font-family: 'Jost', sans-serif;
-    font-size: 1.25rem;
+    font-size: 18px;
+    /* Standardize font size */
     line-height: 1.8;
     color: var(--text-color);
-    max-width: 90%;
+    max-width: 800px;
+    /* Cap content width for readability */
     white-space: pre-wrap;
-    /* Preserve user-entered line breaks and spacing */
 }
 
 .article-body p {

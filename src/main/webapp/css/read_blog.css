@@ -4,7 +4,7 @@
 .read-blog-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem 40px 4rem;
+    padding: 32px 40px 64px;
     display: grid;
     grid-template-columns: 320px 1fr 200px;
     gap: 40px;
@@ -15,7 +15,7 @@
 /* Column 1: Hero Image */
 .hero-column {
     position: sticky;
-    top: 8rem;
+    top: 128px;
     height: fit-content;
 }
 
@@ -42,23 +42,23 @@
 .article-content {
     display: flex;
     flex-direction: column;
-    padding-top: 2rem;
+    padding-top: 32px;
     /* Align text visually */
 }
 
 .article-header {
-    margin-bottom: 3rem;
+    margin-bottom: 48px;
     text-align: left;
 }
 
 .article-category {
     font-family: 'Outfit', sans-serif;
-    font-size: 0.9rem;
+    font-size: 14.4px;
     font-weight: 700;
     color: var(--secondary-color);
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
     display: block;
 }
 
@@ -70,7 +70,7 @@
     /* Use light weight to match local look */
     color: var(--primary-color);
     line-height: 1.1;
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
     position: relative;
     z-index: 1;
     margin-left: -20px;
@@ -84,23 +84,23 @@
     display: grid;
     grid-template-columns: repeat(3, auto);
     /* Auto width cols */
-    gap: 3rem;
-    padding: 1.5rem 0;
+    gap: 48px;
+    padding: 24px 0;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    margin-bottom: 3rem;
+    margin-bottom: 48px;
 }
 
 .meta-item h4 {
-    font-size: 0.8rem;
+    font-size: 12.8px;
     text-transform: uppercase;
     color: var(--text-light);
-    margin-bottom: 0.3rem;
+    margin-bottom: 4.8px;
     font-weight: 600;
 }
 
 .meta-item p {
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: 500;
     color: var(--primary-color);
 }
@@ -124,22 +124,22 @@
 }
 
 .article-body p {
-    margin-bottom: 1.5rem;
+    margin-bottom: 24px;
 }
 
 .article-body h3 {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.8rem;
-    margin: 2.5rem 0 1rem;
+    font-size: 28.8px;
+    margin: 40px 0 16px;
     font-weight: 700;
 }
 
 /* Sidebar "Bookshelf" Style */
 .blog-sidebar {
     position: sticky;
-    top: 8rem;
+    top: 128px;
     height: fit-content;
-    padding-left: 2rem;
+    padding-left: 32px;
     border-left: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -152,9 +152,9 @@
     text-orientation: mixed;
     transform: rotate(180deg);
     position: absolute;
-    left: -1rem;
+    left: -16px;
     top: 0;
-    font-size: 0.8rem;
+    font-size: 12.8px;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--text-light);
@@ -165,13 +165,13 @@
 .sidebar-list {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 32px;
 }
 
 .sidebar-item {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 8px;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
@@ -185,7 +185,7 @@
     height: 140px;
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -197,7 +197,7 @@
 }
 
 .sidebar-title {
-    font-size: 0.95rem;
+    font-size: 15.2px;
     font-weight: 600;
     color: var(--primary-color);
     line-height: 1.4;
@@ -206,8 +206,8 @@
 
 /* Comments Section */
 .comments-section {
-    margin-top: 6rem;
-    padding-top: 3rem;
+    margin-top: 96px;
+    padding-top: 48px;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -216,20 +216,20 @@
 }
 
 .comments-title {
-    font-size: 1.5rem;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
 }
 
 .comment-form textarea {
     width: 100%;
-    padding: 1.5rem;
+    padding: 24px;
     border-radius: 12px;
     border: 2px solid rgba(0, 0, 0, 0.1);
     background: transparent;
     font-family: inherit;
-    font-size: 1rem;
-    margin-bottom: 1rem;
+    font-size: 16px;
+    margin-bottom: 16px;
     resize: vertical;
     min-height: 120px;
     color: var(--text-color);
@@ -249,7 +249,7 @@
 @media (max-width: 900px) {
     .read-blog-container {
         grid-template-columns: 1fr;
-        padding-top: 6rem;
+        padding-top: 96px;
     }
 
     .blog-sidebar {
@@ -258,11 +258,11 @@
     }
 
     .article-title {
-        font-size: 2.5rem;
+        font-size: 40px;
     }
 
     .meta-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 24px;
     }
 }

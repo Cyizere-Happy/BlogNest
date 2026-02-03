@@ -6,18 +6,19 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Designing for Humans - BlogNest</title>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/blogs.css">
-            <!-- For shared blog-body split background -->
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/read_blog.css">
-            <!-- Specific Layout Styles -->
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css">
+            <title>${post.title} - BlogNest</title>
+
+            <!-- Fonts FIRST -->
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link
-                href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+                href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap"
                 rel="stylesheet">
+
+            <!-- CSS SECOND -->
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/blogs.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/read_blog.css">
         </head>
 
         <body class="blog-body">

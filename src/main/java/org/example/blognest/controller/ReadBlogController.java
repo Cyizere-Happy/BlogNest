@@ -7,6 +7,7 @@ import org.example.blognest.model.Post;
 import org.example.blognest.model.User;
 import org.example.blognest.services.PostService;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/read_blog")
 public class ReadBlogController extends HttpServlet {
@@ -20,7 +21,17 @@ public class ReadBlogController extends HttpServlet {
                 Long id = Long.parseLong(idStr);
                 Post post = postService.getPostById(id);
                 if (post != null) {
+                    postService.incrementViews(id);
                     req.setAttribute("post", post);
+
+                    // Fetch other stories for sidebar
+                    List<Post> allPosts = postService.getAllPosts();
+                    List<Post> otherPosts = allPosts.stream()
+                            .filter(p -> !p.getId().equals(id))
+                            .limit(3)
+                            .toList();
+                    req.setAttribute("otherPosts", otherPosts);
+
                     req.getRequestDispatcher("/WEB-INF/read_blog.jsp").forward(req, resp);
                     return;
                 }
@@ -45,13 +56,13 @@ public class ReadBlogController extends HttpServlet {
                 resp.sendRedirect("read_blog?id=" + postId);
                 return;
                 } catch(NumberFormatException e) {
-                    // Ignore
+
                 }
             }
         } else {
             resp.sendRedirect("auth");
         }
-         // Fallback
+
          String referer = req.getHeader("Referer");
          if(referer != null) resp.sendRedirect(referer);
          else resp.sendRedirect("blog");

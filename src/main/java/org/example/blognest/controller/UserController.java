@@ -33,7 +33,7 @@ public class UserController extends HttpServlet {
             
             // Basic validation removed for brevity, rely on frontend or add later
             userService.addUser(new User(name, email, pass));
-            resp.sendRedirect("auth"); // Redirect to login page (which is the same auth page)
+            resp.sendRedirect("auth");
         } else if ("login".equals(action)) {
             String email = req.getParameter("email");
             String pass = req.getParameter("password");
@@ -43,8 +43,12 @@ public class UserController extends HttpServlet {
             if (user != null) {
                 HttpSession session = req.getSession();
                 session.setAttribute("user", user);
-                // Redirect to profile or blog? Usage suggests blog is the main feed.
-                resp.sendRedirect("blog");
+
+                if("ADMIN".equalsIgnoreCase(user.getRole())) {
+                    resp.sendRedirect("admin");
+                }else {
+                    resp.sendRedirect("blog");
+                }
             } else {
                 req.setAttribute("error", "Invalid email or password");
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);

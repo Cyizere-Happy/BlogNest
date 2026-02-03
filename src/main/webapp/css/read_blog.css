@@ -2,15 +2,14 @@
 
 /* Base Layout */
 .read-blog-container {
-    max-width: 1600px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 1rem 5% 4rem;
-    /* Drastically reduced top padding */
+    padding: 2rem 5% 4rem;
     display: grid;
-    grid-template-columns: 200px 1fr 220px;
-    /* Reduced Sidebar width to give content more space */
-    gap: 3rem;
-    /* Reduced gap to pull sidebar closer to left */
+    grid-template-columns: 350px 1fr 220px;
+    /* Increased hero column width */
+    gap: 0;
+    /* Removed gap for overlap potential */
     position: relative;
     min-height: 100vh;
 }
@@ -24,15 +23,17 @@
 
 .article-hero-img {
     width: 100%;
-    height: 300px;
-    /* Small, compact book-cover size */
+    height: 480px;
+    /* Larger hero image */
     background-color: #f7fafc;
-    border-radius: 8px;
-    /* Slightly sharper corners */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    /* Deep shadow like a book cover */
+    border-radius: 12px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
     overflow: hidden;
     position: relative;
+    z-index: 10;
+    /* Image in front of words */
+    transform: translateX(40px);
+    /* Push into the main content area for overlap */
 }
 
 .article-hero-img img {
@@ -67,13 +68,18 @@
 
 .article-title {
     font-family: 'Jost', sans-serif;
-    /* Serif-like elegance */
-    font-size: 3.5rem;
-    font-weight: 300;
-    /* Light weight for elegance */
+    font-size: 4.5rem;
+    /* Larger title */
+    font-weight: 800;
+    /* Bolder */
     color: var(--primary-color);
-    line-height: 1.1;
+    line-height: 1.0;
     margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+    /* Title behind image overlap */
+    margin-left: -50px;
+    /* Pull towards image */
 }
 
 /* Metadata Grid */
@@ -113,6 +119,8 @@
     line-height: 1.8;
     color: var(--text-color);
     max-width: 90%;
+    white-space: pre-wrap;
+    /* Preserve user-entered line breaks and spacing */
 }
 
 .article-body p {
@@ -174,21 +182,26 @@
 
 .sidebar-thumb {
     width: 100px;
-    /* Small book-like width */
     height: 140px;
-    background-color: var(--secondary-color);
-    border-radius: 4px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 1rem;
     position: relative;
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sidebar-item:hover .sidebar-thumb {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-title {
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--primary-color);
-    line-height: 1.3;
+    line-height: 1.4;
+    font-family: 'Jost', sans-serif;
 }
 
 /* Comments Section */

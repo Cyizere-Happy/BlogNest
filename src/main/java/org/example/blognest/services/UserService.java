@@ -37,10 +37,8 @@ public class UserService {
     public void addUser(User user){
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            // Hash password
             String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(hashed);
-            // Default role is USER, set in Model
             session.persist(user);
             session.getTransaction().commit();
         }

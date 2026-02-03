@@ -306,13 +306,45 @@
                         right: 0;
                     }
                 }
+
+                /* Reveal Animations */
+                .reveal {
+                    opacity: 0;
+                    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                .reveal-up {
+                    transform: translateY(30px);
+                }
+
+                .reveal-left {
+                    transform: translateX(-30px);
+                }
+
+                .reveal-right {
+                    transform: translateX(30px);
+                }
+
+                .reveal.active {
+                    opacity: 1;
+                    transform: translate(0, 0);
+                }
+
+                .delay-100 {
+                    transition-delay: 100ms;
+                }
+
+                .delay-200 {
+                    transition-delay: 200ms;
+                }
             </style>
         </head>
 
         <body>
             <header class="navbar">
                 <div class="logo">
-                    <span class="logo-text">BlogNest</span>
+                    <span class="logo-text"><a href="${pageContext.request.contextPath}/blog"
+                            style="text-decoration: none;   color: inherit; ">BlogNest</a></span>
                 </div>
                 <div class="header-actions">
                     <button id="theme-toggle" class="btn-icon">
@@ -370,7 +402,8 @@
                         </div>
 
                         <div class="form-footer">
-                            <a href="#" class="forgot-pass">Forgot Password?</a>
+                            <a href="#" class="forgot-pass" style="text-decoration: none; color: transparent">Forgot
+                                Password?</a>
                             <button type="submit" name="action" value="login" class="btn-login">Login</button>
                         </div>
                     </form>
@@ -440,16 +473,13 @@
                         if (tab.innerText === 'Login') {
                             loginForm.classList.remove('hidden');
                             signupForm.classList.add('hidden');
-                            // Use setTimeout to allow display:block to apply before adding active class for animation
                             setTimeout(() => {
-                                loginForm.classList.add('reveal-up');
                                 loginForm.classList.add('active');
                             }, 10);
                         } else {
                             loginForm.classList.add('hidden');
                             signupForm.classList.remove('hidden');
                             setTimeout(() => {
-                                signupForm.classList.add('reveal-up');
                                 signupForm.classList.add('active');
                             }, 10);
                         }

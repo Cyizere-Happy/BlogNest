@@ -7,8 +7,9 @@
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>BlogNest - Stories</title>
-            <link rel="stylesheet" href="css/style.css">
-            <link rel="stylesheet" href="css/blogs.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/blogs.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css">
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link
@@ -40,7 +41,8 @@
                         </svg>
                     </div>
                     <div class="nav-profile">
-                        <a href="javascript:void(0)" class="active-profile profile-trigger" style="color: inherit;">
+                        <a href="javascript:void(0)" class="active-profile profile-trigger"
+                            data-logged-in="${user != null}" style="color: inherit;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>

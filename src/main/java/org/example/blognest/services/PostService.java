@@ -71,4 +71,23 @@ public class PostService {
             session.getTransaction().commit();
         }
     }
+
+    public void updatePost(Post post) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            session.merge(post);
+            session.getTransaction().commit();
+        }
+    }
+
+    public void incrementViews(Long postId) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            Post post = session.get(Post.class, postId);
+            if (post != null) {
+                post.setViews(post.getViews() + 1);
+            }
+            session.getTransaction().commit();
+        }
+    }
 }

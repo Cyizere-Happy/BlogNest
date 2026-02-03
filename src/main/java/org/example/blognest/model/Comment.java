@@ -28,6 +28,9 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean approved = false;
+
     @PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();

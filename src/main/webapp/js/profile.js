@@ -8,7 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
         profileTriggers.forEach(trigger => {
             trigger.addEventListener('click', (e) => {
                 e.preventDefault();
-                profileModal.classList.add('active');
+                const isLoggedIn = trigger.getAttribute('data-logged-in') === 'true';
+
+                if (isLoggedIn) {
+                    profileModal.classList.add('active');
+                } else {
+                    window.location.href = 'auth';
+                }
             });
         });
 

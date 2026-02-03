@@ -1,0 +1,208 @@
+/* Profile Modal Overlay */
+.profile-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    display: none;
+    /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Modal Content */
+.profile-modal-content {
+    background: var(--white);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    border-radius: 24px;
+    position: relative;
+    padding: 3rem;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    color: var(--primary-color);
+}
+
+/* Profile Sections */
+.profile-header-section h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+}
+
+.profile-header-section p {
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+/* Progress Section */
+.progress-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #edf2f7;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--secondary-color);
+    border-radius: 100px;
+    transition: width 0.5s ease;
+}
+
+.progress-badge {
+    padding: 0.4rem 0.8rem;
+    background: #e6fffa;
+    color: var(--secondary-color);
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+/* Setup Cards */
+.setup-card {
+    display: flex;
+    gap: 1.5rem;
+    background: #f8fafc;
+    padding: 2rem;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.setup-card.active {
+    background: var(--white);
+    border-color: #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.setup-icon-check {
+    width: 40px;
+    height: 40px;
+    background: #e6fffa;
+    color: var(--secondary-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.setup-content h3 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.setup-body {
+    display: flex;
+    gap: 2rem;
+}
+
+.profile-gif {
+    width: 200px;
+    border-radius: 12px;
+}
+
+.setup-text p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.btn-link {
+    color: var(--secondary-color);
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* Step list */
+.setup-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid #edf2f7;
+}
+
+.step-number {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #cbd5e0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #a0aec0;
+}
+
+.step-details h4 {
+    margin-bottom: 0.5rem;
+}
+
+.action-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.status-complete {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+/* Animation */
+.reveal-zoom {
+    animation: zoomIn 0.3s ease forwards;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}

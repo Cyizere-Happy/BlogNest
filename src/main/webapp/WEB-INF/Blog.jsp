@@ -6,7 +6,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>BlogNest - Blog</title>
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link
@@ -38,7 +39,8 @@
                     </svg>
                 </div>
                 <div class="nav-profile">
-                    <a href="javascript:void(0)" class="active-profile profile-trigger" style="color: inherit;">
+                    <a href="javascript:void(0)" class="active-profile profile-trigger" data-logged-in="${user != null}"
+                        style="color: inherit;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -51,22 +53,22 @@
 
         <main class="container">
             <section class="hero-section">
-                <div class="hero-text-container reveal reveal-up">
+                <div class="hero-text-container">
                     <h1 class="hero-title">
-                        <span class="stagger-up">B</span>
-                        <span class="stagger-down">L</span>
-                        <span class="stagger-up">O</span>
-                        <span class="stagger-down">G</span>
-                        <span class="stagger-up">N</span>
-                        <span class="stagger-down">E</span>
-                        <span class="stagger-up">S</span>
-                        <span class="stagger-down">T</span>
+                        <span class="reveal letter-reveal delay-100">B</span>
+                        <span class="reveal letter-reveal delay-400">L</span>
+                        <span class="reveal letter-reveal delay-700">O</span>
+                        <span class="reveal letter-reveal delay-1000">G</span>
+                        <span class="reveal letter-reveal delay-1300">N</span>
+                        <span class="reveal letter-reveal delay-1600">E</span>
+                        <span class="reveal letter-reveal delay-1900">S</span>
+                        <span class="reveal letter-reveal delay-2200">T</span>
                     </h1>
-                    <p class="hero-subtitle">Cyizere Happy</p>
-                    <div class="hero-year">'26</div>
+                    <p class="hero-subtitle reveal reveal-up delay-2500">Cyizere Happy</p>
+                    <div class="hero-year reveal reveal-up delay-2700">'26</div>
                 </div>
 
-                <div class="mascot-container reveal reveal-left delay-200">
+                <div class="mascot-container reveal reveal-left delay-3000">
                     <img src="images/Mascot.png" alt="BlogNest Mascot" class="mascot-img">
                 </div>
             </section>

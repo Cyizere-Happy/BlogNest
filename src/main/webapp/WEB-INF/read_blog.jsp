@@ -7,9 +7,12 @@
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Designing for Humans - BlogNest</title>
-            <link rel="stylesheet" href="css/style.css">
-            <link rel="stylesheet" href="css/blogs.css"> <!-- For shared blog-body split background -->
-            <link rel="stylesheet" href="css/read_blog.css"> <!-- Specific Layout Styles -->
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/blogs.css">
+            <!-- For shared blog-body split background -->
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/read_blog.css">
+            <!-- Specific Layout Styles -->
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css">
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link
@@ -43,7 +46,8 @@
                         </svg>
                     </div>
                     <div class="nav-profile">
-                        <a href="javascript:void(0)" class="active-profile profile-trigger" style="color: inherit;">
+                        <a href="javascript:void(0)" class="active-profile profile-trigger"
+                            data-logged-in="${user != null}" style="color: inherit;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -57,97 +61,120 @@
             <div class="read-blog-container">
                 <!-- Column 1: Main Hero Image -->
                 <div class="hero-column reveal reveal-right">
-                    <div class="article-hero-img" style="background-color: #e2e8f0;">
-                        <!-- Placeholder for actual image -->
+                    <div class="article-hero-img">
+                        <c:if test="${not empty post.thumbnail_url}">
+                            <img src="${post.thumbnail_url}" alt="${post.title}"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </c:if>
+                        <c:if test="${empty post.thumbnail_url}">
+                            <div style="width: 100%; height: 100%; background: var(--secondary-color); opacity: 0.1;">
+                            </div>
+                        </c:if>
                     </div>
                 </div>
 
                 <!-- Column 2: Main Content -->
                 <main class="article-content reveal reveal-up delay-100">
-                    <header class="article-header">
-                        <span class="article-category">Design & Tech</span>
-                        <h1 class="article-title">Designing for Humans in a Digital World</h1>
+                    <article>
+                        <header class="article-header">
+                            <!-- Category Tag -->
+                            <div class="article-category">${not empty post.category ? post.category : 'General Stories'}
+                            </div>
+                            <h1 class="article-title">${post.title}</h1>
+                            <div class="article-meta"
+                                style="display: flex; gap: 1.5rem; color: var(--text-light); border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem;">
+                                <span>By <strong>${not empty post.author.name ? post.author.name : 'BlogNest
+                                        Author'}</strong></span>
+                                <span class="meta-separator">•</span>
+                                <span>${not empty post.createdAt ? post.createdAt.toLocalDate() : 'Just now'}</span>
+                                <c:if test="${user.role == 'ADMIN'}">
+                                    <span class="meta-separator">•</span>
+                                    <a href="${pageContext.request.contextPath}/admin?editId=${post.id}"
+                                        class="edit-story-btn"
+                                        style="color: var(--secondary-color); text-decoration: none; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">
+                                        Edit Story
+                                    </a>
+                                </c:if>
+                            </div>
+                        </header>
 
-                        <!-- Metadata Grid -->
-                        <main class="read-content reveal reveal-up delay-100">
-                            <article>
-                                <header class="article-header">
-                                    <!-- Category Tag -->
-                                    <div class="category-tag">${post.category != null ? post.category : 'General'}</div>
-                                    <h1 class="article-title">${post.title}</h1>
-                                    <div class="article-meta">
-                                        <span>By ${post.author.name}</span>
-                                        <span class="meta-separator">•</span>
-                                        <span>${post.createdAt != null ? post.createdAt.toLocalDate() : 'Just
-                                            now'}</span>
-                                    </div>
-                                </header>
+                        <div class="article-body">
+                            <c:choose>
+                                <c:when test="${not empty post.content}">
+                                    ${post.content}
+                                </c:when>
+                                <c:otherwise>
+                                    <p>No content available.</p>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </article>
 
-                                <div class="article-body">
-                                    <c:choose>
-                                        <c:when test="${not empty post.content}">
-                                            ${post.content}
-                                        </c:when>
-                                        <c:otherwise>
-                                            <p>No content available.</p>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </article>
+                    <!-- Comments Section -->
+                    <section class="comments-section">
+                        <h3 class="comments-title">Join the Conversation</h3>
 
-                            <!-- Comments Section -->
-                            <section class="comments-section">
-                                <h3 class="comments-title">Join the Conversation</h3>
-
-                                <!-- Comment Form -->
+                        <!-- Comment Form -->
+                        <c:choose>
+                            <c:when test="${not empty user}">
                                 <form class="comment-form" action="read_blog" method="post">
                                     <input type="hidden" name="postId" value="${post.id}">
                                     <textarea name="content" placeholder="Share your thoughts..." required></textarea>
                                     <button type="submit" class="btn btn-primary">Post Comment</button>
                                 </form>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="login-prompt"
+                                    style="padding: 2rem; background: var(--white); border-radius: 12px; text-align: center; border: 1px dashed var(--secondary-color);">
+                                    <p style="margin-bottom: 1rem;">Please <a href="auth"
+                                            style="color: var(--secondary-color); font-weight: 600;">log in</a>
+                                        to join the conversation.</p>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
 
-                                <!-- Comments List -->
-                                <div class="comments-list" style="margin-top: 2rem;">
-                                    <c:if test="${not empty post.comments}">
-                                        <c:forEach var="comment" items="${post.comments}">
-                                            <div class="comment-item"
-                                                style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
-                                                <div class="comment-header"
-                                                    style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                                    <strong>${comment.user.name}</strong>
-                                                    <span
-                                                        style="font-size: 0.8rem; color: #888;">${comment.createdAt.toLocalDate()}</span>
-                                                </div>
-                                                <p>${comment.content}</p>
-                                            </div>
-                                        </c:forEach>
-                                    </c:if>
-                                    <c:if test="${empty post.comments}">
-                                        <p style="color: #888; font-style: italic;">No comments yet. Be the first to
-                                            share!</p>
-                                    </c:if>
-                                </div>
-                            </section>
-                        </main>
+                        <!-- Comments List -->
+                        <div class="comments-list" style="margin-top: 2rem;">
+                            <c:if test="${not empty post.comments}">
+                                <c:forEach var="comment" items="${post.comments}">
+                                    <div class="comment-item"
+                                        style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                                        <div class="comment-header"
+                                            style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                            <strong>${comment.user.name}</strong>
+                                            <span
+                                                style="font-size: 0.8rem; color: #888;">${comment.createdAt.toLocalDate()}</span>
+                                        </div>
+                                        <p>${comment.content}</p>
+                                    </div>
+                                </c:forEach>
+                            </c:if>
+                            <c:if test="${empty post.comments}">
+                                <p style="color: #888; font-style: italic;">No comments yet. Be the first to
+                                    share!</p>
+                            </c:if>
+                        </div>
+                    </section>
+                </main>
 
-                        <!-- Right Sidebar (Bookshelf) -->
-                        <aside class="blog-sidebar reveal reveal-left delay-200">
-                            <span class="sidebar-label">More Stories</span>
-                            <div class="sidebar-list">
-                                <div class="sidebar-item">
-                                    <div class="sidebar-thumb" style="background-color: #38b2ac;"></div>
-                                    <div class="sidebar-title">The Code Chronicles</div>
+                <!-- Column 3: Right Sidebar (Bookshelf) -->
+                <aside class="blog-sidebar reveal reveal-left delay-200">
+                    <span class="sidebar-label">More Stories</span>
+                    <div class="sidebar-list">
+                        <c:forEach var="other" items="${otherPosts}">
+                            <a href="read_blog?id=${other.id}" class="sidebar-item"
+                                style="text-decoration: none; color: inherit; display: block; margin-bottom: 2rem;">
+                                <div class="sidebar-thumb"
+                                    style="background: url('${other.thumbnail_url}') center/cover; background-color: var(--secondary-color);">
                                 </div>
-                                <div class="sidebar-item">
-                                    <div class="sidebar-thumb" style="background-color: #2d3748;"></div>
-                                    <div class="sidebar-title">Visual Storytelling</div>
-                                </div>
-                                <div class="sidebar-item">
-                                    <div class="sidebar-thumb" style="background-color: #81e6d9;"></div>
-                                    <div class="sidebar-title">Life in Techno-Color</div>
-                                </div>
-                            </div>
-                        </aside>
+                                <div class="sidebar-title">${other.title}</div>
+                            </a>
+                        </c:forEach>
+                        <c:if test="${empty otherPosts}">
+                            <p style="color: #888; font-style: italic; font-size: 0.8rem;">No other stories yet.</p>
+                        </c:if>
+                    </div>
+                </aside>
             </div>
 
             <jsp:include page="profile_modal.jsp" />

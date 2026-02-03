@@ -8,22 +8,23 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import java.util.List;
-
 public class PostService {
-    private static final SessionFactory sf = HibernateUtil.getSessionFactory();
-    private static PostService instance;
-
     private PostService() {}
 
+    private static class Holder {
+        private static final PostService INSTANCE = new PostService();
+    }
+
     public static PostService getInstance() {
-        if (instance == null) {
-            instance = new PostService();
-        }
-        return instance;
+        return Holder.INSTANCE;
+    }
+
+    private SessionFactory getSf() {
+        return HibernateUtil.getSessionFactory();
     }
 
     public void createPost(Post post) {
-        try (Session session = sf.openSession()) {
+        try (Session session = getSf().openSession()) {
             session.beginTransaction();
             session.persist(post);
             session.getTransaction().commit();
@@ -31,13 +32,13 @@ public class PostService {
     }
 
     public List<Post> getAllPosts() {
-        try (Session session = sf.openSession()) {
+        try (Session session = getSf().openSession()) {
             return session.createQuery("FROM Post ORDER BY createdAt DESC", Post.class).list();
         }
     }
 
     public Post getPostById(Long id) {
-        try (Session session = sf.openSession()) {
+        try (Session session = getSf().openSession()) {
             Post post = session.get(Post.class, id);
             if (post != null) {
                 // Initialize comments to prevent LazyInitializationException
@@ -48,7 +49,7 @@ public class PostService {
     }
 
     public void addComment(Long postId, Long userId, String content) {
-        try (Session session = sf.openSession()) {
+        try (Session session = getSf().openSession()) {
             session.beginTransaction();
             Post post = session.get(Post.class, postId);
             User user = session.get(User.class, userId);
@@ -62,7 +63,7 @@ public class PostService {
     }
     
     public void deletePost(Long id) {
-        try (Session session = sf.openSession()) {
+        try (Session session = getSf().openSession()) {
             session.beginTransaction();
             Post post = session.get(Post.class, id);
             if (post != null) {
@@ -73,7 +74,7 @@ public class PostService {
     }
 
     public void updatePost(Post post) {
-        try (Session session = sf.openSession()) {
+        try (Session session = getSf().openSession()) {
             session.beginTransaction();
             session.merge(post);
             session.getTransaction().commit();
@@ -81,7 +82,7 @@ public class PostService {
     }
 
     public void incrementViews(Long postId) {
-        try (Session session = sf.openSession()) {
+        try (Session session = getSf().openSession()) {
             session.beginTransaction();
             Post post = session.get(Post.class, postId);
             if (post != null) {

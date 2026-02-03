@@ -2,14 +2,12 @@
 
 /* Base Layout */
 .read-blog-container {
-    max-width: 1500px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem 50px 4rem;
+    padding: 2rem 40px 4rem;
     display: grid;
-    grid-template-columns: 280px 1fr 240px;
-    /* Narrower hero column, wider main content */
-    gap: 80px;
-    /* Significantly increased gap for aerated feel */
+    grid-template-columns: 320px 1fr 200px;
+    gap: 40px;
     position: relative;
     min-height: 100vh;
 }
@@ -23,16 +21,15 @@
 
 .article-hero-img {
     width: 100%;
-    height: 400px;
-    /* Reduced height to look more balanced */
+    height: 480px;
     background-color: #f7fafc;
     border-radius: 12px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
     overflow: hidden;
     position: relative;
     z-index: 10;
-    transform: none;
-    /* REMOVE overlapping translation */
+    transform: translateX(20px);
+    /* Reduced translation */
 }
 
 .article-hero-img img {
@@ -66,19 +63,20 @@
 }
 
 .article-title {
-    font-family: 'Jost', 'Outfit', sans-serif;
-    font-size: 56px;
-    /* Slightly smaller to fit better */
-    font-weight: 300 !important;
-    /* Force light weight */
+    font-family: 'Jost', sans-serif;
+    font-size: 64px;
+    /* Convert rem to px for stability */
+    font-weight: 300;
+    /* Use light weight to match local look */
     color: var(--primary-color);
     line-height: 1.1;
     margin-bottom: 2rem;
     position: relative;
     z-index: 1;
-    margin-left: 0;
-    /* REMOVE negative margin overlap */
-    max-width: 850px;
+    margin-left: -20px;
+    /* Reduced negative margin to prevent excessive overlap */
+    max-width: 900px;
+    /* Cap width to prevent excessive growth */
 }
 
 /* Metadata Grid */
@@ -113,10 +111,10 @@
 
 /* Article Body Text */
 .article-body {
-    font-family: 'Jost', 'Outfit', sans-serif;
+    font-family: 'Jost', sans-serif;
     font-size: 18px;
     /* Standardize font size */
-    font-weight: 300 !important;
+    font-weight: 300;
     /* Lighter weight for article body */
     line-height: 1.8;
     color: var(--text-color);

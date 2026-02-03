@@ -19,25 +19,27 @@ public class HibernateUtil {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration();
             Properties settings = new Properties();
-            //POSTGRESQL
+
+            // Use environment variables if available (for Docker Compose)
+            String dbUrl = System.getenv().getOrDefault("DB_URL", "jdbc:postgresql://localhost:5432/hibernating");
+            String dbUser = System.getenv().getOrDefault("DB_USER", "postgres");
+            String dbPass = System.getenv().getOrDefault("DB_PASSWORD", "5Tr@wberry");
 
             settings.put(Environment.DRIVER, "org.postgresql.Driver");
-//            settings.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-            //Postgresql
-            settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/hibernating");
-//            settings.put(Environment.URL, "jdbc:mysql://localhost:3306/hibernating");
-            settings.put(Environment.USER, "postgres");
-            settings.put(Environment.PASS, "5Tr@wberry");
-            //PostgreSQL
+            settings.put(Environment.URL, dbUrl);
+            settings.put(Environment.USER, dbUser);
+            settings.put(Environment.PASS, dbPass);
             settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
-//            settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
             settings.put(Environment.SHOW_SQL, true);
             settings.put(Environment.HBM2DDL_AUTO, "update");
+
             configuration.setProperties(settings);
+
             configuration.addAnnotatedClass(Post.class);
             configuration.addAnnotatedClass(Comment.class);
             configuration.addAnnotatedClass(User.class);
             configuration.addAnnotatedClass(Subscription.class);
+
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);

@@ -344,16 +344,21 @@
                                                     <c:forEach var="u" items="${users}">
                                                         <tr>
                                                             <td class="user-cell"><img
-                                                                    src="https://ui-avatars.com/api/?name=<c:out value="${u.name}"/>"
-                                                                    alt="">
-                                                                <c:out value="${u.name}"/>
+                                                                    src="https://ui-avatars.com/api/?name=<c:out value="
+                                                                    ${u.name}" />"
+                                                                alt="">
+                                                                <c:out value="${u.name}" />
                                                                 <c:if test="${u.id == sessionScope.user.id}">
                                                                     <span class="status-badge published"
                                                                         style="font-size: 10px; margin-left: 5px;">You</span>
                                                                 </c:if>
                                                             </td>
-                                                            <td><c:out value="${u.email}"/></td>
-                                                            <td><c:out value="${u.role}"/></td>
+                                                            <td>
+                                                                <c:out value="${u.email}" />
+                                                            </td>
+                                                            <td>
+                                                                <c:out value="${u.role}" />
+                                                            </td>
                                                             <td>Joined</td>
                                                             <td>
                                                                 <c:if test="${u.id != sessionScope.user.id}">
@@ -402,9 +407,15 @@
                                         <tbody>
                                             <c:forEach var="comment" items="${comments}">
                                                 <tr>
-                                                    <td><c:out value="${comment.user.name}"/></td>
-                                                    <td>"<c:out value="${comment.content}"/>"</td>
-                                                    <td><c:out value="${comment.post.title}"/></td>
+                                                    <td>
+                                                        <c:out value="${comment.user.name}" />
+                                                    </td>
+                                                    <td>"
+                                                        <c:out value="${comment.content}" />"
+                                                    </td>
+                                                    <td>
+                                                        <c:out value="${comment.post.title}" />
+                                                    </td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${comment.approved}">
@@ -646,6 +657,7 @@
                             }
                         });
                     </script>
+                    <jsp:include page="toast_component.jsp" />
                     <script src="${pageContext.request.contextPath}/js/animations.js"></script>
                 </body>
 

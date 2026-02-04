@@ -15,7 +15,11 @@ public class UserController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
         if ("logout".equals(action)) {
-            req.getSession().invalidate();
+            HttpSession session = req.getSession();
+            session.removeAttribute("user");
+            session.setAttribute("toastType", "success");
+            session.setAttribute("toastTitle", "Goodbye!");
+            session.setAttribute("toastMessage", "You have been logged out successfully.");
             resp.sendRedirect("auth");
         } else {
             req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
@@ -43,19 +47,23 @@ public class UserController extends HttpServlet {
 
             // Check if user already exists
             if (userService.getUserByEmail(email.trim()) != null) {
-                req.setAttribute("error", "An account with this email already exists.");
+                req.setAttribute("toastType", "error");
+                req.setAttribute("toastTitle", "Registration Error");
+                req.setAttribute("toastMessage", "An account with this email already exists.");
                 req.setAttribute("isSignup", true);
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
                 return;
             }
             
-            try {
-                User newUser = new User(name.trim(), email.trim(), pass);
-                userService.addUser(newUser);
-                req.setAttribute("success", "Registration successful! Please login.");
-                req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
-            } catch (Exception e) {
-                req.setAttribute("error", "An unexpected error occurred. Please try again.");
+            // Using 3-arg constructor. Role defaults to "USER" in the Model.
+            User newUser = new User(name.trim(), email.trim(), pass);
+            if (userService.addUser(newUser)) {
+                req.getSession().setAttribute("toastType", "success");
+                req.getSession().setAttribute("toastTitle", "Account Created!");
+                req.getSession().setAttribute("toastMessage", "Welcome to BlogNest! You can now log in.");
+                resp.sendRedirect("auth");
+            } else {
+                req.setAttribute("error", "An error occurred. Please try again.");
                 req.setAttribute("isSignup", true);
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
             }
@@ -74,6 +82,9 @@ public class UserController extends HttpServlet {
             if (user != null) {
                 HttpSession session = req.getSession();
                 session.setAttribute("user", user);
+                session.setAttribute("toastType", "success");
+                session.setAttribute("toastTitle", "Welcome back!");
+                session.setAttribute("toastMessage", "You have successfully logged in.");
 
                 if("ADMIN".equalsIgnoreCase(user.getRole())) {
                     resp.sendRedirect("admin");
@@ -81,7 +92,9 @@ public class UserController extends HttpServlet {
                     resp.sendRedirect("blog");
                 }
             } else {
-                req.setAttribute("error", "Invalid email or password.");
+                req.setAttribute("toastType", "error");
+                req.setAttribute("toastTitle", "Login Failed");
+                req.setAttribute("toastMessage", "Invalid email or password.");
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
             }
         }

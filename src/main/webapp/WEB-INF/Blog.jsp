@@ -92,6 +92,7 @@
         <script src="${pageContext.request.contextPath}/js/theme.js"></script>
         <script src="${pageContext.request.contextPath}/js/animations.js"></script>
         <script src="${pageContext.request.contextPath}/js/profile.js"></script>
+        <jsp:include page="toast_component.jsp" />
     </body>
 
     </html>

@@ -26,12 +26,31 @@
     background: var(--white);
     width: 90%;
     max-width: 800px;
-    max-height: 90vh;
+    max-height: 85vh;
     border-radius: 24px;
     position: relative;
-    padding: 3rem;
+    padding: 2rem;
     overflow-y: auto;
+    overflow-x: hidden;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary-color) transparent;
+}
+
+/* Custom Scrollbar for Chrome/Safari */
+.profile-modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-modal-content::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 20px 0;
+    /* Keeps scrollbar away from rounded corners */
+}
+
+.profile-modal-content::-webkit-scrollbar-thumb {
+    background-color: var(--secondary-color);
+    border-radius: 20px;
 }
 
 .close-modal-btn {
@@ -60,7 +79,7 @@
 
 .profile-header-section p {
     color: var(--text-light);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Progress Section */
@@ -68,7 +87,7 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .progress-bar {
@@ -136,7 +155,7 @@
 }
 
 .profile-gif {
-    width: 200px;
+    width: 150px;
     border-radius: 12px;
 }
 

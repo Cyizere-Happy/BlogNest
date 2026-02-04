@@ -551,6 +551,7 @@
                     setActiveTab(false);
                 </c:if>
             </script>
+            <jsp:include page="toast_component.jsp" />
         </body>
 
         </html>

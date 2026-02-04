@@ -58,6 +58,7 @@ public class AdminController extends HttpServlet {
             String targetSection = "dashboard";
             
             try {
+                HttpSession session = req.getSession();
                 if ("createPost".equals(action)) {
                     targetSection = "manage-posts";
                     String title = req.getParameter("title") != null ? req.getParameter("title").trim() : null;
@@ -70,6 +71,9 @@ public class AdminController extends HttpServlet {
                          Post post = new Post(title, desc, content, category, user);
                          post.setThumbnail_url(thumb);
                          postService.createPost(post);
+                         session.setAttribute("toastType", "success");
+                         session.setAttribute("toastTitle", "Success!");
+                         session.setAttribute("toastMessage", "Your story has been published.");
                     }
                 } else if ("updatePost".equals(action)) {
                     targetSection = "manage-posts";
@@ -90,6 +94,9 @@ public class AdminController extends HttpServlet {
                             post.setDescription(desc);
                             post.setThumbnail_url(thumb);
                             postService.updatePost(post);
+                            session.setAttribute("toastType", "success");
+                            session.setAttribute("toastTitle", "Updated!");
+                            session.setAttribute("toastMessage", "Your story has been updated successfully.");
                         }
                     }
                 } else if ("deletePost".equals(action)) {
@@ -97,18 +104,27 @@ public class AdminController extends HttpServlet {
                     String postIdStr = req.getParameter("postId");
                     if (postIdStr != null) {
                         postService.deletePost(Long.parseLong(postIdStr));
+                        session.setAttribute("toastType", "success");
+                        session.setAttribute("toastTitle", "Deleted!");
+                        session.setAttribute("toastMessage", "The story has been removed.");
                     }
                 } else if ("approveComment".equals(action)) {
                     targetSection = "comments";
                     String commentIdStr = req.getParameter("commentId");
                     if (commentIdStr != null) {
                         commentService.approveComment(Long.parseLong(commentIdStr));
+                        session.setAttribute("toastType", "success");
+                        session.setAttribute("toastTitle", "Approved!");
+                        session.setAttribute("toastMessage", "The comment is now visible to everyone.");
                     }
                 } else if ("deleteComment".equals(action)) {
                     targetSection = "comments";
                     String commentIdStr = req.getParameter("commentId");
                     if (commentIdStr != null) {
                         commentService.deleteComment(Long.parseLong(commentIdStr));
+                        session.setAttribute("toastType", "success");
+                        session.setAttribute("toastTitle", "Removed!");
+                        session.setAttribute("toastMessage", "The comment has been deleted.");
                     }
                 } else if ("deleteUser".equals(action)) {
                     targetSection = "users";
@@ -118,6 +134,9 @@ public class AdminController extends HttpServlet {
                         // Prevent self-deletion
                         if (!user.getId().equals(userId)) {
                             userService.deleteUser(userId);
+                            session.setAttribute("toastType", "success");
+                            session.setAttribute("toastTitle", "User Disabled!");
+                            session.setAttribute("toastMessage", "The user account and their content have been removed.");
                         }
                     }
                 }

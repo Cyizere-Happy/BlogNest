@@ -53,6 +53,12 @@ public class ReadBlogController extends HttpServlet {
                 try {
                 Long postId = Long.parseLong(postIdStr);
                 postService.addComment(postId, user.getId(), content);
+                
+                HttpSession session = req.getSession();
+                session.setAttribute("toastType", "success");
+                session.setAttribute("toastTitle", "Success!");
+                session.setAttribute("toastMessage", "Your comment has been submitted.");
+                
                 resp.sendRedirect("read_blog?id=" + postId);
                 return;
                 } catch(NumberFormatException e) {

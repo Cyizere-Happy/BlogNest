@@ -35,13 +35,17 @@ public class UserService {
         }
     }
 
-    public void addUser(User user){
+    public boolean addUser(User user){
         try (Session session = getSf().openSession()) {
             session.beginTransaction();
             String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(hashed);
             session.persist(user);
             session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

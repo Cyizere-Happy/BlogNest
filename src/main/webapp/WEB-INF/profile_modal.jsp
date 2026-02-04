@@ -63,13 +63,15 @@
                 </div>
             </div>
 
-            <div class="logout-section"
-                style="margin-top: 2rem; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 1rem;">
-                <p style="margin: 0;">Logged in as: <strong>
-                        <c:out value="${user.email}" />
-                    </strong></p>
-                <a href="${pageContext.request.contextPath}/auth?action=logout" class="btn btn-primary"
-                    style="background: #e53e3e; border: none;">Log Out</a>
-            </div>
+            <c:if test="${not empty user}">
+                <div class="logout-section"
+                    style="margin-top: 2rem; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 1rem;">
+                    <p style="margin: 0;">Logged in as: <strong>
+                            <c:out value="${user.email}" />
+                        </strong></p>
+                    <a href="${pageContext.request.contextPath}/auth?action=logout" class="btn btn-primary"
+                        style="background: #e53e3e; border: none;">Log Out</a>
+                </div>
+            </c:if>
         </div>
     </div>

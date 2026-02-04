@@ -78,13 +78,18 @@
                     <article>
                         <header class="article-header">
                             <!-- Category Tag -->
-                            <div class="article-category">${not empty post.category ? post.category : 'General Stories'}
+                            <div class="article-category">
+                                <c:out value="${not empty post.category ? post.category : 'General Stories'}" />
                             </div>
-                            <h1 class="article-title">${post.title}</h1>
+                            <h1 class="article-title">
+                                <c:out value="${post.title}" />
+                            </h1>
                             <div class="article-meta"
                                 style="display: flex; gap: 1.5rem; color: var(--text-light); border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem;">
-                                <span>By <strong>${not empty post.author.name ? post.author.name : 'BlogNest
-                                        Author'}</strong></span>
+                                <span>By <strong>
+                                        <c:out
+                                            value="${not empty post.author.name ? post.author.name : 'BlogNest Author'}" />
+                                    </strong></span>
                                 <span class="meta-separator">•</span>
                                 <span>${not empty post.createdAt ? post.createdAt.toLocalDate() : 'Just now'}</span>
                                 <c:if test="${user.role == 'ADMIN'}">
@@ -101,7 +106,7 @@
                         <div class="article-body">
                             <c:choose>
                                 <c:when test="${not empty post.content}">
-                                    ${post.content}
+                                    <c:out value="${post.content}" />
                                 </c:when>
                                 <c:otherwise>
                                     <p>No content available.</p>
@@ -141,11 +146,15 @@
                                         style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
                                         <div class="comment-header"
                                             style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                            <strong>${comment.user.name}</strong>
+                                            <strong>
+                                                <c:out value="${comment.user.name}" />
+                                            </strong>
                                             <span
                                                 style="font-size: 0.8rem; color: #888;">${comment.createdAt.toLocalDate()}</span>
                                         </div>
-                                        <p>${comment.content}</p>
+                                        <p>
+                                            <c:out value="${comment.content}" />
+                                        </p>
                                     </div>
                                 </c:forEach>
                             </c:if>

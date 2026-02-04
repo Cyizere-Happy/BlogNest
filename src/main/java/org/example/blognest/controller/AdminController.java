@@ -55,48 +55,77 @@ public class AdminController extends HttpServlet {
         User user = (User) req.getSession().getAttribute("user");
         if (user != null && "ADMIN".equals(user.getRole())) {
             String action = req.getParameter("action");
+            String targetSection = "dashboard";
             
-            if ("createPost".equals(action)) {
-                String title = req.getParameter("title");
-                String content = req.getParameter("content");
-                String category = req.getParameter("category");
-                String desc = req.getParameter("description");
-                String thumb = req.getParameter("thumbnail_url");
+            try {
+                if ("createPost".equals(action)) {
+                    targetSection = "manage-posts";
+                    String title = req.getParameter("title") != null ? req.getParameter("title").trim() : null;
+                    String content = req.getParameter("content") != null ? req.getParameter("content").trim() : null;
+                    String category = req.getParameter("category") != null ? req.getParameter("category").trim() : "";
+                    String desc = req.getParameter("description") != null ? req.getParameter("description").trim() : "";
+                    String thumb = req.getParameter("thumbnail_url") != null ? req.getParameter("thumbnail_url").trim() : "";
 
-                if(title != null && content != null) {
-                     Post post = new Post(title, desc, content, category, user);
-                     post.setThumbnail_url(thumb);
-                     postService.createPost(post);
-                }
-            } else if ("updatePost".equals(action)) {
-                Long id = Long.parseLong(req.getParameter("postId"));
-                String title = req.getParameter("title");
-                String content = req.getParameter("content");
-                String category = req.getParameter("category");
-                String desc = req.getParameter("description");
-                String thumb = req.getParameter("thumbnail_url");
+                    if(title != null && !title.isEmpty() && content != null && !content.isEmpty()) {
+                         Post post = new Post(title, desc, content, category, user);
+                         post.setThumbnail_url(thumb);
+                         postService.createPost(post);
+                    }
+                } else if ("updatePost".equals(action)) {
+                    targetSection = "manage-posts";
+                    String postIdStr = req.getParameter("postId");
+                    if (postIdStr != null) {
+                        Long id = Long.parseLong(postIdStr);
+                        String title = req.getParameter("title") != null ? req.getParameter("title").trim() : null;
+                        String content = req.getParameter("content") != null ? req.getParameter("content").trim() : null;
+                        String category = req.getParameter("category") != null ? req.getParameter("category").trim() : "";
+                        String desc = req.getParameter("description") != null ? req.getParameter("description").trim() : "";
+                        String thumb = req.getParameter("thumbnail_url") != null ? req.getParameter("thumbnail_url").trim() : "";
 
-                Post post = postService.getPostById(id);
-                if (post != null) {
-                    post.setTitle(title);
-                    post.setContent(content);
-                    post.setCategory(category);
-                    post.setDescription(desc);
-                    post.setThumbnail_url(thumb);
-                    postService.updatePost(post);
+                        Post post = postService.getPostById(id);
+                        if (post != null && title != null && !title.isEmpty() && content != null && !content.isEmpty()) {
+                            post.setTitle(title);
+                            post.setContent(content);
+                            post.setCategory(category);
+                            post.setDescription(desc);
+                            post.setThumbnail_url(thumb);
+                            postService.updatePost(post);
+                        }
+                    }
+                } else if ("deletePost".equals(action)) {
+                    targetSection = "manage-posts";
+                    String postIdStr = req.getParameter("postId");
+                    if (postIdStr != null) {
+                        postService.deletePost(Long.parseLong(postIdStr));
+                    }
+                } else if ("approveComment".equals(action)) {
+                    targetSection = "comments";
+                    String commentIdStr = req.getParameter("commentId");
+                    if (commentIdStr != null) {
+                        commentService.approveComment(Long.parseLong(commentIdStr));
+                    }
+                } else if ("deleteComment".equals(action)) {
+                    targetSection = "comments";
+                    String commentIdStr = req.getParameter("commentId");
+                    if (commentIdStr != null) {
+                        commentService.deleteComment(Long.parseLong(commentIdStr));
+                    }
+                } else if ("deleteUser".equals(action)) {
+                    targetSection = "users";
+                    String userIdStr = req.getParameter("userId");
+                    if (userIdStr != null) {
+                        Long userId = Long.parseLong(userIdStr);
+                        // Prevent self-deletion
+                        if (!user.getId().equals(userId)) {
+                            userService.deleteUser(userId);
+                        }
+                    }
                 }
-            } else if ("deletePost".equals(action)) {
-                Long id = Long.parseLong(req.getParameter("postId"));
-                postService.deletePost(id);
-            } else if ("approveComment".equals(action)) {
-                Long id = Long.parseLong(req.getParameter("commentId"));
-                commentService.approveComment(id);
-            } else if ("deleteComment".equals(action)) {
-                Long id = Long.parseLong(req.getParameter("commentId"));
-                commentService.deleteComment(id);
+            } catch (Exception e) {
+                // Log the exception if you had a logger, for now just move on
             }
             
-            resp.sendRedirect("admin");
+            resp.sendRedirect("admin?section=" + targetSection);
         } else {
             resp.sendRedirect("auth");
         }

@@ -337,6 +337,42 @@
                 .delay-200 {
                     transition-delay: 200ms;
                 }
+
+                /* Alerts */
+                .alert {
+                    padding: 1rem 1.5rem;
+                    border-radius: 12px;
+                    margin-bottom: 2rem;
+                    font-size: 0.95rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    animation: slideInDown 0.4s ease;
+                }
+
+                .alert-error {
+                    background: #fff5f5;
+                    color: #c53030;
+                    border: 1px solid #feb2b2;
+                }
+
+                .alert-success {
+                    background: #f0fff4;
+                    color: #276749;
+                    border: 1px solid #9ae6b4;
+                }
+
+                @keyframes slideInDown {
+                    from {
+                        transform: translateY(-10px);
+                        opacity: 0;
+                    }
+
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
             </style>
         </head>
 
@@ -371,9 +407,32 @@
             <main class="container">
                 <div class="login-section reveal reveal-left">
                     <div class="header-tabs">
-                        <button class="tab active">Login</button>
-                        <button class="tab">Sign up</button>
+                        <button class="tab active" id="tab-login">Login</button>
+                        <button class="tab" id="tab-signup">Sign up</button>
                     </div>
+
+                    <!-- Alerts -->
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-error">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <c:out value="${error}" />
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty success}">
+                        <div class="alert alert-success">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <c:out value="${success}" />
+                        </div>
+                    </c:if>
 
                     <!-- Login Form -->
                     <form id="login-form" class="auth-form reveal reveal-up delay-100" action="auth" method="post">
@@ -467,24 +526,30 @@
 
                 tabs.forEach(tab => {
                     tab.addEventListener('click', () => {
-                        tabs.forEach(t => t.classList.remove('active'));
-                        tab.classList.add('active');
-
-                        if (tab.innerText === 'Login') {
-                            loginForm.classList.remove('hidden');
-                            signupForm.classList.add('hidden');
-                            setTimeout(() => {
-                                loginForm.classList.add('active');
-                            }, 10);
-                        } else {
-                            loginForm.classList.add('hidden');
-                            signupForm.classList.remove('hidden');
-                            setTimeout(() => {
-                                signupForm.classList.add('active');
-                            }, 10);
-                        }
+                        const isLogin = tab.id === 'tab-login';
+                        setActiveTab(isLogin);
                     });
                 });
+
+                function setActiveTab(isLogin) {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    if (isLogin) {
+                        document.getElementById('tab-login').classList.add('active');
+                        loginForm.classList.remove('hidden');
+                        signupForm.classList.add('hidden');
+                        setTimeout(() => loginForm.classList.add('active'), 10);
+                    } else {
+                        document.getElementById('tab-signup').classList.add('active');
+                        loginForm.classList.add('hidden');
+                        signupForm.classList.remove('hidden');
+                        setTimeout(() => signupForm.classList.add('active'), 10);
+                    }
+                }
+
+                // Handle server-side redirection to tab
+                <c:if test="${isSignup}">
+                    setActiveTab(false);
+                </c:if>
             </script>
         </body>
 

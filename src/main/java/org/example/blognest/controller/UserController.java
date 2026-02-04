@@ -31,14 +31,45 @@ public class UserController extends HttpServlet {
             String email = req.getParameter("email");
             String pass = req.getParameter("password");
             
-            // Basic validation removed for brevity, rely on frontend or add later
-            userService.addUser(new User(name, email, pass));
-            resp.sendRedirect("auth");
+            // Basic Validation & Security
+            if (name == null || name.trim().isEmpty() || 
+                email == null || email.trim().isEmpty() || 
+                pass == null || pass.trim().isEmpty()) {
+                req.setAttribute("error", "All fields are required.");
+                req.setAttribute("isSignup", true);
+                req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
+                return;
+            }
+
+            // Check if user already exists
+            if (userService.getUserByEmail(email.trim()) != null) {
+                req.setAttribute("error", "An account with this email already exists.");
+                req.setAttribute("isSignup", true);
+                req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
+                return;
+            }
+            
+            try {
+                User newUser = new User(name.trim(), email.trim(), pass);
+                userService.addUser(newUser);
+                req.setAttribute("success", "Registration successful! Please login.");
+                req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
+            } catch (Exception e) {
+                req.setAttribute("error", "An unexpected error occurred. Please try again.");
+                req.setAttribute("isSignup", true);
+                req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
+            }
         } else if ("login".equals(action)) {
             String email = req.getParameter("email");
             String pass = req.getParameter("password");
             
-            User user = userService.authenticate(email, pass);
+            if (email == null || email.trim().isEmpty() || pass == null || pass.trim().isEmpty()) {
+                req.setAttribute("error", "Please provide both email and password.");
+                req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
+                return;
+            }
+
+            User user = userService.authenticate(email.trim(), pass);
             
             if (user != null) {
                 HttpSession session = req.getSession();
@@ -46,11 +77,11 @@ public class UserController extends HttpServlet {
 
                 if("ADMIN".equalsIgnoreCase(user.getRole())) {
                     resp.sendRedirect("admin");
-                }else {
+                } else {
                     resp.sendRedirect("blog");
                 }
             } else {
-                req.setAttribute("error", "Invalid email or password");
+                req.setAttribute("error", "Invalid email or password.");
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
             }
         }

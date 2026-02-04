@@ -258,7 +258,8 @@
                             <!-- Manage Posts Section -->
                             <div id="manage-posts" class="admin-section" style="display: none;">
                                 <div class="section-header">
-                                    <h2 class="section-title">Story Management</h2>
+                                    <h2 class="section-title">Story Management <span class="admin-badge"
+                                            style="background: var(--text-dim);">${fn:length(posts)}</span></h2>
                                     <button class="btn btn-primary" onclick="prepareNewPost()">+ New
                                         Post</button>
                                 </div>
@@ -276,12 +277,16 @@
                                                     <span class="dot"></span>
                                                     <span>5 MIN READ</span>
                                                 </div>
-                                                <h3 class="post-card-title">${post.title}</h3>
-                                                <p class="post-card-excerpt">${post.description}</p>
+                                                <h3 class="post-card-title">
+                                                    <c:out value="${post.title}" />
+                                                </h3>
+                                                <p class="post-card-excerpt">
+                                                    <c:out value="${post.description}" />
+                                                </p>
                                                 <div class="post-card-actions">
                                                     <a href="javascript:void(0)" class="edit-link"
-                                                        onclick="editPost(${post.id}, this)" data-title="${post.title}"
-                                                        data-desc="${post.description}"
+                                                        onclick="editPost('${post.id}', this)"
+                                                        data-title="${post.title}" data-desc="${post.description}"
                                                         data-content="<c:out value='${post.content}'/>"
                                                         data-category="${post.category}"
                                                         data-thumb="${post.thumbnail_url}">
@@ -319,7 +324,8 @@
                             <!-- Users Section -->
                             <div id="users" class="admin-section" style="display: none;">
                                 <div class="section-header">
-                                    <h2 class="section-title">Platform Users</h2>
+                                    <h2 class="section-title">Platform Users <span class="admin-badge"
+                                            style="background: var(--text-dim);">${fn:length(users)}</span></h2>
                                 </div>
                                 <div class="table-container">
                                     <table class="admin-table">
@@ -333,17 +339,45 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="u" items="${users}">
-                                                <tr>
-                                                    <td class="user-cell"><img
-                                                            src="https://ui-avatars.com/api/?name=${u.name}" alt="">
-                                                        ${u.name}</td>
-                                                    <td>${u.email}</td>
-                                                    <td>${u.role}</td>
-                                                    <td>Joined</td>
-                                                    <td><button class="action-btn danger">Disable</button></td>
-                                                </tr>
-                                            </c:forEach>
+                                            <c:choose>
+                                                <c:when test="${not empty users}">
+                                                    <c:forEach var="u" items="${users}">
+                                                        <tr>
+                                                            <td class="user-cell"><img
+                                                                    src="https://ui-avatars.com/api/?name=<c:out value="${u.name}"/>"
+                                                                    alt="">
+                                                                <c:out value="${u.name}"/>
+                                                                <c:if test="${u.id == sessionScope.user.id}">
+                                                                    <span class="status-badge published"
+                                                                        style="font-size: 10px; margin-left: 5px;">You</span>
+                                                                </c:if>
+                                                            </td>
+                                                            <td><c:out value="${u.email}"/></td>
+                                                            <td><c:out value="${u.role}"/></td>
+                                                            <td>Joined</td>
+                                                            <td>
+                                                                <c:if test="${u.id != sessionScope.user.id}">
+                                                                    <form action="admin" method="post"
+                                                                        style="display:inline;">
+                                                                        <input type="hidden" name="action"
+                                                                            value="deleteUser">
+                                                                        <input type="hidden" name="userId"
+                                                                            value="${u.id}">
+                                                                        <button type="submit" class="action-btn danger"
+                                                                            onclick="return confirm('Delete this user? This will also delete all their posts and comments.')">Disable</button>
+                                                                    </form>
+                                                                </c:if>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <tr>
+                                                        <td colspan="5" style="text-align:center; padding: 20px;">No
+                                                            users found.</td>
+                                                    </tr>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </tbody>
                                     </table>
                                 </div>
@@ -368,9 +402,9 @@
                                         <tbody>
                                             <c:forEach var="comment" items="${comments}">
                                                 <tr>
-                                                    <td>${comment.user.name}</td>
-                                                    <td>"${comment.content}"</td>
-                                                    <td>${comment.post.title}</td>
+                                                    <td><c:out value="${comment.user.name}"/></td>
+                                                    <td>"<c:out value="${comment.content}"/>"</td>
+                                                    <td><c:out value="${comment.post.title}"/></td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${comment.approved}">
@@ -602,6 +636,15 @@
                                 switchView('post-editor');
                             });
                         </c:if>
+
+                        // Check for section parameter in URL
+                        window.addEventListener('DOMContentLoaded', () => {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const section = urlParams.get('section');
+                            if (section) {
+                                switchView(section);
+                            }
+                        });
                     </script>
                     <script src="${pageContext.request.contextPath}/js/animations.js"></script>
                 </body>

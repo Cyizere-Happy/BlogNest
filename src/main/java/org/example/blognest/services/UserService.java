@@ -53,10 +53,10 @@ public class UserService {
         }
     }
 
-    public void deleteUser(int userId){
+    public void deleteUser(Long userId){
         try (Session session = getSf().openSession()) {
             session.beginTransaction();
-            User u = session.get(User.class, (long) userId);
+            User u = session.get(User.class, userId);
             if (u != null) {
                 session.delete(u);
             }
@@ -73,6 +73,14 @@ public class UserService {
     public User getUserById(Long id){
         try (Session session = getSf().openSession()) {
             return session.get(User.class, id);
+        }
+    }
+
+    public User getUserByEmail(String email) {
+        try (Session session = getSf().openSession()) {
+            Query<User> query = session.createQuery("FROM User WHERE email = :email", User.class);
+            query.setParameter("email", email);
+            return query.uniqueResult();
         }
     }
 }

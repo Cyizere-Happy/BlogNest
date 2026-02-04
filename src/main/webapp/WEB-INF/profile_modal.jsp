@@ -4,7 +4,9 @@
             <button id="close-profile" class="close-modal-btn">&times;</button>
 
             <div class="profile-header-section">
-                <h1>Good Evening, ${user != null ? user.name : 'Guest'}.</h1>
+                <h1>Good Evening,
+                    <c:out value="${user != null ? user.name : 'Guest'}" />.
+                </h1>
                 <p>Start supporting your customers in no time, by completing the tasks below.</p>
             </div>
 
@@ -63,7 +65,9 @@
 
             <div class="logout-section"
                 style="margin-top: 2rem; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 1rem;">
-                <p style="margin: 0;">Logged in as: <strong>${user.email}</strong></p>
+                <p style="margin: 0;">Logged in as: <strong>
+                        <c:out value="${user.email}" />
+                    </strong></p>
                 <a href="${pageContext.request.contextPath}/auth?action=logout" class="btn btn-primary"
                     style="background: #e53e3e; border: none;">Log Out</a>
             </div>

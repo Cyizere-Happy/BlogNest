@@ -6,7 +6,7 @@
     margin: 0 auto;
     padding: 32px 40px 64px;
     display: grid;
-    grid-template-columns: 320px 1fr 200px;
+    grid-template-columns: 250px 1fr 200px;
     gap: 40px;
     position: relative;
     min-height: 100vh;
@@ -21,15 +21,12 @@
 
 .article-hero-img {
     width: 100%;
-    height: 480px;
+    height: 350px;
     background-color: #f7fafc;
     border-radius: 12px;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     position: relative;
-    z-index: 10;
-    transform: translateX(20px);
-    /* Reduced translation */
 }
 
 .article-hero-img img {
@@ -42,8 +39,8 @@
 .article-content {
     display: flex;
     flex-direction: column;
-    padding-top: 32px;
-    /* Align text visually */
+    padding-top: 0;
+    padding-left: 20px;
 }
 
 .article-header {
@@ -64,19 +61,12 @@
 
 .article-title {
     font-family: 'Jost', sans-serif;
-    font-size: 64px;
-    /* Convert rem to px for stability */
-    font-weight: 300;
-    /* Use light weight to match local look */
+    font-size: 48px;
+    font-weight: 400;
     color: var(--primary-color);
-    line-height: 1.1;
-    margin-bottom: 32px;
-    position: relative;
-    z-index: 1;
-    margin-left: -20px;
-    /* Reduced negative margin to prevent excessive overlap */
-    max-width: 900px;
-    /* Cap width to prevent excessive growth */
+    line-height: 1.2;
+    margin-bottom: 24px;
+    max-width: 650px;
 }
 
 /* Metadata Grid */

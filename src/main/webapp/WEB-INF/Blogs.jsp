@@ -40,10 +40,8 @@
                             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                         </svg>
                     </div>
-                    <div class="nav-links" style="display: flex; gap: 1rem; margin: 0 1rem;">
-                        <a href="${pageContext.request.contextPath}/quotes"
-                            style="text-decoration: none; color: var(--text-light); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Daily
-                            Quote</a>
+                    <div class="nav-links">
+                        <a href="${pageContext.request.contextPath}/quotes" class="nav-item">Daily Quote</a>
                     </div>
                     <div class="nav-profile">
                         <a href="javascript:void(0)" class="active-profile profile-trigger"
@@ -75,8 +73,7 @@
                                         <div class="discovery-card">
                                             <div class="card-visuals">
                                                 <div class="main-img"
-                                                    style="background-color: ${post.category == 'Tech' ? '#cbd5e0' : '#f7fafc'}; 
-                                                     background-image: url('${post.thumbnail_url}'); background-size: cover; background-position: center;">
+                                                    style="background-color: ${post.category == 'Tech' ? '#cbd5e0' : '#f7fafc'}; background-image: url('${post.thumbnail_url}'); background-size: cover; background-position: center;">
                                                 </div>
                                                 <div class="thumb-img"
                                                     style="background-color: var(--secondary-color);"></div>
@@ -99,8 +96,7 @@
                                         <div class="discovery-card">
                                             <div class="card-visuals">
                                                 <div class="main-img"
-                                                    style="background-color: ${post.category == 'Tech' ? '#cbd5e0' : '#f7fafc'}; 
-                                                     background-image: url('${post.thumbnail_url}'); background-size: cover; background-position: center;">
+                                                    style="background-color: ${post.category == 'Tech' ? '#cbd5e0' : '#f7fafc'}; background-image: url('${post.thumbnail_url}'); background-size: cover; background-position: center;">
                                                 </div>
                                                 <div class="thumb-img"
                                                     style="background-color: var(--secondary-color);"></div>

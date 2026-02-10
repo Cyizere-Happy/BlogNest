@@ -43,7 +43,7 @@
 .quotes-header h1 {
     font-size: 3.5rem;
     font-weight: 800;
-    color: #000;
+    color: var(--primary-color);
     margin-bottom: 2rem;
     letter-spacing: -1px;
 }
@@ -64,7 +64,7 @@
 
 .header-content p {
     font-size: 1.1rem;
-    color: #666;
+    color: var(--text-light);
     line-height: 1.6;
 }
 
@@ -100,7 +100,7 @@
     transform: translateX(-50%);
     font-size: 0.9rem;
     font-weight: 700;
-    color: #333;
+    color: var(--text-color);
     letter-spacing: 1px;
 }
 
@@ -117,7 +117,7 @@
     padding: 1rem 2rem;
     background: linear-gradient(to right, rgba(56, 178, 172, 0.02) 0%, rgba(56, 178, 172, 0.15) 100%);
     border-radius: 8px;
-    color: #000;
+    color: var(--text-color);
     font-weight: 600;
     font-size: 0.95rem;
     white-space: nowrap;
@@ -199,21 +199,18 @@
     }
 }
 
-.dark-theme .quotes-container {
+body.dark-theme .quotes-container {
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
 }
 
-.dark-theme .quotes-header h1,
-.dark-theme .dot-label {
-    color: #fff;
-}
-
-.dark-theme .sticker-card {
-    color: #fff;
+body.dark-theme .sticker-card {
     background: linear-gradient(to right, rgba(56, 178, 172, 0.1) 0%, rgba(56, 178, 172, 0.25) 100%);
 }
 
-.dark-theme .header-marker {
-    color: var(--design-brand);
+body.dark-theme .sticker-card:hover {
+    background: linear-gradient(to right, rgba(56, 178, 172, 0.15) 0%, rgba(56, 178, 172, 0.35) 100%);
+}
+
+body.dark-theme .header-marker {
     opacity: 0.2;
 }

@@ -40,6 +40,9 @@
                             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                         </svg>
                     </div>
+                    <div class="nav-links">
+                        <a href="${pageContext.request.contextPath}/quotes" class="nav-item active">Daily Quote</a>
+                    </div>
                     <div class="nav-profile">
                         <a href="javascript:void(0)" class="active-profile profile-trigger"
                             data-logged-in="${user != null}" style="color: inherit;">

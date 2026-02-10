@@ -10,6 +10,8 @@ import org.example.blognest.services.UserService;
 import org.example.blognest.services.CommentService;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @WebServlet("/admin")
 public class AdminController extends HttpServlet {
@@ -32,6 +34,7 @@ public class AdminController extends HttpServlet {
             req.setAttribute("totalViews", totalViews);
             req.setAttribute("totalPosts", postService.getAllPosts().size());
             req.setAttribute("totalUsers", userService.getAllUsers().size());
+            req.setAttribute("messageHistory", org.example.blognest.services.QuoteService.getInstance().getMessageHistory());
             
             // Check for cross-page edit request
             String editId = req.getParameter("editId");
@@ -138,6 +141,27 @@ public class AdminController extends HttpServlet {
                             session.setAttribute("toastTitle", "User Disabled!");
                             session.setAttribute("toastMessage", "The user account and their content have been removed.");
                         }
+                    }
+                } else if ("updateDailyMessage".equals(action)) {
+                    targetSection = "quotes-admin";
+                    String title = req.getParameter("title");
+                    String message = req.getParameter("message");
+                    String takeawaysStr = req.getParameter("takeaways");
+                    
+                    if (title != null && message != null && takeawaysStr != null) {
+                        List<String> takeaways = Arrays.asList(takeawaysStr.split("\\n"));
+                        // Filter out empty lines
+                        takeaways = takeaways.stream()
+                                    .map(String::trim)
+                                    .filter(s -> !s.isEmpty())
+                                    .toList();
+                                    
+                        org.example.blognest.services.QuoteService.getInstance()
+                            .updateDailyMessage(title, message, takeaways);
+                            
+                        session.setAttribute("toastType", "success");
+                        session.setAttribute("toastTitle", "Updated!");
+                        session.setAttribute("toastMessage", "The Message of the Day has been updated.");
                     }
                 }
             } catch (Exception e) {

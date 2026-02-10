@@ -78,6 +78,15 @@
                                 </svg>
                                 Analytics
                             </a>
+                            <a href="#" class="sidebar-link" data-section="quotes-admin">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    <line x1="9" y1="9" x2="15" y2="9"></line>
+                                    <line x1="9" y1="13" x2="13" y2="13"></line>
+                                </svg>
+                                Daily Message
+                            </a>
                             <a href="#" class="sidebar-link" data-section="settings">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -116,6 +125,11 @@
                             </div>
                             <div class="welcome-text">
                                 Home / Dashboard
+                            </div>
+                            <div class="topbar-nav" style="margin-left: 2rem;">
+                                <a href="${pageContext.request.contextPath}/quotes"
+                                    style="text-decoration: none; color: #666; font-weight: 600; font-size: 0.9rem;">View
+                                    Daily Quote</a>
                             </div>
                             <div class="topbar-actions">
                                 <div class="action-icon">
@@ -238,6 +252,23 @@
                                     </div>
                                 </div>
 
+                                <!-- Daily Message Card -->
+                                <div class="admin-card reveal reveal-up delay-200">
+                                    <div class="card-icon">
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
+                                            stroke="var(--secondary-color)" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <h3>Daily Message</h3>
+                                    <p>Update the inspiring message and takeaways shared with readers.</p>
+                                    <div class="card-action-overlay">
+                                        <button class="view-btn" onclick="switchView('quotes-admin')">Manage
+                                            Message</button>
+                                    </div>
+                                </div>
                                 <!-- Help Card (Large) -->
                                 <div class="admin-card large-card reveal reveal-up delay-300">
                                     <div class="card-icon">
@@ -537,12 +568,79 @@
                                     </div>
                                 </form>
                             </div>
+                            <!-- Daily Message Management -->
+                            <div id="quotes-admin" class="admin-section" style="display: none;">
+                                <div class="section-header">
+                                    <h2 class="section-title">Message of the Day</h2>
+                                </div>
+                                <div class="post-editor-section">
+                                    <form action="admin" method="post">
+                                        <input type="hidden" name="action" value="updateDailyMessage">
+                                        <div class="form-group">
+                                            <label>Message Title</label>
+                                            <input type="text" name="title" class="form-control"
+                                                placeholder="e.g. Growth Mindset" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Main Message</label>
+                                            <textarea name="message" class="form-control content-area"
+                                                style="min-height: 150px;"
+                                                placeholder="Share your main thought for today..." required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Key Takeaways (one per line)</label>
+                                            <textarea name="takeaways" class="form-control content-area"
+                                                style="min-height: 200px;"
+                                                placeholder="Embrace the struggle&#10;Learn from setbacks"
+                                                required></textarea>
+                                        </div>
+                                        <div class="editor-actions">
+                                            <button type="submit" class="btn btn-primary">Update Daily Message</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="section-header" style="margin-top: 4rem;">
+                                    <h2 class="section-title">Message History</h2>
+                                </div>
+                                <div class="table-container">
+                                    <table class="admin-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Day</th>
+                                                <th>Title</th>
+                                                <th>Takeaways</th>
+                                                <th>Content</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="msg" items="${messageHistory}">
+                                                <tr>
+                                                    <td><span class="status-badge published">${msg.formattedDay}</span>
+                                                    </td>
+                                                    <td style="font-weight: 700;">${msg.title}</td>
+                                                    <td>
+                                                        <c:forEach var="t" items="${msg.takeaways}">
+                                                            <span class="status-badge"
+                                                                style="background: rgba(56, 178, 172, 0.1); color: var(--secondary-color); font-size: 10px; margin-bottom: 2px;">${t}</span>
+                                                        </c:forEach>
+                                                    </td>
+                                                    <td
+                                                        style="font-size: 0.85rem; color: #666; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                        ${msg.mainMessage}
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </main>
 
                     <script>
                         // View Management
-                        const sections = ['dashboard', 'manage-posts', 'post-editor', 'users', 'comments', 'analytics'];
+                        const sections = ['dashboard', 'manage-posts', 'post-editor', 'users', 'comments', 'analytics', 'quotes-admin'];
                         const sidebarLinks = document.querySelectorAll('.sidebar-link[data-section]');
                         const adminWelcomeTitle = document.querySelector('.admin-welcome-title');
                         const adminGrid = document.querySelector('.admin-grid');

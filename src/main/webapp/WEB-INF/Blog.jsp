@@ -20,6 +20,11 @@
             <div class="pill-nav">
                 <div class="nav-logo"><a href="${pageContext.request.contextPath}/blog"
                         style="text-decoration: none;   color: inherit; ">BlogNest</a></div>
+                <div class="nav-links" style="display: flex; gap: 1rem; margin-right: 0.8rem;">
+                    <a href="${pageContext.request.contextPath}/quotes" class="nav-item"
+                        style="text-decoration: none; color: inherit; font-weight: 500; font-size: 0.8rem; opacity: 0.8;">Daily
+                        Quote</a>
+                </div>
                 <div class="nav-theme-toggle" id="theme-toggle">
                     <svg id="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

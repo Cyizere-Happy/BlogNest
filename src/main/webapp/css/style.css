@@ -73,11 +73,13 @@ body {
 
 .pill-nav {
     background: var(--white);
-    padding: 0.6rem 1rem;
+    padding: 0.4rem 0.8rem;
+    /* Reduced from 0.6rem 1rem */
     border-radius: 100px;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.8rem;
+    /* Reduced gap */
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
 }
@@ -88,9 +90,10 @@ body {
 }
 
 .nav-logo {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+    /* Reduced from 1.1rem */
     font-weight: 900;
-    margin-left: 1rem;
+    margin-left: 0.8rem;
     color: var(--primary-color);
     letter-spacing: -0.5px;
     text-transform: uppercase;
@@ -997,7 +1000,8 @@ body {
 
 .admin-post-card {
     background: var(--white);
-    border-radius: 20px;
+    border-radius: 16px;
+    /* Reduced from 20px */
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -1014,7 +1018,8 @@ body {
 .post-card-visual {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 21 / 9;
+    /* Much more compact aspect ratio */
     overflow: hidden;
     background: #f1f5f9;
 }
@@ -1049,17 +1054,20 @@ body {
 }
 
 .post-card-content {
-    padding: 1.5rem;
+    padding: 1.25rem;
+    /* Reduced from 1.5rem */
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 .post-card-meta {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    /* Reduced from 0.75rem */
     color: var(--text-light);
     font-weight: 600;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
+    /* Reduced from 0.8rem */
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: flex;
@@ -1075,18 +1083,22 @@ body {
 }
 
 .post-card-title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    /* Reduced from 1.25rem */
     font-weight: 800;
     line-height: 1.3;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
     color: var(--primary-color);
 }
 
 .post-card-excerpt {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    /* Reduced from 0.9rem */
     color: var(--text-light);
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    line-height: 1.4;
+    /* Reduced from 1.6 */
+    margin-bottom: 1rem;
+    /* Reduced from 1.5rem */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -1098,7 +1110,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1.25rem;
+    padding-top: 1rem;
+    /* Reduced from 1.25rem */
     border-top: 1px solid rgba(0, 0, 0, 0.04);
     margin-top: auto;
 }

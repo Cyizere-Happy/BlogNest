@@ -14,6 +14,9 @@ public class Main {
         String webappDirLocation = "/app/webapp";
         tomcat.addWebapp("", new File(webappDirLocation).getAbsolutePath());
 
+        // Enable WebSocket support
+        tomcat.addServlet("", "default", "org.apache.catalina.servlets.DefaultServlet");
+        
         System.out.println("Server started at http://localhost:" + port);
         tomcat.start();
         tomcat.getServer().await();

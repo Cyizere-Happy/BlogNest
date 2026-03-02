@@ -13,6 +13,7 @@
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/read_blog.css">
             <!-- Specific Layout Styles -->
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chat.css">
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link
@@ -190,6 +191,13 @@
             <script src="${pageContext.request.contextPath}/js/theme.js"></script>
             <script src="${pageContext.request.contextPath}/js/animations.js"></script>
             <script src="${pageContext.request.contextPath}/js/profile.js"></script>
+            <c:if test="${user != null}">
+                <script>
+                    window.chatUser = "${user.name}";
+                    window.contextPath = "${pageContext.request.contextPath}";
+                </script>
+                <script src="${pageContext.request.contextPath}/js/chat.js"></script>
+            </c:if>
             <jsp:include page="toast_component.jsp" />
         </body>
 

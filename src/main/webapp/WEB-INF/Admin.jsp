@@ -87,6 +87,13 @@
                                 </svg>
                                 Daily Message
                             </a>
+                            <a href="#" class="sidebar-link" data-section="messages">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                Messages
+                            </a>
                             <a href="#" class="sidebar-link" data-section="settings">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -635,23 +642,57 @@
                                     </table>
                                 </div>
                             </div>
+
+                            <!-- Messages Section -->
+                            <div id="messages" class="admin-section" style="display: none;">
+                                <div class="section-header">
+                                    <h2 class="section-title">Live Chat</h2>
+                                </div>
+                                <div class="chat-admin-container"
+                                    style="display: flex; height: 600px; background: white; border-radius: 12px; box-shadow: var(--shadow); overflow: hidden;">
+                                    <!-- User List -->
+                                    <div class="chat-user-list" id="chatUserList"
+                                        style="width: 300px; border-right: 1px solid #f1f5f9; display: flex; flex-direction: column;">
+                                        <div style="padding: 20px; border-bottom: 1px solid #f1f5f9; font-weight: 700;">
+                                            Active Conversations</div>
+                                        <div id="usersContainer" style="flex: 1; overflow-y: auto;">
+                                            <!-- Dynamic users -->
+                                        </div>
+                                    </div>
+                                    <!-- Chat Area -->
+                                    <div class="chat-main-area" style="flex: 1; display: flex; flex-direction: column;">
+                                        <div id="chatWith"
+                                            style="padding: 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">
+                                            Select a user to start chatting</div>
+                                        <div id="adminChatBody"
+                                            style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #fafafa;">
+                                            <!-- Messages -->
+                                        </div>
+                                        <div
+                                            style="padding: 20px; border-top: 1px solid #f1f5f9; display: flex; gap: 10px;">
+                                            <input type="text" id="adminChatInput" placeholder="Type a response..."
+                                                style="flex: 1; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+                                            <button id="adminSendBtn"
+                                                style="padding: 0 20px; background: var(--secondary-color); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </main>
 
                     <script>
                         // View Management
-                        const sections = ['dashboard', 'manage-posts', 'post-editor', 'users', 'comments', 'analytics', 'quotes-admin'];
+                        const sections = ['dashboard', 'manage-posts', 'post-editor', 'users', 'comments', 'analytics', 'quotes-admin', 'messages'];
                         const sidebarLinks = document.querySelectorAll('.sidebar-link[data-section]');
                         const adminWelcomeTitle = document.querySelector('.admin-welcome-title');
                         const adminGrid = document.querySelector('.admin-grid');
 
                         function switchView(viewName) {
-                            // Hide all specialized sections
                             document.querySelectorAll('.admin-section').forEach(section => {
                                 section.style.display = 'none';
                             });
 
-                            // Handle Dashboard special case
                             if (viewName === 'dashboard') {
                                 adminWelcomeTitle.style.display = 'block';
                                 adminGrid.style.display = 'grid';
@@ -662,23 +703,22 @@
                                 if (target) target.style.display = 'block';
                             }
 
-                            // Update Sidebar UI
                             sidebarLinks.forEach(link => {
                                 link.classList.remove('active');
                                 if (link.getAttribute('data-section') === viewName) {
                                     link.classList.add('active');
                                 }
                             });
+
+                            if (viewName === 'messages') connectAdminWS();
                         }
 
                         function editPost(postId, btn) {
-                            // Logic to switch to editor and load data from data attributes
                             document.getElementById('editor-title-h2').innerText = "Edit Story";
                             document.getElementById('editor-action').value = "updatePost";
                             document.getElementById('editor-post-id').value = postId;
                             document.getElementById('publish-post').innerText = "Update Post";
 
-                            // Fill fields
                             document.getElementById('post-title').value = btn.getAttribute('data-title');
                             document.getElementById('post-excerpt').value = btn.getAttribute('data-desc');
                             document.getElementById('post-content').value = btn.getAttribute('data-content');
@@ -688,7 +728,6 @@
                             switchView('post-editor');
                         }
 
-                        // Reset form for New Post
                         function prepareNewPost() {
                             document.getElementById('editor-title-h2').innerText = "Create New Story";
                             document.getElementById('editor-action').value = "createPost";
@@ -704,56 +743,149 @@
                             switchView('post-editor');
                         }
 
-                        // Sidebar Navigation Listeners
                         sidebarLinks.forEach(link => {
                             link.addEventListener('click', (e) => {
                                 e.preventDefault();
-                                const section = link.getAttribute('data-section');
-                                switchView(section);
+                                switchView(link.getAttribute('data-section'));
                             });
                         });
 
-                        // Specific Editor Actions
-                        const cancelEdit = document.getElementById('cancel-edit');
+                        document.getElementById('cancel-edit').onclick = () => switchView('dashboard');
 
-                        cancelEdit.addEventListener('click', () => {
-                            switchView('dashboard');
-                        });
-
-                        // Simple script to toggle active state on cards for demo
-                        document.querySelectorAll('.admin-post-card').forEach(card => {
-                            card.addEventListener('click', () => {
-                                // demo effect
-                            });
-                        });
-
-                        // Check for pre-loaded editPost (from cross-page edit)
+                        // Pre-loaded editPost
                         <c:if test="${not empty editPost}">
-                            window.addEventListener('DOMContentLoaded', () => {
-                                // Need to simulate a button or just fill directly
+                        window.addEventListener('DOMContentLoaded', () => {
                                 document.getElementById('editor-title-h2').innerText = "Edit Story";
                             document.getElementById('editor-action').value = "updatePost";
                             document.getElementById('editor-post-id').value = "${editPost.id}";
                             document.getElementById('publish-post').innerText = "Update Post";
-
                             document.getElementById('post-title').value = `<c:out value="${editPost.title}" />`;
                             document.getElementById('post-excerpt').value = `<c:out value="${editPost.description}" />`;
                             document.getElementById('post-content').value = `<c:out value="${editPost.content}" />`;
                             document.getElementById('post-category').value = `<c:out value="${editPost.category}" />`;
                             document.getElementById('post-image').value = `<c:out value="${editPost.thumbnail_url}" />`;
-
-                                switchView('post-editor');
-                            });
+                            switchView('post-editor');
+                        });
                         </c:if>
 
-                        // Check for section parameter in URL
                         window.addEventListener('DOMContentLoaded', () => {
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const section = urlParams.get('section');
-                            if (section) {
-                                switchView(section);
-                            }
+                            const section = new URLSearchParams(window.location.search).get('section');
+                            if (section) switchView(section);
                         });
+
+                        // Admin Chat Logic
+                        let adminSocket = null;
+                        let activeChatUser = null;
+
+                        function connectAdminWS() {
+                            if (adminSocket && (adminSocket.readyState === WebSocket.OPEN || adminSocket.readyState === WebSocket.CONNECTING)) return;
+
+                            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                            const context = "${pageContext.request.contextPath}";
+                            adminSocket = new WebSocket(`\${protocol}//\${window.location.host}\${context}/chat/Admin`);
+
+                            adminSocket.onopen = () => {
+                                if (activeChatUser) {
+                                    adminSocket.send(JSON.stringify({ sender: 'Admin', recipient: activeChatUser, content: 'GET_HISTORY', type: 'CHAT' }));
+                                }
+                            };
+
+                            adminSocket.onmessage = (event) => {
+                                const msg = JSON.parse(event.data);
+                                if (msg.type === 'CHAT') {
+                                    if (msg.sender === 'Admin') {
+                                        if (activeChatUser === msg.recipient) appendAdminMsg(msg.content, 'admin');
+                                    } else if (msg.sender !== 'System') {
+                                        if (activeChatUser === msg.sender) {
+                                            appendAdminMsg(msg.content, 'user');
+                                        } else {
+                                            const item = document.querySelector(`.chat-user-item[data-user="\${msg.sender}"]`);
+                                            if (item) item.querySelector('.last-msg').innerText = "New message!";
+                                        }
+                                    }
+                                }
+                            };
+                            adminSocket.onclose = () => {
+                                adminSocket = null;
+                            };
+
+                            loadAllUsersForChat();
+                        }
+
+                        function loadAllUsersForChat() {
+                            fetch('${pageContext.request.contextPath}/admin/users-api')
+                                .then(res => res.json())
+                                .then(users => {
+                                    const container = document.getElementById('usersContainer');
+                                    container.innerHTML = '';
+                                    if (users.length === 0) {
+                                        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">No users found</div>';
+                                    }
+                                    users.forEach(user => addUserToList(user.name));
+                                });
+                        }
+
+                        function addUserToList(username) {
+                            const container = document.getElementById('usersContainer');
+                            const div = document.createElement('div');
+                            div.className = 'chat-user-item';
+                            div.setAttribute('data-user', username);
+                            div.style.padding = '15px 20px';
+                            div.style.cursor = 'pointer';
+                            div.style.borderBottom = '1px solid #f1f5f9';
+                            div.innerHTML = `
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <img src="https://ui-avatars.com/api/?name=\${username}&background=random" style="width: 35px; height: 35px; border-radius: 50%;">
+                                    <div>
+                                        <div style="font-weight: 600;">\${username}</div>
+                                        <div class="last-msg" style="font-size: 0.75rem; color: #64748b;">Click to chat</div>
+                                    </div>
+                                </div>
+                            `;
+                            div.onclick = () => {
+                                activeChatUser = username;
+                                document.getElementById('chatWith').innerText = "Chatting with " + username;
+                                document.querySelectorAll('.chat-user-item').forEach(el => el.style.background = 'transparent');
+                                div.style.background = '#f8fafc';
+                                div.querySelector('.last-msg').innerText = "Active";
+                                document.getElementById('adminChatBody').innerHTML = '';
+                                if (adminSocket && adminSocket.readyState === WebSocket.OPEN) {
+                                    adminSocket.send(JSON.stringify({ sender: 'Admin', recipient: username, content: 'GET_HISTORY', type: 'CHAT' }));
+                                } else {
+                                    connectAdminWS();
+                                }
+                            };
+                            container.appendChild(div);
+                        }
+
+                        function appendAdminMsg(text, type) {
+                            const body = document.getElementById('adminChatBody');
+                            const div = document.createElement('div');
+                            div.style.maxWidth = '70%';
+                            div.style.padding = '10px 15px';
+                            div.style.borderRadius = '12px';
+                            div.style.marginBottom = '8px';
+                            div.style.alignSelf = type === 'admin' ? 'flex-end' : 'flex-start';
+                            div.style.background = type === 'admin' ? 'var(--secondary-color)' : '#e2e8f0';
+                            div.style.color = type === 'admin' ? 'white' : 'black';
+                            div.innerText = text;
+                            body.appendChild(div);
+                            body.scrollTop = body.scrollHeight;
+                        }
+
+                        document.getElementById('adminSendBtn').onclick = () => {
+                            const input = document.getElementById('adminChatInput');
+                            const text = input.value.trim();
+                            if (!text || !activeChatUser) return;
+
+                            if (adminSocket && adminSocket.readyState === WebSocket.OPEN) {
+                                adminSocket.send(JSON.stringify({ sender: 'Admin', recipient: activeChatUser, content: text, type: 'CHAT' }));
+                                appendAdminMsg(text, 'admin');
+                                input.value = '';
+                            } else {
+                                connectAdminWS();
+                            }
+                        };
                     </script>
                     <jsp:include page="toast_component.jsp" />
                     <script src="${pageContext.request.contextPath}/js/animations.js"></script>

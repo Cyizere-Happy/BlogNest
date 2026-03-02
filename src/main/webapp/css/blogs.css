@@ -69,8 +69,8 @@
 
 /* Complex Card Design */
 .discovery-card {
-    width: 180px;
-    /* Increased for better readability */
+    width: 220px;
+    /* Increased for better visibility and readability */
     display: inline-flex;
     flex-direction: column;
     white-space: normal;
@@ -85,8 +85,8 @@
 .card-visuals {
     position: relative;
     width: 100%;
-    height: 240px;
-    /* Increased for better proportions */
+    height: 280px;
+    /* Increased to match wider card proportions */
     margin-bottom: 0.8rem;
 }
 
@@ -120,22 +120,22 @@
 }
 
 .card-info h3 {
-    font-size: 0.85rem;
-    /* Increased for better readability */
+    font-size: 0.95rem;
+    /* Increased for larger cards */
     font-weight: 800;
     color: var(--primary-color);
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.3rem;
     letter-spacing: -0.2px;
     line-height: 1.2;
 }
 
 .card-info p {
-    font-size: 0.72rem;
-    /* Increased for better readability */
+    font-size: 0.8rem;
+    /* Increased for larger cards */
     color: var(--text-light);
-    line-height: 1.3;
+    line-height: 1.4;
     max-width: 100%;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -145,8 +145,8 @@
 }
 
 .read-more {
-    font-size: 0.68rem;
-    /* Increased for better readability */
+    font-size: 0.75rem;
+    /* Increased for larger cards */
     font-weight: 700;
     color: var(--secondary-color);
     text-transform: uppercase;

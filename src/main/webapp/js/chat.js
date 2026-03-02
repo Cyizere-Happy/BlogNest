@@ -1,7 +1,7 @@
 (function () {
     let socket = null;
     let username = window.chatUser || 'Guest';
-    if (username === 'Guest') return; // Extra safety
+    let isGuest = username === 'Guest';
 
     const widget = document.createElement('div');
     widget.className = 'chat-widget-container';
@@ -30,13 +30,24 @@
                 <div class="message-bubble admin">Hi there! How can I help you today?</div>
             </div>
             <div class="chat-footer">
+                <button class="emoji-btn" id="emojiBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 5px;">😊</button>
                 <input type="text" class="chat-input" id="chatInput" placeholder="Type a message...">
                 <button class="send-btn" id="sendBtn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
             </div>
+            <div id="emojiPickerContainer" style="position: absolute; bottom: 80px; right: 20px; z-index: 1000; display: none;"></div>
         </div>
     `;
+
+    // Load Picmo Emoji Picker from CDN
+    const script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/picmo@latest/dist/umd/index.js";
+    document.head.appendChild(script);
+
+    const script2 = document.createElement('script');
+    script2.src = "https://cdn.jsdelivr.net/npm/@picmo/renderer-native@latest/dist/umd/index.js";
+    document.head.appendChild(script2);
     document.body.appendChild(widget);
 
     const toggle = document.getElementById('chatToggle');
@@ -45,8 +56,48 @@
     const input = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
     const body = document.getElementById('chatBody');
+    const emojiBtn = document.getElementById('emojiBtn');
+    const pickerContainer = document.getElementById('emojiPickerContainer');
+    let picker = null;
+
+    emojiBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (!picker && window.picmo) {
+            picker = picmo.createPicker({
+                rootElement: pickerContainer,
+                width: '280px',
+                height: '350px'
+            });
+            picker.addEventListener('emoji:select', event => {
+                input.value += event.emoji;
+                pickerContainer.style.display = 'none';
+            });
+        }
+        pickerContainer.style.display = pickerContainer.style.display === 'none' ? 'block' : 'none';
+    };
+
+    document.addEventListener('click', (e) => {
+        if (pickerContainer && !pickerContainer.contains(e.target) && e.target !== emojiBtn) {
+            pickerContainer.style.display = 'none';
+        }
+    });
 
     toggle.onclick = () => {
+        if (isGuest) {
+            appendMsg("Please login to chat with the writer.", "system");
+            const loginBtn = document.createElement('a');
+            loginBtn.href = (window.contextPath || '') + '/auth';
+            loginBtn.className = 'btn btn-primary';
+            loginBtn.style.fontSize = '0.8rem';
+            loginBtn.style.padding = '5px 15px';
+            loginBtn.style.display = 'block';
+            loginBtn.style.marginTop = '10px';
+            loginBtn.style.textAlign = 'center';
+            loginBtn.innerText = "Go to Login";
+            body.appendChild(loginBtn);
+            windowEl.classList.add('active');
+            return;
+        }
         windowEl.classList.add('active');
         connectWS();
     };

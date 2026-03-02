@@ -39,6 +39,7 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(Comment.class);
             configuration.addAnnotatedClass(User.class);
             configuration.addAnnotatedClass(Subscription.class);
+            configuration.addAnnotatedClass(org.example.blognest.model.ChatHistory.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();

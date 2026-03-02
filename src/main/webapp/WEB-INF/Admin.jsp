@@ -669,7 +669,12 @@
                                             <!-- Messages -->
                                         </div>
                                         <div
-                                            style="padding: 20px; border-top: 1px solid #f1f5f9; display: flex; gap: 10px;">
+                                            style="padding: 10px 20px; border-top: 1px solid #f1f5f9; display: flex; gap: 10px; position: relative;">
+                                            <div id="adminEmojiPicker"
+                                                style="position: absolute; bottom: 70px; right: 20px; z-index: 1000; display: none;">
+                                            </div>
+                                            <button id="adminEmojiBtn"
+                                                style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">😊</button>
                                             <input type="text" id="adminChatInput" placeholder="Type a response..."
                                                 style="flex: 1; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
                                             <button id="adminSendBtn"
@@ -800,7 +805,14 @@
                                             appendAdminMsg(msg.content, 'user');
                                         } else {
                                             const item = document.querySelector(`.chat-user-item[data-user="\${msg.sender}"]`);
-                                            if (item) item.querySelector('.last-msg').innerText = "New message!";
+                                            if (item) {
+                                                const lastMsgEl = item.querySelector('.last-msg');
+                                                lastMsgEl.innerText = msg.content;
+                                                lastMsgEl.style.color = 'var(--secondary-color)';
+                                                lastMsgEl.style.fontWeight = '700';
+                                                // Optional: move to top of list
+                                                item.parentNode.prepend(item);
+                                            }
                                         }
                                     }
                                 }
@@ -821,11 +833,11 @@
                                     if (users.length === 0) {
                                         container.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">No users found</div>';
                                     }
-                                    users.forEach(user => addUserToList(user.name));
+                                    users.forEach(user => addUserToList(user.name, user.lastMsg));
                                 });
                         }
 
-                        function addUserToList(username) {
+                        function addUserToList(username, lastMsgSnippet) {
                             const container = document.getElementById('usersContainer');
                             const div = document.createElement('div');
                             div.className = 'chat-user-item';
@@ -838,7 +850,7 @@
                                     <img src="https://ui-avatars.com/api/?name=\${username}&background=random" style="width: 35px; height: 35px; border-radius: 50%;">
                                     <div>
                                         <div style="font-weight: 600;">\${username}</div>
-                                        <div class="last-msg" style="font-size: 0.75rem; color: #64748b;">Click to chat</div>
+                                        <div class="last-msg" style="font-size: 0.75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">\${lastMsgSnippet || 'Click to chat'}</div>
                                     </div>
                                 </div>
                             `;
@@ -847,7 +859,12 @@
                                 document.getElementById('chatWith').innerText = "Chatting with " + username;
                                 document.querySelectorAll('.chat-user-item').forEach(el => el.style.background = 'transparent');
                                 div.style.background = '#f8fafc';
-                                div.querySelector('.last-msg').innerText = "Active";
+
+                                const lastMsgEl = div.querySelector('.last-msg');
+                                lastMsgEl.innerText = "Active";
+                                lastMsgEl.style.color = '#64748b';
+                                lastMsgEl.style.fontWeight = '400';
+
                                 document.getElementById('adminChatBody').innerHTML = '';
                                 if (adminSocket && adminSocket.readyState === WebSocket.OPEN) {
                                     adminSocket.send(JSON.stringify({ sender: 'Admin', recipient: username, content: 'GET_HISTORY', type: 'CHAT' }));
@@ -872,6 +889,32 @@
                             body.appendChild(div);
                             body.scrollTop = body.scrollHeight;
                         }
+
+                        const adminEmojiBtn = document.getElementById('adminEmojiBtn');
+                        const adminEmojiPickerContainer = document.getElementById('adminEmojiPicker');
+                        let adminPicker = null;
+
+                        adminEmojiBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            if (!adminPicker && window.picmo) {
+                                adminPicker = picmo.createPicker({
+                                    rootElement: adminEmojiPickerContainer,
+                                    width: '320px',
+                                    height: '350px'
+                                });
+                                adminPicker.addEventListener('emoji:select', event => {
+                                    document.getElementById('adminChatInput').value += event.emoji;
+                                    adminEmojiPickerContainer.style.display = 'none';
+                                });
+                            }
+                            adminEmojiPickerContainer.style.display = adminEmojiPickerContainer.style.display === 'none' ? 'block' : 'none';
+                        };
+
+                        document.addEventListener('click', (e) => {
+                            if (adminEmojiPickerContainer && !adminEmojiPickerContainer.contains(e.target) && e.target !== adminEmojiBtn) {
+                                adminEmojiPickerContainer.style.display = 'none';
+                            }
+                        });
 
                         document.getElementById('adminSendBtn').onclick = () => {
                             const input = document.getElementById('adminChatInput');

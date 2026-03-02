@@ -45,8 +45,9 @@ public class ChatServer {
 
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("username") String username) throws IOException {
+        String decodedSender = java.net.URLDecoder.decode(username, "UTF-8");
         ChatMessage chatMessage = objectMapper.readValue(message, ChatMessage.class);
-        chatMessage.setSender(username);
+        chatMessage.setSender(decodedSender);
         chatMessage.setTimestamp(LocalDateTime.now());
 
         // Handle History Requests (from Admin)

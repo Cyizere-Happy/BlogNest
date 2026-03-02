@@ -7,7 +7,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.blognest.model.User;
+import org.example.blognest.model.ChatHistory;
 import org.example.blognest.services.UserService;
+import org.example.blognest.services.ChatHistoryService;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +26,12 @@ public class UserApiController extends HttpServlet {
         if (user != null && "ADMIN".equalsIgnoreCase(user.getRole())) {
             List<UserDTO> users = userService.getAllUsers().stream()
                     .filter(u -> !"ADMIN".equalsIgnoreCase(u.getRole()))
-                    .map(u -> new UserDTO(u.getName(), u.getEmail()))
+                    .map(u -> {
+                        ChatHistory last = ChatHistoryService.getInstance().getLatestMessage(u.getName(), "Admin");
+                        String snippet = (last != null) ? last.getContent() : "Click to chat";
+                        if (snippet.length() > 30) snippet = snippet.substring(0, 27) + "...";
+                        return new UserDTO(u.getName(), u.getEmail(), snippet);
+                    })
                     .collect(Collectors.toList());
             
             resp.setContentType("application/json");
@@ -37,9 +44,11 @@ public class UserApiController extends HttpServlet {
     private static class UserDTO {
         public String name;
         public String email;
-        public UserDTO(String name, String email) {
+        public String lastMsg;
+        public UserDTO(String name, String email, String lastMsg) {
             this.name = name;
             this.email = email;
+            this.lastMsg = lastMsg;
         }
     }
 }

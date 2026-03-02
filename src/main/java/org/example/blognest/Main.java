@@ -17,6 +17,9 @@ public class Main {
         // Enable WebSocket support
         tomcat.addServlet("", "default", "org.apache.catalina.servlets.DefaultServlet");
         
+        // Initialize Services
+        org.example.blognest.services.ChatCleanupService.start();
+        
         System.out.println("Server started at http://localhost:" + port);
         tomcat.start();
         tomcat.getServer().await();

@@ -29,6 +29,12 @@ public class User {
     @Column(nullable = false)
     private String role = "USER"; // Default to USER
 
+    @Column(name = "two_factor_secret")
+    private String twoFactorSecret;
+
+    @Column(name = "is_two_factor_enabled", nullable = false)
+    private boolean isTwoFactorEnabled = false;
+
     // One user can write many posts
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Post> posts;

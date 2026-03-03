@@ -409,6 +409,9 @@
                     <div class="header-tabs">
                         <button class="tab active" id="tab-login">Login</button>
                         <button class="tab" id="tab-signup">Sign up</button>
+                        <c:if test="${is2FA}">
+                            <button class="tab active" style="display: none;">Verify 2FA</button>
+                        </c:if>
                     </div>
 
                     <!-- Alerts -->
@@ -434,7 +437,6 @@
                         </div>
                     </c:if>
 
-                    <!-- Login Form -->
                     <form id="login-form" class="auth-form reveal reveal-up delay-100" action="auth" method="post">
                         <div class="input-group">
                             <span class="icon">
@@ -458,6 +460,27 @@
                                 </svg>
                             </span>
                             <input type="password" name="password" placeholder="Password" required>
+                        </div>
+
+                        <div class="input-group" style="margin-top: 5px;">
+                            <img src="${pageContext.request.contextPath}/captcha" alt="captcha" id="captcha-img-login"
+                                style="border-radius: 10px; margin-right: 10px; border: 1px solid #e2e8f0;">
+                            <button type="button" onclick="refreshCaptcha('login')" class="btn-icon"
+                                style="flex-shrink: 0; width: 35px; height: 35px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="input-group">
+                            <span class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg></span>
+                            <input type="text" name="captcha" placeholder="Enter Captcha" required autocomplete="off">
                         </div>
 
                         <div class="form-footer">
@@ -505,8 +528,77 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
+                        <div class="input-group" style="margin-top: 5px;">
+                            <img src="${pageContext.request.contextPath}/captcha" alt="captcha"
+                                id="captcha-img-register"
+                                style="border-radius: 10px; margin-right: 10px; border: 1px solid #e2e8f0;">
+                            <button type="button" onclick="refreshCaptcha('register')" class="btn-icon"
+                                style="flex-shrink: 0; width: 35px; height: 35px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="input-group">
+                            <span class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg></span>
+                            <input type="text" name="captcha" placeholder="Enter Captcha" required autocomplete="off">
+                        </div>
+
                         <div class="form-footer">
                             <button type="submit" name="action" value="register" class="btn-login">Sign up</button>
+                        </div>
+                    </form>
+
+                    <!-- 2FA Form -->
+                    <form id="2fa-form" class="auth-form ${is2FA ? '' : 'hidden'} reveal reveal-up delay-100"
+                        action="auth" method="post">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <h2 style="font-size: 1.5rem; color: var(--secondary-color);">2FA Required</h2>
+                            <p style="color: var(--text-light); font-size: 0.9rem;">Please enter the 6-digit code from
+                                your authenticator app.</p>
+                            <c:if test="${not empty pending2FAUser}">
+                                <div
+                                    style="margin-top: 10px; padding: 15px; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 12px; font-size: 0.85rem; color: #c53030; text-align: left;">
+                                    <strong style="display: block; margin-bottom: 5px;">⚠️ 2FA Configuration
+                                        Needed</strong>
+                                    Your app expects a <strong>Base32</strong> secret.
+                                    <br><br>
+                                    1. <strong>Secret:</strong> <code
+                                        style="background: white; padding: 2px 5px; border-radius: 4px; font-weight: bold; border: 1px solid #feb2b2;">${pending2FAUser.twoFactorSecret}</code>
+                                    <br>
+                                    2. Open <strong>Google Authenticator</strong>.
+                                    <br>
+                                    3. Choose "Enter a setup key".
+                                    <br>
+                                    4. Name: "BlogNest", Key: paste the secret above.
+                                    <br><br>
+                                    <a href="auth?action=regenerateSecret"
+                                        style="display: inline-block; padding: 5px 10px; background: #c53030; color: white; text-decoration: none; border-radius: 6px; font-size: 0.75rem;">Still
+                                        not working? Get a new Secret</a>
+                                </div>
+                            </c:if>
+                        </div>
+                        <div class="input-group">
+                            <span class="icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                </svg>
+                            </span>
+                            <input type="text" name="code" placeholder="6-digit code" required
+                                autocomplete="one-time-code" maxlength="6"
+                                style="text-align: center; letter-spacing: 5px; font-weight: 700;">
+                        </div>
+                        <div class="form-footer">
+                            <button type="submit" name="action" value="verify2FA" class="btn-login">Verify</button>
+                            <a href="auth" class="forgot-link">Back to Login</a>
                         </div>
                     </form>
                 </div>
@@ -537,18 +629,30 @@
                         document.getElementById('tab-login').classList.add('active');
                         loginForm.classList.remove('hidden');
                         signupForm.classList.add('hidden');
+                        if (document.getElementById('2fa-form')) document.getElementById('2fa-form').classList.add('hidden');
                         setTimeout(() => loginForm.classList.add('active'), 10);
                     } else {
                         document.getElementById('tab-signup').classList.add('active');
                         loginForm.classList.add('hidden');
                         signupForm.classList.remove('hidden');
+                        if (document.getElementById('2fa-form')) document.getElementById('2fa-form').classList.add('hidden');
                         setTimeout(() => signupForm.classList.add('active'), 10);
                     }
+                }
+
+                function refreshCaptcha(type) {
+                    const img = document.getElementById('captcha-img-' + type);
+                    img.src = '${pageContext.request.contextPath}/captcha?' + new Date().getTime();
                 }
 
                 // Handle server-side redirection to tab
                 <c:if test="${isSignup}">
                     setActiveTab(false);
+                </c:if>
+                <c:if test="${is2FA}">
+                    loginForm.classList.add('hidden');
+                    signupForm.classList.add('hidden');
+                    tabs.forEach(t => t.classList.remove('active'));
                 </c:if>
             </script>
             <jsp:include page="toast_component.jsp" />

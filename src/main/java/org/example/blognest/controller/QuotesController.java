@@ -15,6 +15,7 @@ public class QuotesController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         MessageOfTheDay dailyMessage = quoteService.getDailyMessage();
         req.setAttribute("dailyMessage", dailyMessage);
+        req.setAttribute("quoteHistory", quoteService.getMessageHistory());
         req.getRequestDispatcher("/WEB-INF/DailyQuotes.jsp").forward(req, resp);
     }
 }

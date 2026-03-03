@@ -57,42 +57,83 @@
             </nav>
 
             <main class="quotes-container reveal reveal-up">
-                <div class="header-marker">
-                    <c:out value="${dailyMessage.formattedDay}" />
-                </div>
-                <header class="quotes-header">
-                    <h1>
-                        <c:out value="${dailyMessage.title}" />
-                    </h1>
-                    <div class="header-content">
-                        <div class="red-bar"></div> <!-- Keeping class name but it's teal -->
-                        <p>
-                            <c:out value="${dailyMessage.mainMessage}" />
-                        </p>
-                    </div>
-                </header>
-
-                <section class="timeline-system">
-                    <div class="main-line">
-                        <div class="line-dot">
-                            <span class="dot-label">DISCOVERY</span>
+                <c:choose>
+                    <c:when test="${not empty dailyMessage}">
+                        <div class="header-marker">
+                            <c:out value="${dailyMessage.formattedDay}" />
                         </div>
-                        <div class="line-dot" style="left: -15%;">
-                            <span class="dot-label">INSIGHT</span>
-                        </div>
-                        <div class="line-dot">
-                            <span class="dot-label">ACTION</span>
-                        </div>
-                    </div>
-
-                    <div class="stickers-area">
-                        <c:forEach var="takeaway" items="${dailyMessage.takeaways}" varStatus="status">
-                            <div class="sticker-card" data-index="${status.index}">
-                                <c:out value="${takeaway}" />
+                        <header class="quotes-header">
+                            <h1>
+                                <c:out value="${dailyMessage.title}" />
+                            </h1>
+                            <div class="header-content">
+                                <div class="red-bar"></div> <!-- Keeping class name but it's teal -->
+                                <p>
+                                    <c:out value="${dailyMessage.mainMessage}" />
+                                </p>
                             </div>
-                        </c:forEach>
+                        </header>
+
+                        <section class="timeline-system">
+                            <div class="main-line">
+                                <div class="line-dot">
+                                    <span class="dot-label">DISCOVERY</span>
+                                </div>
+                                <div class="line-dot" style="left: -15%;">
+                                    <span class="dot-label">INSIGHT</span>
+                                </div>
+                                <div class="line-dot">
+                                    <span class="dot-label">ACTION</span>
+                                </div>
+                            </div>
+
+                            <div class="stickers-area">
+                                <c:forEach var="takeaway" items="${dailyMessage.takeaways}" varStatus="status">
+                                    <div class="sticker-card" data-index="${status.index}">
+                                        <c:out value="${takeaway}" />
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </section>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="text-align: center; padding: 100px 20px;">
+                            <h1
+                                style="font-family: 'Outfit'; font-size: 3rem; margin-bottom: 20px; color: var(--text-color);">
+                                No Quote of the Day</h1>
+                            <p style="font-family: 'Jost'; color: #64748b;">The writer hasn't shared a new insight just
+                                yet. Check back soon or browse the history below!</p>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+
+                <!-- Quote History Section -->
+                <c:if test="${not empty quoteHistory}">
+                    <div style="margin-top: 100px; padding: 40px 0; border-top: 1px solid #e2e8f0;">
+                        <h2
+                            style="font-family: 'Outfit'; margin-bottom: 40px; text-align: center; color: var(--text-color);">
+                            Previous Insights</h2>
+                        <div class="history-list"
+                            style="display: flex; flex-direction: column; gap: 30px; max-width: 800px; margin: 0 auto;">
+                            <c:forEach var="historyMsg" items="${quoteHistory}">
+                                <div class="history-item"
+                                    style="padding: 24px; background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid #e2e8f0; transition: transform 0.3s ease;">
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 10px;">
+                                        <c:out value="${historyMsg.relativeTime}" />
+                                    </div>
+                                    <h3 style="font-family: 'Outfit'; margin-bottom: 8px; color: var(--text-color);">
+                                        <c:out value="${historyMsg.title}" />
+                                    </h3>
+                                    <p
+                                        style="font-family: 'Jost'; color: #64748b; font-size: 0.9rem; line-height: 1.6;">
+                                        <c:out value="${historyMsg.mainMessage}" />
+                                    </p>
+                                </div>
+                            </c:forEach>
+                        </div>
                     </div>
-                </section>
+                </c:if>
             </main>
 
             <jsp:include page="profile_modal.jsp" />

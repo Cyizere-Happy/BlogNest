@@ -44,6 +44,17 @@ public class HibernateUtil {
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+            
+            // Self-healing: Force missing 2FA columns if Hibernate update fails
+            try (org.hibernate.Session session = sessionFactory.openSession()) {
+                session.beginTransaction();
+                session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS two_factor_secret VARCHAR(255)").executeUpdate();
+                session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_two_factor_enabled BOOLEAN DEFAULT FALSE").executeUpdate();
+                session.getTransaction().commit();
+            } catch (Exception e) {
+                // Silently skip if columns already exist or other DB issues
+                System.err.println("Database self-healing notice: " + e.getMessage());
+            }
         }
         return sessionFactory;
     }

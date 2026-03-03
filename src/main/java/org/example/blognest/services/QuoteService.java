@@ -1,9 +1,9 @@
 package org.example.blognest.services;
 
 import org.example.blognest.model.MessageOfTheDay;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -36,17 +36,17 @@ public class QuoteService {
     }
 
     public MessageOfTheDay getDailyMessage() {
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         MessageOfTheDay msg = currentMessage.get();
-        // Return current message with today's date if title matches, otherwise keep msg as is
-        return new MessageOfTheDay(msg.getTitle(), msg.getMainMessage(), msg.getTakeaways(), day);
+        if (msg != null && !msg.isExpired()) {
+            return msg;
+        }
+        return null; // Expired or not set
     }
 
     public void updateDailyMessage(String title, String mainMessage, List<String> takeaways) {
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        MessageOfTheDay newMessage = new MessageOfTheDay(title, mainMessage, takeaways, day);
+        MessageOfTheDay newMessage = new MessageOfTheDay(title, mainMessage, takeaways, LocalDateTime.now());
         currentMessage.set(newMessage);
-        messageHistory.add(0, newMessage); // Add to the beginning of history
+        messageHistory.add(0, newMessage);
     }
 
     public List<MessageOfTheDay> getMessageHistory() {

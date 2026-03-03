@@ -69,8 +69,35 @@
                     <p style="margin: 0;">Logged in as: <strong>
                             <c:out value="${user.email}" />
                         </strong></p>
-                    <a href="${pageContext.request.contextPath}/auth?action=logout" class="btn btn-primary"
-                        style="background: #e53e3e; border: none;">Log Out</a>
+
+                    <div class="security-settings"
+                        style="width: 100%; border-top: 1px solid #edf2f7; padding-top: 1rem; margin-top: 1rem;">
+                        <h4 style="margin-bottom: 0.5rem; color: var(--text-color);">Security</h4>
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 1rem; border-radius: 12px;">
+                            <div>
+                                <p style="margin: 0; font-weight: 600; font-size: 0.9rem;">Two-Factor Authentication</p>
+                                <p style="margin: 0; font-size: 0.8rem; color: var(--text-light);">
+                                    ${user.twoFactorEnabled ? 'Status: <span style="color: #48bb78;">Enabled</span>' :
+                                    'Status: <span style="color: #e53e3e;">Disabled</span>'}
+                                </p>
+                            </div>
+                            <form action="${pageContext.request.contextPath}/auth" method="post" style="margin: 0;">
+                                <input type="hidden" name="action" value="toggle2FA">
+                                <input type="hidden" name="enable" value="${!user.twoFactorEnabled}">
+                                <button type="submit" class="btn"
+                                    style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 8px; background: ${user.twoFactorEnabled ? '#e2e8f0' : 'var(--secondary-color)'}; color: ${user.twoFactorEnabled ? 'var(--text-color)' : 'white'}; border: none; cursor: pointer;">
+                                    ${user.twoFactorEnabled ? 'Disable' : 'Enable'}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <a href="${pageContext.request.contextPath}/auth?action=logout" class="btn btn-primary"
+                            style="background: #e53e3e; border: none; padding: 0.7rem 1.5rem; border-radius: 100px; color: white; text-decoration: none; font-size: 0.95rem;">Log
+                            Out</a>
+                    </div>
                 </div>
             </c:if>
         </div>

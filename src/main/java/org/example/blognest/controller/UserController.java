@@ -70,7 +70,7 @@ public class UserController extends HttpServlet {
             }
 
             // Captcha Verification
-            if (!CaptchaService.verifyCaptcha(req.getSession(), captcha)) {
+            if (!CaptchaService.verifyCaptcha(req.getSession(), captcha, "register")) {
                 req.setAttribute("error", "Incorrect Captcha. Please try again.");
                 req.setAttribute("isSignup", true);
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
@@ -111,7 +111,7 @@ public class UserController extends HttpServlet {
             }
 
             // Captcha Verification
-            if (!CaptchaService.verifyCaptcha(req.getSession(), captcha)) {
+            if (!CaptchaService.verifyCaptcha(req.getSession(), captcha, "login")) {
                 req.setAttribute("error", "Incorrect Captcha.");
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
                 return;

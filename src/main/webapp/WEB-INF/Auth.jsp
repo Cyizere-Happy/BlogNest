@@ -463,7 +463,8 @@
                         </div>
 
                         <div class="input-group" style="margin-top: 5px;">
-                            <img src="${pageContext.request.contextPath}/captcha" alt="captcha" id="captcha-img-login"
+                            <img src="${pageContext.request.contextPath}/captcha?type=login" alt="captcha"
+                                id="captcha-img-login"
                                 style="border-radius: 10px; margin-right: 10px; border: 1px solid #e2e8f0;">
                             <button type="button" onclick="refreshCaptcha('login')" class="btn-icon"
                                 style="flex-shrink: 0; width: 35px; height: 35px;">
@@ -529,7 +530,7 @@
                         </div>
 
                         <div class="input-group" style="margin-top: 5px;">
-                            <img src="${pageContext.request.contextPath}/captcha" alt="captcha"
+                            <img src="${pageContext.request.contextPath}/captcha?type=register" alt="captcha"
                                 id="captcha-img-register"
                                 style="border-radius: 10px; margin-right: 10px; border: 1px solid #e2e8f0;">
                             <button type="button" onclick="refreshCaptcha('register')" class="btn-icon"
@@ -642,7 +643,7 @@
 
                 function refreshCaptcha(type) {
                     const img = document.getElementById('captcha-img-' + type);
-                    img.src = '${pageContext.request.contextPath}/captcha?' + new Date().getTime();
+                    img.src = '${pageContext.request.contextPath}/captcha?type=' + type + '&' + new Date().getTime();
                 }
 
                 // Handle server-side redirection to tab

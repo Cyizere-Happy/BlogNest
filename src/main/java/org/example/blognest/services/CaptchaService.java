@@ -10,9 +10,10 @@ public class CaptchaService {
     private static final int HEIGHT = 40;
     private static final String CAPTCHA_SESSION_KEY = "CAPTCHA_ANSWER";
 
-    public static BufferedImage generateCaptchaImage(HttpSession session) {
+    public static BufferedImage generateCaptchaImage(HttpSession session, String type) {
         String captchaText = generateRandomString(6);
-        session.setAttribute(CAPTCHA_SESSION_KEY, captchaText);
+        String key = CAPTCHA_SESSION_KEY + (type != null ? "_" + type.toUpperCase() : "");
+        session.setAttribute(key, captchaText);
 
         BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = image.createGraphics();
@@ -41,8 +42,9 @@ public class CaptchaService {
         return image;
     }
 
-    public static boolean verifyCaptcha(HttpSession session, String answer) {
-        String expected = (String) session.getAttribute(CAPTCHA_SESSION_KEY);
+    public static boolean verifyCaptcha(HttpSession session, String answer, String type) {
+        String key = CAPTCHA_SESSION_KEY + (type != null ? "_" + type.toUpperCase() : "");
+        String expected = (String) session.getAttribute(key);
         if (expected == null || answer == null) return false;
         return expected.equalsIgnoreCase(answer.trim());
     }

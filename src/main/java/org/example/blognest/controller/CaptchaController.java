@@ -19,7 +19,8 @@ public class CaptchaController extends HttpServlet {
         resp.setHeader("Pragma", "no-cache");
         resp.setDateHeader("Expires", 0);
 
-        BufferedImage image = CaptchaService.generateCaptchaImage(req.getSession());
+        String type = req.getParameter("type");
+        BufferedImage image = CaptchaService.generateCaptchaImage(req.getSession(), type);
         ImageIO.write(image, "png", resp.getOutputStream());
     }
 }

@@ -566,22 +566,8 @@
                             <c:if test="${not empty pending2FAUser}">
                                 <div
                                     style="margin-top: 10px; padding: 15px; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 12px; font-size: 0.85rem; color: #c53030; text-align: left;">
-                                    <strong style="display: block; margin-bottom: 5px;">⚠️ 2FA Configuration
-                                        Needed</strong>
-                                    Your app expects a <strong>Base32</strong> secret.
-                                    <br><br>
-                                    1. <strong>Secret:</strong> <code
-                                        style="background: white; padding: 2px 5px; border-radius: 4px; font-weight: bold; border: 1px solid #feb2b2;">${pending2FAUser.twoFactorSecret}</code>
-                                    <br>
-                                    2. Open <strong>Google Authenticator</strong>.
-                                    <br>
-                                    3. Choose "Enter a setup key".
-                                    <br>
-                                    4. Name: "BlogNest", Key: paste the secret above.
-                                    <br><br>
-                                    <a href="auth?action=regenerateSecret"
-                                        style="display: inline-block; padding: 5px 10px; background: #c53030; color: white; text-decoration: none; border-radius: 6px; font-size: 0.75rem;">Still
-                                        not working? Get a new Secret</a>
+                                    <strong style="display: block; margin-bottom: 5px;">⚠️ 2FA Required</strong>
+                                    Please enter the 6-digit code from your authenticator app to continue.
                                 </div>
                             </c:if>
                         </div>

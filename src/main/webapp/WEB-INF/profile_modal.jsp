@@ -71,25 +71,75 @@
                         </strong></p>
 
                     <div class="security-settings"
-                        style="width: 100%; border-top: 1px solid #edf2f7; padding-top: 1rem; margin-top: 1rem;">
-                        <h4 style="margin-bottom: 0.5rem; color: var(--text-color);">Security</h4>
+                        style="width: 100%; border-top: 1px solid #edf2f7; padding-top: 1rem; margin-top: 1rem; text-align: left;">
+                        <h4 style="margin-bottom: 1rem; color: var(--text-color);">Security & 2FA</h4>
                         <div
-                            style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 1rem; border-radius: 12px;">
-                            <div>
-                                <p style="margin: 0; font-weight: 600; font-size: 0.9rem;">Two-Factor Authentication</p>
-                                <p style="margin: 0; font-size: 0.8rem; color: var(--text-light);">
-                                    ${user.twoFactorEnabled ? 'Status: <span style="color: #48bb78;">Enabled</span>' :
-                                    'Status: <span style="color: #e53e3e;">Disabled</span>'}
-                                </p>
+                            style="display: flex; flex-direction: column; gap: 1rem; background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0;">
+
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <p style="margin: 0; font-weight: 600; font-size: 0.95rem;">Two-Factor
+                                        Authentication</p>
+                                    <p style="margin: 0; font-size: 0.85rem; color: var(--text-light);">
+                                        Status: ${user.twoFactorEnabled ? '<span
+                                            style="color: #48bb78; font-weight: 700;">Enabled</span>' :
+                                        '<span style="color: #e53e3e; font-weight: 700;">Disabled</span>'}
+                                    </p>
+                                </div>
+                                <c:choose>
+                                    <c:when test="${user.twoFactorEnabled}">
+                                        <form action="${pageContext.request.contextPath}/auth" method="post"
+                                            style="margin: 0;">
+                                            <input type="hidden" name="action" value="toggle2FA">
+                                            <input type="hidden" name="enable" value="false">
+                                            <button type="submit" class="btn"
+                                                style="padding: 0.6rem 1.2rem; font-size: 0.85rem; border-radius: 100px; background: #fee2e2; color: #b91c1c; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">
+                                                Disable 2FA
+                                            </button>
+                                        </form>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <form action="${pageContext.request.contextPath}/auth" method="post"
+                                            style="margin: 0;">
+                                            <input type="hidden" name="action" value="toggle2FA">
+                                            <input type="hidden" name="enable" value="true">
+                                            <button type="submit" class="btn"
+                                                style="padding: 0.6rem 1.2rem; font-size: 0.85rem; border-radius: 100px; background: var(--secondary-color); color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">
+                                                ${not empty user.twoFactorSecret ? 'Reset Secret' : 'Setup 2FA'}
+                                            </button>
+                                        </form>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
-                            <form action="${pageContext.request.contextPath}/auth" method="post" style="margin: 0;">
-                                <input type="hidden" name="action" value="toggle2FA">
-                                <input type="hidden" name="enable" value="${!user.twoFactorEnabled}">
-                                <button type="submit" class="btn"
-                                    style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 8px; background: ${user.twoFactorEnabled ? '#e2e8f0' : 'var(--secondary-color)'}; color: ${user.twoFactorEnabled ? 'var(--text-color)' : 'white'}; border: none; cursor: pointer;">
-                                    ${user.twoFactorEnabled ? 'Disable' : 'Enable'}
-                                </button>
-                            </form>
+
+                            <c:if test="${not user.twoFactorEnabled and not empty user.twoFactorSecret}">
+                                <div
+                                    style="margin-top: 0.5rem; padding: 1rem; background: white; border-radius: 12px; border: 1px dashed var(--secondary-color);">
+                                    <p style="margin-bottom: 0.8rem; font-size: 0.85rem; color: var(--text-color);">
+                                        1. Add this secret to your authenticator app (e.g. Google Authenticator):
+                                    </p>
+                                    <div
+                                        style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 1rem;">
+                                        <code
+                                            style="background: #f1f5f9; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; color: var(--primary-dark); border: 1px solid #e2e8f0;">
+                                            ${user.twoFactorSecret}
+                                        </code>
+                                    </div>
+                                    <p style="margin-bottom: 0.8rem; font-size: 0.85rem; color: var(--text-color);">
+                                        2. Enter the 6-digit code to verify and enable:
+                                    </p>
+                                    <form action="${pageContext.request.contextPath}/auth" method="post"
+                                        style="display: flex; gap: 10px;">
+                                        <input type="hidden" name="action" value="verifyAndEnable2FA">
+                                        <input type="text" name="code" placeholder="000000" maxlength="6" required
+                                            style="flex: 1; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; font-family: monospace; font-size: 1rem; text-align: center; letter-spacing: 3px;">
+                                        <button type="submit" class="btn"
+                                            style="padding: 0.6rem 1.2rem; background: var(--primary-dark); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                                            Verify & Enable
+                                        </button>
+                                    </form>
+                                </div>
+                            </c:if>
                         </div>
                     </div>
 

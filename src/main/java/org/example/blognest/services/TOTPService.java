@@ -14,7 +14,7 @@ import java.security.SecureRandom;
 public class TOTPService {
 
     public static String generateSecret() {
-        byte[] buffer = new byte[10]; // 80 bits is enough for most apps
+        byte[] buffer = new byte[20]; // 160 bits is recommended for modern HMAC-SHA1 TOTP
         new SecureRandom().nextBytes(buffer);
         // Use Base32 as required by most 2FA apps (Google Authenticator, etc.)
         return Base32.encode(buffer);

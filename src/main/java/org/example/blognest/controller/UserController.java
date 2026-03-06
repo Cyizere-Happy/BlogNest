@@ -144,6 +144,21 @@ public class UserController extends HttpServlet {
                 req.setAttribute("is2FA", true);
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
             }
+        } else if ("verifyAndEnable2FA".equals(action)) {
+            User user = (User) req.getSession().getAttribute("user");
+            String code = req.getParameter("code");
+            if (user != null && user.getTwoFactorSecret() != null && TOTPService.verifyCode(user.getTwoFactorSecret(), code)) {
+                user.setTwoFactorEnabled(true);
+                userService.updateUser(user);
+                req.getSession().setAttribute("toastType", "success");
+                req.getSession().setAttribute("toastTitle", "2FA Enabled");
+                req.getSession().setAttribute("toastMessage", "Two-factor authentication is now active on your account.");
+            } else {
+                req.getSession().setAttribute("toastType", "error");
+                req.getSession().setAttribute("toastTitle", "Verification Failed");
+                req.getSession().setAttribute("toastMessage", "The 2FA code is incorrect. Please try again.");
+            }
+            resp.sendRedirect("admin?section=profile");
         } else if ("toggle2FA".equals(action)) {
             User user = (User) req.getSession().getAttribute("user");
             if (user != null) {
@@ -151,8 +166,8 @@ public class UserController extends HttpServlet {
                 if (enable) {
                     String secret = TOTPService.generateSecret();
                     user.setTwoFactorSecret(secret);
-                    user.setTwoFactorEnabled(true);
-                    req.getSession().setAttribute("toastMessage", "2FA has been enabled. Your secret is: " + secret);
+                    user.setTwoFactorEnabled(false); // Must verify first
+                    req.getSession().setAttribute("toastMessage", "2FA secret generated. Please verify it to enable.");
                 } else {
                     user.setTwoFactorEnabled(false);
                     user.setTwoFactorSecret(null);
@@ -161,7 +176,7 @@ public class UserController extends HttpServlet {
                 userService.updateUser(user);
                 req.getSession().setAttribute("toastType", "success");
                 req.getSession().setAttribute("toastTitle", "Security Updated");
-                resp.sendRedirect("admin?section=profile"); // Or wherever the profile is
+                resp.sendRedirect("admin?section=profile");
             }
         }
     }

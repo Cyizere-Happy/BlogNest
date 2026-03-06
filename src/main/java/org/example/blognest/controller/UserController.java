@@ -55,7 +55,7 @@ public class UserController extends HttpServlet {
         
         if ("register".equals(action)) {
             String name = InputSanitizer.sanitizePlain(req.getParameter("name"));
-            String email = InputSanitizer.sanitizePlain(req.getParameter("email"));
+            String email = req.getParameter("email");
             String pass = req.getParameter("password");
             String captcha = req.getParameter("captcha");
             

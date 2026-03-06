@@ -7,6 +7,7 @@ import org.example.blognest.model.User;
 import org.example.blognest.services.CaptchaService;
 import org.example.blognest.services.TOTPService;
 import org.example.blognest.services.UserService;
+import org.example.blognest.util.InputSanitizer;
 import java.io.IOException;
 
 @WebServlet(name = "UserController", value = "/auth")
@@ -53,8 +54,8 @@ public class UserController extends HttpServlet {
         String action = req.getParameter("action");
         
         if ("register".equals(action)) {
-            String name = req.getParameter("name");
-            String email = req.getParameter("email");
+            String name = InputSanitizer.sanitizePlain(req.getParameter("name"));
+            String email = InputSanitizer.sanitizePlain(req.getParameter("email"));
             String pass = req.getParameter("password");
             String captcha = req.getParameter("captcha");
             

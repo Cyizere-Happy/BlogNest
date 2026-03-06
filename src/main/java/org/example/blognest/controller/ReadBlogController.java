@@ -6,6 +6,7 @@ import jakarta.servlet.http.*;
 import org.example.blognest.model.Post;
 import org.example.blognest.model.User;
 import org.example.blognest.services.PostService;
+import org.example.blognest.util.InputSanitizer;
 import java.io.IOException;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class ReadBlogController extends HttpServlet {
         User user = (User) req.getSession().getAttribute("user");
         if (user != null) {
             String postIdStr = req.getParameter("postId");
-            String content = req.getParameter("content");
+            String content = InputSanitizer.sanitizeRich(req.getParameter("content"));
             
             if (postIdStr != null && content != null && !content.trim().isEmpty()) {
                 try {

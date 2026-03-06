@@ -8,6 +8,7 @@ import org.example.blognest.model.User;
 import org.example.blognest.services.PostService;
 import org.example.blognest.services.UserService;
 import org.example.blognest.services.CommentService;
+import org.example.blognest.util.InputSanitizer;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -64,11 +65,11 @@ public class AdminController extends HttpServlet {
                 HttpSession session = req.getSession();
                 if ("createPost".equals(action)) {
                     targetSection = "manage-posts";
-                    String title = req.getParameter("title") != null ? req.getParameter("title").trim() : null;
-                    String content = req.getParameter("content") != null ? req.getParameter("content").trim() : null;
-                    String category = req.getParameter("category") != null ? req.getParameter("category").trim() : "";
-                    String desc = req.getParameter("description") != null ? req.getParameter("description").trim() : "";
-                    String thumb = req.getParameter("thumbnail_url") != null ? req.getParameter("thumbnail_url").trim() : "";
+                    String title = req.getParameter("title") != null ? InputSanitizer.sanitizePlain(req.getParameter("title").trim()) : null;
+                    String content = req.getParameter("content") != null ? InputSanitizer.sanitizeRich(req.getParameter("content").trim()) : null;
+                    String category = req.getParameter("category") != null ? InputSanitizer.sanitizePlain(req.getParameter("category").trim()) : "";
+                    String desc = req.getParameter("description") != null ? InputSanitizer.sanitizePlain(req.getParameter("description").trim()) : "";
+                    String thumb = req.getParameter("thumbnail_url") != null ? InputSanitizer.sanitizePlain(req.getParameter("thumbnail_url").trim()) : "";
 
                     if(title != null && !title.isEmpty() && content != null && !content.isEmpty()) {
                          Post post = new Post(title, desc, content, category, user);
@@ -83,11 +84,11 @@ public class AdminController extends HttpServlet {
                     String postIdStr = req.getParameter("postId");
                     if (postIdStr != null) {
                         Long id = Long.parseLong(postIdStr);
-                        String title = req.getParameter("title") != null ? req.getParameter("title").trim() : null;
-                        String content = req.getParameter("content") != null ? req.getParameter("content").trim() : null;
-                        String category = req.getParameter("category") != null ? req.getParameter("category").trim() : "";
-                        String desc = req.getParameter("description") != null ? req.getParameter("description").trim() : "";
-                        String thumb = req.getParameter("thumbnail_url") != null ? req.getParameter("thumbnail_url").trim() : "";
+                        String title = req.getParameter("title") != null ? InputSanitizer.sanitizePlain(req.getParameter("title").trim()) : null;
+                        String content = req.getParameter("content") != null ? InputSanitizer.sanitizeRich(req.getParameter("content").trim()) : null;
+                        String category = req.getParameter("category") != null ? InputSanitizer.sanitizePlain(req.getParameter("category").trim()) : "";
+                        String desc = req.getParameter("description") != null ? InputSanitizer.sanitizePlain(req.getParameter("description").trim()) : "";
+                        String thumb = req.getParameter("thumbnail_url") != null ? InputSanitizer.sanitizePlain(req.getParameter("thumbnail_url").trim()) : "";
 
                         Post post = postService.getPostById(id);
                         if (post != null && title != null && !title.isEmpty() && content != null && !content.isEmpty()) {
@@ -144,8 +145,8 @@ public class AdminController extends HttpServlet {
                     }
                 } else if ("updateDailyMessage".equals(action)) {
                     targetSection = "quotes-admin";
-                    String title = req.getParameter("title");
-                    String message = req.getParameter("message");
+                    String title = InputSanitizer.sanitizePlain(req.getParameter("title"));
+                    String message = InputSanitizer.sanitizeRich(req.getParameter("message"));
                     String takeawaysStr = req.getParameter("takeaways");
                     
                     if (title != null && message != null && takeawaysStr != null) {
@@ -154,6 +155,7 @@ public class AdminController extends HttpServlet {
                         takeaways = takeaways.stream()
                                     .map(String::trim)
                                     .filter(s -> !s.isEmpty())
+                                    .map(InputSanitizer::sanitizePlain)
                                     .toList();
                                     
                         org.example.blognest.services.QuoteService.getInstance()

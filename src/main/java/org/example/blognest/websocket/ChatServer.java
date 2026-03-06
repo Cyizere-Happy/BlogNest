@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.blognest.model.User;
+import org.example.blognest.util.InputSanitizer;
 
 @ServerEndpoint(value = "/chat/{username}", configurator = HttpSessionConfigurator.class)
 public class ChatServer {
@@ -79,8 +80,10 @@ public class ChatServer {
             return;
         }
 
-        // Persist message
+        // Sanitize CHAT messages for both history and routing
         if (chatMessage.getType() == ChatMessage.MessageType.CHAT) {
+            chatMessage.setContent(InputSanitizer.sanitizePlain(chatMessage.getContent()));
+            
             String recipient = chatMessage.getRecipient();
             if (recipient == null || recipient.isEmpty()) {
                 recipient = "Admin";

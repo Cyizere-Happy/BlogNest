@@ -24,12 +24,12 @@
 /* Modal Content */
 .profile-modal-content {
     background: var(--white);
-    width: 90%;
-    max-width: 800px;
+    width: 95%;
+    max-width: 650px;
     max-height: 85vh;
-    border-radius: 24px;
+    border-radius: 20px;
     position: relative;
-    padding: 2rem;
+    padding: 1.5rem;
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -55,9 +55,9 @@
 
 .close-modal-btn {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    font-size: 2rem;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
     background: none;
     border: none;
     cursor: pointer;
@@ -71,23 +71,24 @@
 
 /* Profile Sections */
 .profile-header-section h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 800;
-    margin-bottom: 0.5rem;
-    letter-spacing: -1px;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.5px;
 }
 
 .profile-header-section p {
     color: var(--text-light);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
 }
 
 /* Progress Section */
 .progress-section {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .progress-bar {
@@ -117,11 +118,11 @@
 /* Setup Cards */
 .setup-card {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     background: #f8fafc;
-    padding: 2rem;
-    border-radius: 20px;
-    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 16px;
+    margin-bottom: 1rem;
     border: 1px solid transparent;
     transition: all 0.3s ease;
 }
@@ -151,12 +152,13 @@
 
 .setup-body {
     display: flex;
-    gap: 2rem;
+    gap: 1.25rem;
+    align-items: center;
 }
 
 .profile-gif {
-    width: 150px;
-    border-radius: 12px;
+    width: 100px;
+    border-radius: 10px;
 }
 
 .setup-text p {

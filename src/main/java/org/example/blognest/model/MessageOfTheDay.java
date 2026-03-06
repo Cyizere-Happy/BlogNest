@@ -23,7 +23,7 @@ public class MessageOfTheDay {
     public LocalDateTime getTimestamp() { return timestamp; }
     
     public boolean isExpired() {
-        return timestamp == null || timestamp.isBefore(LocalDateTime.now().minusHours(24));
+        return timestamp == null || timestamp.isBefore(LocalDateTime.now().minusDays(7));
     }
 
     public String getFormattedDay() {

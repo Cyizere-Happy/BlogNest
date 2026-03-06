@@ -3,6 +3,7 @@ package org.example.blognest.websocket;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
+import jakarta.websocket.EndpointConfig;
 import org.example.blognest.websocket.model.ChatMessage;
 import org.example.blognest.model.ChatHistory;
 import org.example.blognest.services.ChatHistoryService;
@@ -15,22 +16,43 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@ServerEndpoint("/chat/{username}")
+import jakarta.servlet.http.HttpSession;
+import org.example.blognest.model.User;
+
+@ServerEndpoint(value = "/chat/{username}", configurator = HttpSessionConfigurator.class)
 public class ChatServer {
     private static final Map<String, Session> sessions = new ConcurrentHashMap<>();
     private static final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) {
+    public void onOpen(Session session, EndpointConfig config, @PathParam("username") String username) {
         try {
             String decodedUsername = java.net.URLDecoder.decode(username, "UTF-8");
+
+            HttpSession httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+            User loggedInUser = (httpSession != null) ? (User) httpSession.getAttribute("user") : null;
+
+            boolean isAuthorized = false;
+            if (loggedInUser != null) {
+                if ("Admin".equalsIgnoreCase(decodedUsername)) {
+                    isAuthorized = "ADMIN".equalsIgnoreCase(loggedInUser.getRole());
+                } else {
+                    isAuthorized = decodedUsername.equals(loggedInUser.getName());
+                }
+            }
+
+            if (!isAuthorized) {
+                System.err.println("Unauthorized WebSocket connection attempt: " + decodedUsername + " (Logged in as: " + (loggedInUser != null ? loggedInUser.getName() : "None") + ")");
+                session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Authentication required or invalid identity."));
+                return;
+            }
+
             sessions.put(decodedUsername, session);
-            System.out.println("WebSocket opened: " + decodedUsername + " (Session: " + session.getId() + ")");
+            System.out.println("WebSocket secured and opened: " + decodedUsername + " (Session: " + session.getId() + ")");
             broadcastSystemMessage(decodedUsername, ChatMessage.MessageType.JOIN);
 
-            // Load history for non-admin users automatically
-            if (!"Admin".equals(username)) {
-                sendHistory(username, "Admin", session);
+            if (!"Admin".equals(decodedUsername)) {
+                sendHistory(decodedUsername, "Admin", session);
             }
         } catch (Exception e) {
             System.err.println("Error in onOpen for " + username + ": " + e.getMessage());

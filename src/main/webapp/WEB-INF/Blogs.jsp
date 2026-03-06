@@ -10,6 +10,7 @@
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/blogs.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chat.css">
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link
@@ -145,6 +146,11 @@
             <script src="${pageContext.request.contextPath}/js/theme.js"></script>
             <script src="${pageContext.request.contextPath}/js/animations.js"></script>
             <script src="${pageContext.request.contextPath}/js/profile.js"></script>
+            <script>
+                window.chatUser = "${not empty user ? user.name : 'Guest'}";
+                window.contextPath = "${pageContext.request.contextPath}";
+            </script>
+            <script src="${pageContext.request.contextPath}/js/chat.js?v=1.2"></script>
             <jsp:include page="toast_component.jsp" />
         </body>
 

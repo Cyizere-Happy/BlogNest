@@ -191,13 +191,11 @@
             <script src="${pageContext.request.contextPath}/js/theme.js"></script>
             <script src="${pageContext.request.contextPath}/js/animations.js"></script>
             <script src="${pageContext.request.contextPath}/js/profile.js"></script>
-            <c:if test="${user != null}">
-                <script>
-                    window.chatUser = "${user.name}";
-                    window.contextPath = "${pageContext.request.contextPath}";
-                </script>
-                <script src="${pageContext.request.contextPath}/js/chat.js"></script>
-            </c:if>
+            <script>
+                window.chatUser = "${not empty user ? user.name : 'Guest'}";
+                window.contextPath = "${pageContext.request.contextPath}";
+            </script>
+            <script src="${pageContext.request.contextPath}/js/chat.js?v=1.2"></script>
             <jsp:include page="toast_component.jsp" />
         </body>
 

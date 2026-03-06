@@ -1,7 +1,14 @@
 (function () {
     let socket = null;
-    let username = window.chatUser || 'Guest';
-    let isGuest = username === 'Guest';
+
+    function checkGuest() {
+        const u = window.chatUser || 'Guest';
+        return u === 'Guest' || !window.chatUser;
+    }
+
+    const username = window.chatUser || 'Guest';
+    const isGuest = checkGuest();
+    console.log("Chat initialized. User:", username, "isGuest:", isGuest);
 
     const widget = document.createElement('div');
     widget.className = 'chat-widget-container';
@@ -60,7 +67,19 @@
     const pickerContainer = document.getElementById('emojiPickerContainer');
     let picker = null;
 
+    if (isGuest) {
+        console.log("Disabling chat for guest access.");
+        input.disabled = true;
+        input.placeholder = "Login to join the chat...";
+        sendBtn.disabled = true;
+        sendBtn.style.opacity = '0.5';
+        sendBtn.style.cursor = 'not-allowed';
+        emojiBtn.style.pointerEvents = 'none';
+        emojiBtn.style.opacity = '0.5';
+    }
+
     emojiBtn.onclick = (e) => {
+        if (checkGuest()) return;
         e.stopPropagation();
         if (!picker && window.picmo) {
             picker = picmo.createPicker({
@@ -83,18 +102,20 @@
     });
 
     toggle.onclick = () => {
-        if (isGuest) {
-            appendMsg("Please login to chat with the writer.", "system");
-            const loginBtn = document.createElement('a');
-            loginBtn.href = (window.contextPath || '') + '/auth';
-            loginBtn.className = 'btn btn-primary';
-            loginBtn.style.fontSize = '0.8rem';
-            loginBtn.style.padding = '5px 15px';
-            loginBtn.style.display = 'block';
-            loginBtn.style.marginTop = '10px';
-            loginBtn.style.textAlign = 'center';
-            loginBtn.innerText = "Go to Login";
-            body.appendChild(loginBtn);
+        if (checkGuest()) {
+            if (!body.innerText.includes("Please login")) {
+                appendMsg("Please login to chat with the writer.", "system");
+                const loginBtn = document.createElement('a');
+                loginBtn.href = (window.contextPath || '') + '/auth';
+                loginBtn.className = 'btn btn-primary';
+                loginBtn.style.fontSize = '0.8rem';
+                loginBtn.style.padding = '5px 15px';
+                loginBtn.style.display = 'block';
+                loginBtn.style.marginTop = '10px';
+                loginBtn.style.textAlign = 'center';
+                loginBtn.innerText = "Go to Login";
+                body.appendChild(loginBtn);
+            }
             windowEl.classList.add('active');
             return;
         }
@@ -104,11 +125,18 @@
     closeBtn.onclick = () => windowEl.classList.remove('active');
 
     function connectWS() {
+        if (checkGuest()) {
+            console.warn("Aborting connectWS: User is a guest.");
+            return;
+        }
         if (socket && socket.readyState === WebSocket.OPEN) return;
 
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const context = window.contextPath || '';
-        socket = new WebSocket(`${protocol}//${window.location.host}${context}/chat/${encodeURIComponent(username)}`);
+        const socketUsername = window.chatUser || 'Guest';
+
+        console.log("Connecting to WebSocket as:", socketUsername);
+        socket = new WebSocket(`${protocol}//${window.location.host}${context}/chat/${encodeURIComponent(socketUsername)}`);
 
         socket.onopen = () => {
             console.log("Chat connected as " + username);
@@ -132,6 +160,10 @@
     }
 
     function sendMessage() {
+        if (checkGuest()) {
+            console.warn("Aborting sendMessage: User is a guest.");
+            return;
+        }
         const text = input.value.trim();
         if (!text) return;
 

@@ -10,6 +10,7 @@
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/quotes.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chat.css">
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link
@@ -108,38 +109,51 @@
                 </c:choose>
 
                 <!-- Quote History Section -->
-                <c:if test="${not empty quoteHistory}">
-                    <div style="margin-top: 100px; padding: 40px 0; border-top: 1px solid #e2e8f0;">
-                        <h2
-                            style="font-family: 'Outfit'; margin-bottom: 40px; text-align: center; color: var(--text-color);">
-                            Previous Insights</h2>
-                        <div class="history-list"
-                            style="display: flex; flex-direction: column; gap: 30px; max-width: 800px; margin: 0 auto;">
-                            <c:forEach var="historyMsg" items="${quoteHistory}">
-                                <div class="history-item"
-                                    style="padding: 24px; background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid #e2e8f0; transition: transform 0.3s ease;">
-                                    <div
-                                        style="font-size: 0.75rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 10px;">
-                                        <c:out value="${historyMsg.relativeTime}" />
+                <div style="margin-top: 100px; padding: 40px 0; border-top: 1px solid #e2e8f0;">
+                    <h2
+                        style="font-family: 'Outfit'; margin-bottom: 40px; text-align: center; color: var(--text-color);">
+                        Previous Insights
+                    </h2>
+                    <c:choose>
+                        <c:when test="${not empty quoteHistory}">
+                            <div class="history-list"
+                                style="display: flex; flex-direction: column; gap: 30px; max-width: 800px; margin: 0 auto;">
+                                <c:forEach var="historyMsg" items="${quoteHistory}">
+                                    <div class="history-item"
+                                        style="padding: 24px; background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid #e2e8f0; transition: transform 0.3s ease;">
+                                        <div
+                                            style="font-size: 0.75rem; color: var(--secondary-color); font-weight: 700; margin-bottom: 10px;">
+                                            <c:out value="${historyMsg.relativeTime}" />
+                                        </div>
+                                        <h3
+                                            style="font-family: 'Outfit'; margin-bottom: 8px; color: var(--text-color);">
+                                            <c:out value="${historyMsg.title}" />
+                                        </h3>
+                                        <p
+                                            style="font-family: 'Jost'; color: #64748b; font-size: 0.9rem; line-height: 1.6;">
+                                            <c:out value="${historyMsg.mainMessage}" />
+                                        </p>
                                     </div>
-                                    <h3 style="font-family: 'Outfit'; margin-bottom: 8px; color: var(--text-color);">
-                                        <c:out value="${historyMsg.title}" />
-                                    </h3>
-                                    <p
-                                        style="font-family: 'Jost'; color: #64748b; font-size: 0.9rem; line-height: 1.6;">
-                                        <c:out value="${historyMsg.mainMessage}" />
-                                    </p>
-                                </div>
-                            </c:forEach>
-                        </div>
-                    </div>
-                </c:if>
+                                </c:forEach>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <p style="text-align: center; color: #64748b; font-family: 'Jost';">No previous insights
+                                yet. Stay tuned!</p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </main>
 
             <jsp:include page="profile_modal.jsp" />
             <script src="${pageContext.request.contextPath}/js/theme.js"></script>
             <script src="${pageContext.request.contextPath}/js/animations.js"></script>
             <script src="${pageContext.request.contextPath}/js/profile.js"></script>
+            <script>
+                window.chatUser = "${not empty user ? user.name : 'Guest'}";
+                window.contextPath = "${pageContext.request.contextPath}";
+            </script>
+            <script src="${pageContext.request.contextPath}/js/chat.js?v=1.2"></script>
             <jsp:include page="toast_component.jsp" />
         </body>
 

@@ -14,7 +14,6 @@ public class QuoteService {
     private final List<MessageOfTheDay> messageHistory = Collections.synchronizedList(new ArrayList<>());
 
     private QuoteService() {
-        // Initialize with default content
         updateDailyMessage(
             "Growth Mindset", 
             "The journey of self-improvement is not a sprint, but a series of intentional steps towards becoming the best version of yourself.",
@@ -36,17 +35,17 @@ public class QuoteService {
     }
 
     public MessageOfTheDay getDailyMessage() {
-        MessageOfTheDay msg = currentMessage.get();
-        if (msg != null && !msg.isExpired()) {
-            return msg;
-        }
-        return null; // Expired or not set
+        return currentMessage.get(); 
     }
 
     public void updateDailyMessage(String title, String mainMessage, List<String> takeaways) {
         MessageOfTheDay newMessage = new MessageOfTheDay(title, mainMessage, takeaways, LocalDateTime.now());
+        MessageOfTheDay oldMessage = currentMessage.get();
         currentMessage.set(newMessage);
-        messageHistory.add(0, newMessage);
+        
+        if (oldMessage == null || !oldMessage.getTitle().equals(title) || !oldMessage.getMainMessage().equals(mainMessage)) {
+            messageHistory.add(0, newMessage);
+        }
     }
 
     public List<MessageOfTheDay> getMessageHistory() {

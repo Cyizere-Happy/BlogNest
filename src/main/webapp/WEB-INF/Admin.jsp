@@ -78,6 +78,16 @@
                                 </svg>
                                 Analytics
                             </a>
+                            <a href="#" class="sidebar-link" data-section="categories">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="7" height="7"></rect>
+                                    <rect x="14" y="3" width="7" height="7"></rect>
+                                    <rect x="14" y="14" width="7" height="7"></rect>
+                                    <rect x="3" y="14" width="7" height="7"></rect>
+                                </svg>
+                                Categories
+                            </a>
                             <a href="#" class="sidebar-link" data-section="quotes-admin">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -305,7 +315,7 @@
                                     <c:forEach var="post" items="${posts}">
                                         <div class="admin-post-card">
                                             <div class="post-card-visual">
-                                                <span class="post-card-badge">${post.category}</span>
+                                                <span class="post-card-badge">${post.category.name}</span>
                                                 <img src="${not empty post.thumbnail_url ? post.thumbnail_url : 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=800'}"
                                                     alt="${post.title}">
                                             </div>
@@ -326,7 +336,7 @@
                                                         onclick="editPost('${post.id}', this)"
                                                         data-title="${post.title}" data-desc="${post.description}"
                                                         data-content="<c:out value='${post.content}'/>"
-                                                        data-category="${post.category}"
+                                                        data-category="${post.category.name}"
                                                         data-thumb="${post.thumbnail_url}">
                                                         Edit Blog <svg width="16" height="16" viewBox="0 0 24 24"
                                                             fill="none" stroke="currentColor" stroke-width="2.5"
@@ -550,13 +560,14 @@
                                         <div class="editor-sidebar-canvas">
                                             <div class="form-group">
                                                 <label for="post-category">Category</label>
-                                                <select id="post-category" name="category" class="form-control">
-                                                    <option value="">Select Category</option>
-                                                    <option value="lifestyle">Lifestyle</option>
-                                                    <option value="tech">Technology</option>
-                                                    <option value="travel">Travel</option>
-                                                    <option value="creative">Creative Writing</option>
-                                                </select>
+                                                <input type="text" id="post-category" name="category" 
+                                                       class="form-control" placeholder="Type or select a category" 
+                                                       list="categories-list">
+                                                <datalist id="categories-list">
+                                                    <c:forEach var="cat" items="${categories}">
+                                                        <option value="${cat.name}">
+                                                    </c:forEach>
+                                                </datalist>
                                             </div>
 
                                             <div class="form-group">
@@ -690,12 +701,43 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Categories Section -->
+                            <div id="categories" class="admin-section" style="display: none;">
+                                <div class="section-header">
+                                    <h2 class="section-title">Manage Categories</h2>
+                                </div>
+                                <div class="table-container" style="max-width: 600px;">
+                                    <table class="admin-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Category Name</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="cat" items="${categories}">
+                                                <tr>
+                                                    <td style="font-weight: 600;">${cat.name}</td>
+                                                    <td>
+                                                        <!-- Categories are mostly managed via deletion if unused -->
+                                                        <form action="admin" method="post" style="display:inline;">
+                                                            <input type="hidden" name="action" value="deleteCategory">
+                                                            <input type="hidden" name="categoryId" value="${cat.id}">
+                                                            <button type="submit" class="action-btn danger" onclick="return confirm('Delete this category?')">Delete</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </main>
 
                     <script>
                         // View Management
-                        const sections = ['dashboard', 'manage-posts', 'post-editor', 'users', 'comments', 'analytics', 'quotes-admin', 'messages'];
+                        const sections = ['dashboard', 'manage-posts', 'post-editor', 'users', 'comments', 'analytics', 'categories', 'quotes-admin', 'messages'];
                         const sidebarLinks = document.querySelectorAll('.sidebar-link[data-section]');
                         const adminWelcomeTitle = document.querySelector('.admin-welcome-title');
                         const adminGrid = document.querySelector('.admin-grid');
@@ -774,7 +816,7 @@
                             document.getElementById('post-title').value = `<c:out value="${editPost.title}" />`;
                             document.getElementById('post-excerpt').value = `<c:out value="${editPost.description}" />`;
                             document.getElementById('post-content').value = `<c:out value="${editPost.content}" />`;
-                            document.getElementById('post-category').value = `<c:out value="${editPost.category}" />`;
+                            document.getElementById('post-category').value = `<c:out value="${editPost.category.name}" />`;
                             document.getElementById('post-image').value = `<c:out value="${editPost.thumbnail_url}" />`;
                             switchView('post-editor');
                         });

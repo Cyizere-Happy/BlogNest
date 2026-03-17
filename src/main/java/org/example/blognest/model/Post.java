@@ -31,7 +31,9 @@ public class Post {
 
     private String thumbnail_url;
 
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Column(columnDefinition = "integer default 0")
     private int views;
@@ -58,7 +60,7 @@ public class Post {
         this.author = author;
     }
 
-    public Post(String title, String description, String content, String category, User author) {
+    public Post(String title, String description, String content, Category category, User author) {
         this.title = title;
         this.description = description;
         this.content = content;

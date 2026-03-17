@@ -3,8 +3,10 @@ package org.example.blognest.controller;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.example.blognest.model.Category;
 import org.example.blognest.model.Post;
 import org.example.blognest.model.User;
+import org.example.blognest.services.CategoryService;
 import org.example.blognest.services.PostService;
 import org.example.blognest.services.UserService;
 import org.example.blognest.services.CommentService;
@@ -19,6 +21,7 @@ public class AdminController extends HttpServlet {
     private final PostService postService = PostService.getInstance();
     private final UserService userService = UserService.getInstance();
     private final CommentService commentService = CommentService.getInstance();
+    private final CategoryService categoryService = CategoryService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,6 +39,7 @@ public class AdminController extends HttpServlet {
             req.setAttribute("totalPosts", postService.getAllPosts().size());
             req.setAttribute("totalUsers", userService.getAllUsers().size());
             req.setAttribute("messageHistory", org.example.blognest.services.QuoteService.getInstance().getMessageHistory());
+            req.setAttribute("categories", categoryService.getAllCategories());
             
             // Check for cross-page edit request
             String editId = req.getParameter("editId");
@@ -72,7 +76,8 @@ public class AdminController extends HttpServlet {
                     String thumb = req.getParameter("thumbnail_url") != null ? InputSanitizer.sanitizePlain(req.getParameter("thumbnail_url").trim()) : "";
 
                     if(title != null && !title.isEmpty() && content != null && !content.isEmpty()) {
-                         Post post = new Post(title, desc, content, category, user);
+                         Category cat = categoryService.getOrCreateCategoryByName(category);
+                         Post post = new Post(title, desc, content, cat, user);
                          post.setThumbnail_url(thumb);
                          postService.createPost(post);
                          session.setAttribute("toastType", "success");
@@ -92,9 +97,10 @@ public class AdminController extends HttpServlet {
 
                         Post post = postService.getPostById(id);
                         if (post != null && title != null && !title.isEmpty() && content != null && !content.isEmpty()) {
+                            Category cat = categoryService.getOrCreateCategoryByName(category);
                             post.setTitle(title);
                             post.setContent(content);
-                            post.setCategory(category);
+                            post.setCategory(cat);
                             post.setDescription(desc);
                             post.setThumbnail_url(thumb);
                             postService.updatePost(post);
@@ -172,6 +178,15 @@ public class AdminController extends HttpServlet {
                     session.setAttribute("toastType", "success");
                     session.setAttribute("toastTitle", "Cleared!");
                     session.setAttribute("toastMessage", "The Daily Message has been removed for today.");
+                } else if ("deleteCategory".equals(action)) {
+                    targetSection = "categories";
+                    String catIdStr = req.getParameter("categoryId");
+                    if (catIdStr != null) {
+                        categoryService.deleteCategory(Long.parseLong(catIdStr));
+                        session.setAttribute("toastType", "success");
+                        session.setAttribute("toastTitle", "Category Removed!");
+                        session.setAttribute("toastMessage", "The category has been deleted.");
+                    }
                 }
             } catch (Exception e) {
                 // Log the exception if you had a logger, for now just move on

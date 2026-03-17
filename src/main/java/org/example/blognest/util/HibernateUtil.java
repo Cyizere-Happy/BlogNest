@@ -1,5 +1,6 @@
 package org.example.blognest.util;
 
+import org.example.blognest.model.Category;
 import org.example.blognest.model.Comment;
 import org.example.blognest.model.Post;
 import org.example.blognest.model.Subscription;
@@ -36,6 +37,7 @@ public class HibernateUtil {
             configuration.setProperties(settings);
 
             configuration.addAnnotatedClass(Post.class);
+            configuration.addAnnotatedClass(Category.class);
             configuration.addAnnotatedClass(Comment.class);
             configuration.addAnnotatedClass(User.class);
             configuration.addAnnotatedClass(Subscription.class);

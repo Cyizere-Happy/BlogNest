@@ -1,0 +1,263 @@
+/* Admin Dashboard Premium Styles */
+:root {
+    --admin-bg: #f8fafc;
+    --admin-sidebar-bg: #0f172a;
+    --admin-card-bg: rgba(255, 255, 255, 0.8);
+    --admin-accent: #38b2ac;
+    --admin-accent-soft: rgba(56, 178, 172, 0.1);
+    --admin-text: #1e293b;
+    --admin-text-light: #64748b;
+    --admin-glass-border: rgba(255, 255, 255, 0.3);
+    --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --admin-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dark-theme :root {
+    --admin-bg: #0f172a;
+    --admin-sidebar-bg: #020617;
+    --admin-card-bg: rgba(30, 41, 59, 0.7);
+    --admin-accent: #63b3ed;
+    --admin-accent-soft: rgba(99, 179, 237, 0.1);
+    --admin-text: #f1f5f9;
+    --admin-text-light: #94a3b8;
+    --admin-glass-border: rgba(255, 255, 255, 0.05);
+}
+
+body.admin-body {
+    background-color: var(--admin-bg);
+    font-family: 'Outfit', sans-serif;
+    color: var(--admin-text);
+}
+
+/* Sidebar Refinement */
+.admin-sidebar {
+    background: var(--admin-sidebar-bg);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--admin-glass-border);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-logo {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.5px;
+    padding: 1rem 0;
+}
+
+.sidebar-link {
+    margin: 4px 0;
+    padding: 12px 16px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    opacity: 0.8;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+    background: var(--admin-accent-soft);
+    color: var(--admin-accent);
+    opacity: 1;
+}
+
+.sidebar-link.active::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    height: 20px;
+    width: 3px;
+    background: var(--admin-accent);
+    border-radius: 4px 0 0 4px;
+}
+
+/* Header & Personalization */
+.admin-welcome-header {
+    margin-bottom: 2.5rem;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.greeting-text {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--admin-text) 0%, var(--admin-accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.date-text {
+    font-family: 'Jost', sans-serif;
+    color: var(--admin-text-light);
+    font-weight: 500;
+}
+
+/* Grid & Cards Modernization */
+.admin-grid {
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+.admin-card {
+    background: var(--admin-card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--admin-glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: var(--admin-shadow);
+    height: auto;
+    min-height: 220px;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--admin-shadow-lg);
+    border-color: var(--admin-accent);
+}
+
+.card-icon {
+    background: var(--admin-accent-soft);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    margin-bottom: 1.25rem;
+}
+
+.admin-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.admin-card p {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+/* Glass Buttons */
+.view-btn {
+    margin-top: 1.5rem;
+    background: var(--admin-accent);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+}
+
+/* Animations */
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal-up {
+    animation: slideUpFade 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+
+/* Section Containers */
+.admin-section {
+    background: var(--admin-card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--admin-glass-border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: var(--admin-shadow-lg);
+    margin-top: 1rem;
+    animation: slideUpFade 0.5s ease-out;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: var(--admin-text);
+}
+
+/* Table Modernization */
+.table-container {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--admin-glass-border);
+}
+
+.dark-theme .table-container {
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background: var(--admin-accent-soft);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--admin-accent);
+}
+
+.admin-table td {
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid var(--admin-glass-border);
+    font-family: 'Jost', sans-serif;
+}
+
+/* Button Refinement */
+.btn {
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--admin-accent);
+    box-shadow: 0 4px 12px rgba(56, 178, 172, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(56, 178, 172, 0.4);
+}
+
+/* Form Styling */
+.form-control {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--admin-glass-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-family: 'Jost', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.dark-theme .form-control {
+    background: rgba(15, 23, 42, 0.8);
+}
+
+.form-control:focus {
+    border-color: var(--admin-accent);
+    box-shadow: 0 0 0 4px var(--admin-accent-soft);
+    outline: none;
+}

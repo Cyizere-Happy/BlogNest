@@ -35,16 +35,33 @@ public class QuoteService {
     }
 
     public MessageOfTheDay getDailyMessage() {
-        return currentMessage.get(); 
+        MessageOfTheDay msg = currentMessage.get();
+        if (msg != null && msg.isExpired()) {
+            // Move to history if expired and clear current
+            messageHistory.add(0, msg);
+            currentMessage.set(null);
+            return null;
+        }
+        return msg;
+    }
+
+    public void clearDailyMessage() {
+        MessageOfTheDay msg = currentMessage.get();
+        if (msg != null) {
+            messageHistory.add(0, msg);
+            currentMessage.set(null);
+        }
     }
 
     public void updateDailyMessage(String title, String mainMessage, List<String> takeaways) {
-        MessageOfTheDay newMessage = new MessageOfTheDay(title, mainMessage, takeaways, LocalDateTime.now());
         MessageOfTheDay oldMessage = currentMessage.get();
+        MessageOfTheDay newMessage = new MessageOfTheDay(title, mainMessage, takeaways, LocalDateTime.now());
+        
         currentMessage.set(newMessage);
         
-        if (oldMessage == null || !oldMessage.getTitle().equals(title) || !oldMessage.getMainMessage().equals(mainMessage)) {
-            messageHistory.add(0, newMessage);
+        // If there was an old message from a different day, move it to history
+        if (oldMessage != null && !oldMessage.getTimestamp().toLocalDate().equals(newMessage.getTimestamp().toLocalDate())) {
+            messageHistory.add(0, oldMessage);
         }
     }
 

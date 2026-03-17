@@ -101,7 +101,7 @@
                         <div style="text-align: center; padding: 100px 20px;">
                             <h1
                                 style="font-family: 'Outfit'; font-size: 3rem; margin-bottom: 20px; color: var(--text-color);">
-                                No Quote of the Day</h1>
+                                No daily message for today</h1>
                             <p style="font-family: 'Jost'; color: #64748b;">The writer hasn't shared a new insight just
                                 yet. Check back soon or browse the history below!</p>
                         </div>

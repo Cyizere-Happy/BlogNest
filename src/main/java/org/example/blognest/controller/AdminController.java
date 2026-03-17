@@ -165,6 +165,13 @@ public class AdminController extends HttpServlet {
                         session.setAttribute("toastTitle", "Updated!");
                         session.setAttribute("toastMessage", "The Message of the Day has been updated.");
                     }
+                } else if ("clearDailyMessage".equals(action)) {
+                    targetSection = "quotes-admin";
+                    org.example.blognest.services.QuoteService.getInstance().clearDailyMessage();
+
+                    session.setAttribute("toastType", "success");
+                    session.setAttribute("toastTitle", "Cleared!");
+                    session.setAttribute("toastMessage", "The Daily Message has been removed for today.");
                 }
             } catch (Exception e) {
                 // Log the exception if you had a logger, for now just move on

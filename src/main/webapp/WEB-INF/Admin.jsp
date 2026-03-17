@@ -605,6 +605,13 @@
                                             <button type="submit" class="btn btn-primary">Update Daily Message</button>
                                         </div>
                                     </form>
+                                    <form action="admin" method="post" style="margin-top: 10px;">
+                                        <input type="hidden" name="action" value="clearDailyMessage">
+                                        <button type="submit" class="btn btn-outline"
+                                            style="border-color: #e53e3e; color: #e53e3e; width: 100%;"
+                                            onclick="return confirm('This will hide the current message and move it to history. Proceed?')">Clear
+                                            Today's Message</button>
+                                    </form>
                                 </div>
 
                                 <div class="section-header" style="margin-top: 4rem;">

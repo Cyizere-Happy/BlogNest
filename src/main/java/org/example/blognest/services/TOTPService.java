@@ -16,7 +16,6 @@ public class TOTPService {
     public static String generateSecret() {
         byte[] buffer = new byte[10]; // 80 bits is enough for most apps
         new SecureRandom().nextBytes(buffer);
-        // Use Base32 as required by most 2FA apps (Google Authenticator, etc.)
         return Base32.encode(buffer);
     }
 

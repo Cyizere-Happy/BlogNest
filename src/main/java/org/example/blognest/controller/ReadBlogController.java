@@ -59,7 +59,6 @@ public class ReadBlogController extends HttpServlet {
                 session.setAttribute("toastType", "success");
                 session.setAttribute("toastTitle", "Success!");
                 session.setAttribute("toastMessage", "Your comment has been submitted.");
-                
                 resp.sendRedirect("read_blog?id=" + postId);
                 return;
                 } catch(NumberFormatException e) {

@@ -1,13 +1,30 @@
 package org.example.blognest.model;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class MessageOfTheDay {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String title;
+    
+    @Lob
     private String mainMessage;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> takeaways;
+
     private LocalDateTime timestamp;
 
     public MessageOfTheDay(String title, String mainMessage, List<String> takeaways, LocalDateTime timestamp) {

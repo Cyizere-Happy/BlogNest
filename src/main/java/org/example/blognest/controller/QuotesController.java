@@ -17,11 +17,23 @@ public class QuotesController extends HttpServlet {
         MessageOfTheDay dailyMessage = quoteService.getDailyMessage();
         List<MessageOfTheDay> history = quoteService.getMessageHistory();
         
-        if (dailyMessage != null && !history.isEmpty()) {
-            history.remove(0); 
+        String viewIndexStr = req.getParameter("viewIndex");
+        if (viewIndexStr != null) {
+            try {
+                int index = Integer.parseInt(viewIndexStr);
+                if (index >= 0 && index < history.size()) {
+                    req.setAttribute("dailyMessage", history.get(index));
+                    req.setAttribute("isHistorical", true);
+                }
+            } catch (NumberFormatException ignored) {}
+        } else {
+            req.setAttribute("dailyMessage", dailyMessage);
+            // If we have a current message, hide it from the "Previous" list to avoid redundancy
+            if (dailyMessage != null && !history.isEmpty()) {
+                history.remove(0);
+            }
         }
         
-        req.setAttribute("dailyMessage", dailyMessage);
         req.setAttribute("quoteHistory", history);
         req.getRequestDispatcher("/WEB-INF/DailyQuotes.jsp").forward(req, resp);
     }

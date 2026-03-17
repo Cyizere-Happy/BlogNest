@@ -40,6 +40,7 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(User.class);
             configuration.addAnnotatedClass(Subscription.class);
             configuration.addAnnotatedClass(org.example.blognest.model.ChatHistory.class);
+            configuration.addAnnotatedClass(org.example.blognest.model.MessageOfTheDay.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();

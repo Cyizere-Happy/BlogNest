@@ -1,31 +1,19 @@
 package org.example.blognest.services;
 
 import org.example.blognest.model.MessageOfTheDay;
+import org.example.blognest.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class QuoteService {
     private static QuoteService instance;
-    private final AtomicReference<MessageOfTheDay> currentMessage = new AtomicReference<>();
-    private final List<MessageOfTheDay> messageHistory = Collections.synchronizedList(new ArrayList<>());
 
-    private QuoteService() {
-        updateDailyMessage(
-            "Growth Mindset", 
-            "The journey of self-improvement is not a sprint, but a series of intentional steps towards becoming the best version of yourself.",
-            Arrays.asList(
-                "Embrace the struggle",
-                "Learn from setbacks",
-                "Stay consistent",
-                "Focus on the process",
-                "Celebrate small wins"
-            )
-        );
-    }
+    private QuoteService() {}
 
     public static synchronized QuoteService getInstance() {
         if (instance == null) {
@@ -35,37 +23,61 @@ public class QuoteService {
     }
 
     public MessageOfTheDay getDailyMessage() {
-        MessageOfTheDay msg = currentMessage.get();
-        if (msg != null && msg.isExpired()) {
-            // Move to history if expired and clear current
-            messageHistory.add(0, msg);
-            currentMessage.set(null);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            // Get the latest message
+            Query<MessageOfTheDay> query = session.createQuery("from MessageOfTheDay order by timestamp desc", MessageOfTheDay.class);
+            query.setMaxResults(1);
+            MessageOfTheDay msg = query.uniqueResult();
+            
+            if (msg != null && msg.isExpired()) {
+                // Return null if expired; the system will show "No message"
+                return null;
+            }
+            return msg;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-        return msg;
     }
 
     public void clearDailyMessage() {
-        MessageOfTheDay msg = currentMessage.get();
+        // Technically, with next-day expiration, "clearing" just means 
+        // there is no current message. We could set the timestamp to 
+        // slightly older or just let getDailyMessage return null if we 
+        // deleted the current one. 
+        // For simplicity, let's just make it expired by setting timestamp to yesterday.
+        MessageOfTheDay msg = getDailyMessage();
         if (msg != null) {
-            messageHistory.add(0, msg);
-            currentMessage.set(null);
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                Transaction transaction = session.beginTransaction();
+                msg.setTimestamp(LocalDateTime.now().minusDays(1));
+                session.merge(msg);
+                transaction.commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void updateDailyMessage(String title, String mainMessage, List<String> takeaways) {
-        MessageOfTheDay oldMessage = currentMessage.get();
         MessageOfTheDay newMessage = new MessageOfTheDay(title, mainMessage, takeaways, LocalDateTime.now());
         
-        currentMessage.set(newMessage);
-        
-        // If there was an old message from a different day, move it to history
-        if (oldMessage != null && !oldMessage.getTimestamp().toLocalDate().equals(newMessage.getTimestamp().toLocalDate())) {
-            messageHistory.add(0, oldMessage);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(newMessage);
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public List<MessageOfTheDay> getMessageHistory() {
-        return new ArrayList<>(messageHistory);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<MessageOfTheDay> query = session.createQuery("from MessageOfTheDay order by timestamp desc", MessageOfTheDay.class);
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 }

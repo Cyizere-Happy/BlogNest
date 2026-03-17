@@ -1,4 +1,5 @@
 /* Read Blog Page Styles */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
 /* Base Layout */
 .read-blog-container {
@@ -255,4 +256,102 @@
         grid-template-columns: 1fr;
         gap: 24px;
     }
+}
+
+/* Zen Mode (Immersive Reader) */
+body.zen-active {
+    background-color: #fdfbf7 !important; /* Soft crème */
+    transition: background-color 0.8s ease;
+    padding-top: 0 !important;
+}
+
+body.zen-active .floating-navbar,
+body.zen-active .hero-column,
+body.zen-active .blog-sidebar,
+body.zen-active .comments-section,
+body.zen-active .toast-container,
+body.zen-active #chat-widget-container,
+body.zen-active .profile-modal-overlay {
+    display: none !important;
+}
+
+body.zen-active .read-blog-container {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 100px 20px;
+    display: block;
+    animation: fadeInZen 1.2s ease;
+}
+
+@keyframes fadeInZen {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.zen-active .article-content {
+    padding-left: 0;
+}
+
+body.zen-active .article-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 64px;
+    max-width: 100%;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+body.zen-active .article-body {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 2;
+    color: #2c2c2c;
+    margin: 0 auto;
+}
+
+body.zen-active .article-header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+body.zen-active .article-category {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    opacity: 0.6;
+}
+
+/* Zen Toggle Button Style */
+.zen-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    background: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 2000;
+    transition: var(--transition);
+    border: none;
+    color: var(--text-color);
+}
+
+.zen-toggle:hover {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+body.zen-active .zen-toggle {
+    background: #2c2c2c;
+    color: #fdfbf7;
+}
+
+.zen-toggle svg {
+    width: 28px;
+    height: 28px;
 }

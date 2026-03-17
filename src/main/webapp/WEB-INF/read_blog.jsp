@@ -187,6 +187,13 @@
                 </aside>
             </div>
 
+            <button class="zen-toggle" id="zen-toggle-btn" title="Zen Mode (Press 'Z')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+            </button>
+
             <jsp:include page="profile_modal.jsp" />
             <script src="${pageContext.request.contextPath}/js/theme.js"></script>
             <script src="${pageContext.request.contextPath}/js/animations.js"></script>
@@ -196,6 +203,27 @@
                 window.contextPath = "${pageContext.request.contextPath}";
             </script>
             <script src="${pageContext.request.contextPath}/js/chat.js?v=1.2"></script>
+            <script>
+                const zenBtn = document.getElementById('zen-toggle-btn');
+                
+                function toggleZenMode() {
+                    document.body.classList.toggle('zen-active');
+                    zenBtn.classList.toggle('active');
+                }
+
+                if(zenBtn) {
+                    zenBtn.addEventListener('click', toggleZenMode);
+                }
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key.toLowerCase() === 'z' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                        toggleZenMode();
+                    }
+                    if (e.key === 'Escape' && document.body.classList.contains('zen-active')) {
+                        toggleZenMode();
+                    }
+                });
+            </script>
             <jsp:include page="toast_component.jsp" />
         </body>
 

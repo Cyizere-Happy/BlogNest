@@ -362,6 +362,11 @@
                                                             </svg>
                                                         </button>
                                                     </form>
+                                                    <button class="delete-btn-minimal" onclick="viewPulse('${post.id}')" title="View Reading Pulse" style="color: var(--secondary-color); margin-left:10px;">
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -981,6 +986,187 @@
                     </script>
                     <jsp:include page="toast_component.jsp" />
                     <script src="${pageContext.request.contextPath}/js/animations.js"></script>
+
+                    <!-- Pulse Modal (Moved to root for fixed positioning) -->
+                    <div id="pulseModal" class="pulse-overlay" style="display:none;">
+                        <div class="pulse-modal-container">
+                            <div class="pulse-modal-header">
+                                <div class="pulse-modal-title">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                    </svg>
+                                    Post Attention Heatmap
+                                </div>
+                                <button class="pulse-close-btn" onclick="closePulseModal()">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div id="pulse-heatmap-content" class="pulse-modal-body">
+                                <!-- Heatmap content injected here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <style>
+                        .pulse-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100vw;
+                            height: 100vh;
+                            background: rgba(0, 0, 0, 0.6);
+                            backdrop-filter: blur(8px);
+                            z-index: 9999;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            animation: fadeIn 0.3s ease;
+                        }
+
+                        .pulse-modal-container {
+                            background: var(--white);
+                            width: 90%;
+                            max-width: 900px;
+                            max-height: 85vh;
+                            border-radius: 24px;
+                            display: flex;
+                            flex-direction: column;
+                            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+                            overflow: hidden;
+                            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                        }
+
+                        .pulse-modal-header {
+                            padding: 1.5rem 2rem;
+                            border-bottom: 1px solid rgba(0,0,0,0.05);
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            background: var(--bg-light);
+                        }
+
+                        .pulse-modal-title {
+                            font-family: 'Outfit', sans-serif;
+                            font-size: 1.25rem;
+                            font-weight: 800;
+                            display: flex;
+                            align-items: center;
+                            gap: 0.75rem;
+                            color: var(--primary-color);
+                        }
+
+                        .pulse-close-btn {
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                            color: var(--text-light);
+                            transition: var(--transition);
+                            padding: 0.5rem;
+                            border-radius: 50%;
+                        }
+
+                        .pulse-close-btn:hover {
+                            background: rgba(0,0,0,0.05);
+                            color: #dc3545;
+                        }
+
+                        .pulse-modal-body {
+                            padding: 2.5rem;
+                            overflow-y: auto;
+                            flex: 1;
+                        }
+
+                        .pulse-block {
+                            padding: 1.25rem;
+                            margin-bottom: 1rem;
+                            border-radius: 12px;
+                            transition: all 0.3s ease;
+                            border-left: 5px solid transparent;
+                            background: #f8fafc;
+                            font-family: 'Jost', sans-serif;
+                            line-height: 1.7;
+                            position: relative;
+                        }
+
+                        .pulse-hot { background: #fff5f5; border-left-color: #ff4d4d; box-shadow: 0 10px 20px rgba(255, 77, 77, 0.05); }
+                        .pulse-warm { background: #fffaf0; border-left-color: #ffa500; }
+                        .pulse-cool { background: #f0f9ff; border-left-color: #63b3ed; }
+                        .pulse-cold { border-left-color: #e2e8f0; opacity: 0.7; }
+
+                        .pulse-badge {
+                            position: absolute;
+                            top: 10px;
+                            right: 15px;
+                            font-size: 0.65rem;
+                            font-weight: 800;
+                            text-transform: uppercase;
+                            color: var(--text-light);
+                            opacity: 0.4;
+                        }
+
+                        @keyframes slideUp {
+                            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+                            to { opacity: 1; transform: translateY(0) scale(1); }
+                        }
+                    </style>                    <script>
+                        function viewPulse(postId) {
+                            const overlay = document.getElementById('pulseModal');
+                            overlay.style.display = 'flex';
+                            
+                            fetch(`${pageContext.request.contextPath}/admin?action=getPulseData&postId=` + postId, {
+                                method: 'POST'
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                const container = document.getElementById('pulse-heatmap-content');
+                                container.innerHTML = '';
+                                
+                                const content = data.content;
+                                const pulses = data.pulses;
+                                const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+                                
+                                const pulseMap = {};
+                                pulses.forEach(p => { pulseMap[p.sectionIndex] = p.attentionScore; });
+                                
+                                const scores = pulses.map(p => p.attentionScore);
+                                const maxScore = scores.length > 0 ? Math.max(...scores) : 1;
+
+                                paragraphs.forEach((text, index) => {
+                                    const score = pulseMap[index] || 0;
+                                    const intensity = score / maxScore;
+                                    
+                                    const div = document.createElement('div');
+                                    div.className = 'pulse-block';
+                                    div.innerText = text;
+                                    
+                                    if (intensity > 0.7) div.classList.add('pulse-hot');
+                                    else if (intensity > 0.4) div.classList.add('pulse-warm');
+                                    else if (intensity > 0.1) div.classList.add('pulse-cool');
+                                    else div.classList.add('pulse-cold');
+                                    
+                                    const badge = document.createElement('span');
+                                    badge.className = 'pulse-badge';
+                                    badge.innerText = `Attention: ${score}`;
+                                    div.appendChild(badge);
+                                    
+                                    container.appendChild(div);
+                                });
+                            });
+                        }
+
+                        function closePulseModal() {
+                            document.getElementById('pulseModal').style.display = 'none';
+                        }
+
+                        // Close on ESC
+                        document.addEventListener('keydown', (e) => {
+                            if (e.key === 'Escape') closePulseModal();
+                        });
+                    </script>
                 </body>
 
                 </html>
+ml>

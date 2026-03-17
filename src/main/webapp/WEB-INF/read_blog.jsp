@@ -104,7 +104,7 @@
                             </div>
                         </header>
 
-                        <div class="article-body">
+                        <div class="article-body" id="article-body-content">
                             <c:choose>
                                 <c:when test="${not empty post.content}">
                                     <c:out value="${post.content}" />
@@ -223,6 +223,56 @@
                         toggleZenMode();
                     }
                 });
+
+                // --- Reading Pulse Telemetry ---
+                const articleBody = document.getElementById('article-body-content');
+                if (articleBody && !window.location.search.includes('preview=true')) {
+                    const content = articleBody.innerText;
+                    const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+                    
+                    // Clear and wrap paragraphs
+                    articleBody.innerHTML = '';
+                    paragraphs.forEach((text, index) => {
+                        const p = document.createElement('p');
+                        p.innerText = text;
+                        p.dataset.sectionIndex = index;
+                        p.classList.add('pulse-section');
+                        articleBody.appendChild(p);
+                    });
+
+                    // Track attention
+                    const observerOptions = {
+                        root: null,
+                        rootMargin: '-20% 0px -20% 0px', // Active reading zone
+                        threshold: 0.5
+                    };
+
+                    const activeSections = new Set();
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                activeSections.add(entry.target.dataset.sectionIndex);
+                            } else {
+                                activeSections.delete(entry.target.dataset.sectionIndex);
+                            }
+                        });
+                    }, observerOptions);
+
+                    document.querySelectorAll('.pulse-section').forEach(p => observer.observe(p));
+
+                    // Ping server every 5 seconds for active sections
+                    setInterval(() => {
+                        if (document.visibilityState === 'visible' && activeSections.size > 0) {
+                            activeSections.forEach(index => {
+                                fetch(`${pageContext.request.contextPath}/pulse_telemetry`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: 'postId=${post.id}&sectionIndex=' + index
+                                });
+                            });
+                        }
+                    }, 5000);
+                }
             </script>
             <jsp:include page="toast_component.jsp" />
         </body>

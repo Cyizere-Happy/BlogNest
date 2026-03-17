@@ -13,8 +13,9 @@ import org.example.blognest.services.CommentService;
 import org.example.blognest.util.InputSanitizer;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.blognest.services.PulseService;
 
 @WebServlet("/admin")
 public class AdminController extends HttpServlet {
@@ -22,6 +23,7 @@ public class AdminController extends HttpServlet {
     private final UserService userService = UserService.getInstance();
     private final CommentService commentService = CommentService.getInstance();
     private final CategoryService categoryService = CategoryService.getInstance();
+    private final PulseService pulseService = PulseService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -187,9 +189,30 @@ public class AdminController extends HttpServlet {
                         session.setAttribute("toastTitle", "Category Removed!");
                         session.setAttribute("toastMessage", "The category has been deleted.");
                     }
+                } else if ("getPulseData".equals(action)) {
+                    String postIdStr = req.getParameter("postId");
+                    if (postIdStr != null) {
+                        Long postId = Long.parseLong(postIdStr);
+                        List<org.example.blognest.model.ReadingPulse> pulses = pulseService.getPulseData(postId);
+                        Post post = postService.getPostById(postId);
+                        
+                        Map<String, Object> responseData = new HashMap<>();
+                        responseData.put("pulses", pulses);
+                        responseData.put("content", post != null ? post.getContent() : "");
+                        
+                        resp.setContentType("application/json");
+                        resp.setCharacterEncoding("UTF-8");
+                        try {
+                            new com.fasterxml.jackson.databind.ObjectMapper().writeValue(resp.getOutputStream(), responseData);
+                            resp.getOutputStream().flush();
+                        } catch (Exception jsonEx) {
+                            jsonEx.printStackTrace();
+                        }
+                        return; // Prevent redirect/forward
+                    }
                 }
             } catch (Exception e) {
-                // Log the exception if you had a logger, for now just move on
+                e.printStackTrace();
             }
             
             resp.sendRedirect("admin?section=" + targetSection);

@@ -15,4 +15,9 @@
         <location>/WEB-INF/404.jsp</location>
     </error-page>
 
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/500.jsp</location>
+    </error-page>
+
 </web-app>

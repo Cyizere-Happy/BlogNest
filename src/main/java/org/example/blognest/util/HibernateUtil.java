@@ -24,7 +24,7 @@ public class HibernateUtil {
 
             String dbUrl = ConfigService.get("DB_URL", "jdbc:postgresql://localhost:5432/hibernating");
             String dbUser = ConfigService.get("DB_USER", "postgres");
-            String dbPass = ConfigService.get("DB_PASS", "5Tr@wberry");
+            String dbPass = ConfigService.get("DB_PASS", "5Tr@wbery");
 
             settings.put(Environment.DRIVER, "org.postgresql.Driver");
             settings.put(Environment.URL, dbUrl);

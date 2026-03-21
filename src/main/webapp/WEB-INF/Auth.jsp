@@ -444,7 +444,9 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
-                        <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
+                        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
+                        </div>
 
                         <div class="form-footer">
                             <a href="#" class="forgot-pass" style="text-decoration: none; color: transparent">Forgot
@@ -491,7 +493,9 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
-                        <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
+                        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
+                        </div>
 
                         <div class="form-footer">
                             <button type="submit" name="action" value="register" class="btn-login">Sign up</button>

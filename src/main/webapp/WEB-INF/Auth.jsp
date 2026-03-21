@@ -160,7 +160,7 @@
                 .auth-form {
                     display: flex;
                     flex-direction: column;
-                    gap: 1.5rem;
+                    gap: 1.2rem;
                 }
 
                 .auth-form.hidden {
@@ -206,8 +206,8 @@
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    gap: 1.5rem;
-                    margin-top: 2rem;
+                    gap: 1.2rem;
+                    margin-top: 1rem;
                     width: 100%;
                 }
 
@@ -444,7 +444,7 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
-                        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: center;">
                             <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
                         </div>
 
@@ -493,7 +493,7 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
-                        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: center;">
                             <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
                         </div>
 

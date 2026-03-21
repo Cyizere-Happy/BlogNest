@@ -20,11 +20,12 @@ public class InputSanitizer {
             .and(Sanitizers.BLOCKS);
 
     /**
-     * Sanitizes input to remove ALL HTML tags.
+     * Sanitizes input to remove ALL HTML tags and returns raw text.
      */
     public static String sanitizePlain(String input) {
         if (input == null) return null;
-        return PLAIN_POLICY.sanitize(input);
+        String sanitized = PLAIN_POLICY.sanitize(input);
+        return org.apache.commons.text.StringEscapeUtils.unescapeHtml4(sanitized);
     }
 
     /**

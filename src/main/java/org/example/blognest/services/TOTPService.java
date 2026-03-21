@@ -12,6 +12,7 @@ import java.security.SecureRandom;
  * Basic TOTP (Time-based One-Time Password) implementation.
  */
 public class TOTPService {
+    private static final int DEFAULT_INTERVAL = 30;
 
     public static String generateSecret() {
         byte[] buffer = new byte[10]; // 80 bits is enough for most apps
@@ -20,13 +21,20 @@ public class TOTPService {
     }
 
     public static boolean verifyCode(String secret, String codeStr) {
+        return verifyCode(secret, codeStr, DEFAULT_INTERVAL); // Default 30s window
+    }
+
+    public static boolean verifyCode(String secret, String codeStr, int windowSeconds) {
         if (secret == null || codeStr == null || codeStr.length() != 6) return false;
         try {
             int code = Integer.parseInt(codeStr);
-            long currentInterval = System.currentTimeMillis() / 1000 / 30; // 30-second window
+            long currentInterval = System.currentTimeMillis() / 1000 / DEFAULT_INTERVAL;
             
-            // Check current, previous, and next interval for clock drift
-            for (int i = -1; i <= 1; i++) {
+            // Calculate how many steps to check based on windowSeconds
+            int steps = windowSeconds / DEFAULT_INTERVAL;
+            
+            // Check range of intervals for clock drift and delay
+            for (int i = -steps; i <= steps; i++) {
                 if (generateTOTP(secret, currentInterval + i) == code) {
                     return true;
                 }
@@ -53,6 +61,20 @@ public class TOTPService {
                 (hash[offset + 3] & 0xff);
 
         return binary % 1000000;
+    }
+
+    public static String generateCode(String secret) {
+        return generateCode(secret, DEFAULT_INTERVAL);
+    }
+
+    public static String generateCode(String secret, int ignoredWindowSeconds) {
+        try {
+            long currentInterval = System.currentTimeMillis() / 1000 / DEFAULT_INTERVAL;
+            int code = generateTOTP(secret, currentInterval);
+            return String.format("%06d", code);
+        } catch (Exception e) {
+            return null;
+        }
     }
     
     public static String getQRBarcodeURL(String user, String host, String secret) {

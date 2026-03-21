@@ -403,6 +403,7 @@
                     </button>
                 </div>
             </header>
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
             <main class="container">
                 <div class="login-section reveal reveal-left">
@@ -412,30 +413,11 @@
                         <c:if test="${is2FA}">
                             <button class="tab active" style="display: none;">Verify 2FA</button>
                         </c:if>
+                        <c:if test="${isVerifyEmail}">
+                            <button class="tab active" style="display: none;">Verify Email</button>
+                        </c:if>
                     </div>
 
-                    <!-- Alerts -->
-                    <c:if test="${not empty error}">
-                        <div class="alert alert-error">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                            </svg>
-                            <c:out value="${error}" />
-                        </div>
-                    </c:if>
-                    <c:if test="${not empty success}">
-                        <div class="alert alert-success">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            <c:out value="${success}" />
-                        </div>
-                    </c:if>
 
                     <form id="login-form" class="auth-form reveal reveal-up delay-100" action="auth" method="post">
                         <div class="input-group">
@@ -462,27 +444,7 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
-                        <div class="input-group" style="margin-top: 5px;">
-                            <img src="${pageContext.request.contextPath}/captcha?type=login" alt="captcha"
-                                id="captcha-img-login"
-                                style="border-radius: 10px; margin-right: 10px; border: 1px solid #e2e8f0;">
-                            <button type="button" onclick="refreshCaptcha('login')" class="btn-icon"
-                                style="flex-shrink: 0; width: 35px; height: 35px;">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="input-group">
-                            <span class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                </svg></span>
-                            <input type="text" name="captcha" placeholder="Enter Captcha" required autocomplete="off">
-                        </div>
+                        <div class="g-recaptcha" data-sitekey="6LfVM5IsAAAAAAVl5rvPTI236piCj09ipvS2qKhF"></div>
 
                         <div class="form-footer">
                             <a href="#" class="forgot-pass" style="text-decoration: none; color: transparent">Forgot
@@ -529,27 +491,7 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
-                        <div class="input-group" style="margin-top: 5px;">
-                            <img src="${pageContext.request.contextPath}/captcha?type=register" alt="captcha"
-                                id="captcha-img-register"
-                                style="border-radius: 10px; margin-right: 10px; border: 1px solid #e2e8f0;">
-                            <button type="button" onclick="refreshCaptcha('register')" class="btn-icon"
-                                style="flex-shrink: 0; width: 35px; height: 35px;">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path
-                                        d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="input-group">
-                            <span class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                                </svg></span>
-                            <input type="text" name="captcha" placeholder="Enter Captcha" required autocomplete="off">
-                        </div>
+                        <div class="g-recaptcha" data-sitekey="6LfVM5IsAAAAAAVl5rvPTI236piCj09ipvS2qKhF"></div>
 
                         <div class="form-footer">
                             <button type="submit" name="action" value="register" class="btn-login">Sign up</button>
@@ -563,13 +505,6 @@
                             <h2 style="font-size: 1.5rem; color: var(--secondary-color);">2FA Required</h2>
                             <p style="color: var(--text-light); font-size: 0.9rem;">Please enter the 6-digit code from
                                 your authenticator app.</p>
-                            <c:if test="${not empty pending2FAUser}">
-                                <div
-                                    style="margin-top: 10px; padding: 15px; background: #fff5f5; border: 1px solid #feb2b2; border-radius: 12px; font-size: 0.85rem; color: #c53030; text-align: left;">
-                                    <strong style="display: block; margin-bottom: 5px;">⚠️ 2FA Required</strong>
-                                    Please enter the 6-digit code from your authenticator app to continue.
-                                </div>
-                            </c:if>
                         </div>
                         <div class="input-group">
                             <span class="icon">
@@ -586,6 +521,31 @@
                         <div class="form-footer">
                             <button type="submit" name="action" value="verify2FA" class="btn-login">Verify</button>
                             <a href="auth" class="forgot-link">Back to Login</a>
+                        </div>
+                    </form>
+
+                    <!-- Email Verification Form -->
+                    <form id="verify-email-form" class="auth-form ${isVerifyEmail ? '' : 'hidden'} reveal reveal-up delay-100"
+                        action="auth" method="post">
+                        <div style="text-align: center; margin-bottom: 1rem;">
+                            <h2 style="font-size: 1.5rem; color: var(--secondary-color);">Verify Your Email</h2>
+                            <p style="color: var(--text-light); font-size: 0.9rem;">We've sent a 6-digit code to your email. It will expire in 5 minutes.</p>
+                        </div>
+                        <div class="input-group">
+                            <span class="icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                </svg>
+                            </span>
+                            <input type="text" name="otp" placeholder="6-digit code" required
+                                autocomplete="one-time-code" maxlength="6"
+                                style="text-align: center; letter-spacing: 5px; font-weight: 700;">
+                        </div>
+                        <div class="form-footer">
+                            <button type="submit" name="action" value="verifyRegistration" class="btn-login">Verify & Register</button>
+                            <a href="auth" class="forgot-link">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -627,10 +587,6 @@
                     }
                 }
 
-                function refreshCaptcha(type) {
-                    const img = document.getElementById('captcha-img-' + type);
-                    img.src = '${pageContext.request.contextPath}/captcha?type=' + type + '&' + new Date().getTime();
-                }
 
                 // Handle server-side redirection to tab
                 <c:if test="${isSignup}">
@@ -639,6 +595,12 @@
                 <c:if test="${is2FA}">
                     loginForm.classList.add('hidden');
                     signupForm.classList.add('hidden');
+                    tabs.forEach(t => t.classList.remove('active'));
+                </c:if>
+                <c:if test="${isVerifyEmail}">
+                    loginForm.classList.add('hidden');
+                    signupForm.classList.add('hidden');
+                    if (document.getElementById('2fa-form')) document.getElementById('2fa-form').classList.add('hidden');
                     tabs.forEach(t => t.classList.remove('active'));
                 </c:if>
             </script>

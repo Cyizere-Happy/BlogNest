@@ -100,10 +100,9 @@ public class UserController extends HttpServlet {
             String secret = TOTPService.generateSecret();
             String code = TOTPService.generateCode(secret, 300); // 5-minute window
             
-            // Send email
-            MailService.getInstance().sendEmail(email.trim(), 
-                "Verify your BlogNest Account", 
-                "Your verification code is: " + code + "\n\nThis code will expire in 5 minutes.");
+            // Send enhanced email with mascot
+            String mascotPath = req.getServletContext().getRealPath("/images/Mascot.png");
+            MailService.getInstance().sendVerificationEmail(email.trim(), code, mascotPath);
             
             // Store registration data in session
             HttpSession session = req.getSession();

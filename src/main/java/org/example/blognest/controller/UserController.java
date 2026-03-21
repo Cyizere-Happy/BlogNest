@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import org.example.blognest.model.User;
 import org.example.blognest.services.CaptchaService;
+import org.example.blognest.services.ConfigService;
 import org.example.blognest.services.MailService;
 import org.example.blognest.services.TOTPService;
 import org.example.blognest.services.UserService;
@@ -17,6 +18,7 @@ public class UserController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("recaptchaSiteKey", ConfigService.get("RECAPTCHA_SITE_KEY"));
         String action = req.getParameter("action");
         if ("logout".equals(action)) {
             HttpSession session = req.getSession();
@@ -51,7 +53,8 @@ public class UserController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("recaptchaSiteKey", ConfigService.get("RECAPTCHA_SITE_KEY"));
         String action = req.getParameter("action");
         
         if ("register".equals(action)) {

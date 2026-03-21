@@ -5,6 +5,7 @@ import org.example.blognest.model.Comment;
 import org.example.blognest.model.Post;
 import org.example.blognest.model.Subscription;
 import org.example.blognest.model.User;
+import org.example.blognest.services.ConfigService;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -21,10 +22,9 @@ public class HibernateUtil {
             Configuration configuration = new Configuration();
             Properties settings = new Properties();
 
-            // Use environment variables if available (for Docker Compose)
-            String dbUrl = System.getenv().getOrDefault("DB_URL", "jdbc:postgresql://localhost:5432/hibernating");
-            String dbUser = System.getenv().getOrDefault("DB_USER", "postgres");
-            String dbPass = System.getenv().getOrDefault("DB_PASSWORD", "5Tr@wberry");
+            String dbUrl = ConfigService.get("DB_URL", "jdbc:postgresql://localhost:5432/hibernating");
+            String dbUser = ConfigService.get("DB_USER", "postgres");
+            String dbPass = ConfigService.get("DB_PASS", "5Tr@wberry");
 
             settings.put(Environment.DRIVER, "org.postgresql.Driver");
             settings.put(Environment.URL, dbUrl);

@@ -13,11 +13,10 @@ public class MailService {
     private final String password;
 
     private MailService() {
-        // Use environment variables or default to common dev settings
-        this.host = System.getenv("SMTP_HOST") != null ? System.getenv("SMTP_HOST") : "smtp.gmail.com";
-        this.port = System.getenv("SMTP_PORT") != null ? System.getenv("SMTP_PORT") : "587";
-        this.username = System.getenv("SMTP_USER") != null ? System.getenv("SMTP_USER") : "happycyizere69@gmail.com";
-        this.password = System.getenv("SMTP_PASS") != null ? System.getenv("SMTP_PASS") : "ijzpojwtzdigoxxz";
+        this.host = ConfigService.get("SMTP_HOST", "smtp.gmail.com");
+        this.port = ConfigService.get("SMTP_PORT", "587");
+        this.username = ConfigService.get("SMTP_USER");
+        this.password = ConfigService.get("SMTP_PASS");
     }
 
     public static synchronized MailService getInstance() {
@@ -51,8 +50,7 @@ public class MailService {
             Transport.send(message);
             System.out.println("Email sent successfully to " + to);
         } catch (MessagingException e) {
-            System.err.println("Failed to send email to " + to + ": " + e.getMessage());
-            // In a real app, you might want to throw an exception or log it properly
+            e.printStackTrace();
         }
     }
 }

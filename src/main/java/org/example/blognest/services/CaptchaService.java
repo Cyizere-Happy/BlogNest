@@ -8,13 +8,8 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class CaptchaService {
-    private static final String RECAPTCHA_SECRET = "6LfVM5IsAAAAAClM2ZgioSpT_QtJyiN6XoY61hGx";
+    private static final String RECAPTCHA_SECRET = ConfigService.get("RECAPTCHA_SECRET_KEY");
 
-    /**
-     * Verifies the reCAPTCHA response token with Google's siteverify API.
-     * @param responseToken The token received from the frontend (g-recaptcha-response).
-     * @return true if verification is successful, false otherwise.
-     */
     public static boolean verifyReCaptcha(String responseToken) {
         if (responseToken == null || responseToken.trim().isEmpty()) {
             return false;

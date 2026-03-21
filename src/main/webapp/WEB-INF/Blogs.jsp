@@ -74,7 +74,7 @@
                                         <div class="discovery-card">
                                             <div class="card-visuals">
                                                 <div class="main-img"
-                                                    style="background-color: ${post.category == 'Tech' ? '#cbd5e0' : '#f7fafc'}; background-image: url('${post.thumbnail_url}'); background-size: cover; background-position: center;">
+                                                    style="background-color: ${post.category.name == 'Tech' ? '#cbd5e0' : '#f7fafc'}; background-image: url('${post.thumbnail_url}'); background-size: cover; background-position: center;">
                                                 </div>
                                                 <div class="thumb-img"
                                                     style="background-color: var(--secondary-color);"></div>

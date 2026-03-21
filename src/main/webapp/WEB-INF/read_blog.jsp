@@ -80,7 +80,7 @@
                         <header class="article-header">
                             <!-- Category Tag -->
                             <div class="article-category">
-                                <c:out value="${not empty post.category ? post.category : 'General Stories'}" />
+                                <c:out value="${not empty post.category.name ? post.category.name : 'General Stories'}" />
                             </div>
                             <h1 class="article-title">
                                 <c:out value="${post.title}" />

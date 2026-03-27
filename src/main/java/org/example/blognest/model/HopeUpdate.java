@@ -16,13 +16,13 @@ public class HopeUpdate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    @Column(name = "testimony", columnDefinition = "TEXT")
+    private String testimony;
 
     private LocalDateTime timestamp;
 
-    public HopeUpdate(String content) {
-        this.content = content;
+    public HopeUpdate(String testimony) {
+        this.testimony = testimony;
         this.timestamp = LocalDateTime.now();
     }
 }

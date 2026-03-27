@@ -53,22 +53,10 @@ public class HibernateUtil {
             
             // Self-healing: Ensure essential columns exist for Users and MoTD
             try (org.hibernate.Session session = sessionFactory.openSession()) {
-                // Nuclear Reset for both main and update tables to clear OID artifacts
-                try {
-                    session.createNativeQuery("ALTER TABLE sanctuary_hope RENAME TO sanctuary_hope_old_" + System.currentTimeMillis()).executeUpdate();
-                } catch (Exception e) {}
-                try {
-                    session.createNativeQuery("ALTER TABLE sanctuary_hope_update RENAME TO sanctuary_hope_update_old_" + System.currentTimeMillis()).executeUpdate();
-                } catch (Exception e) {}
                 session.beginTransaction();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS two_factor_secret VARCHAR(255)").executeUpdate();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_two_factor_enabled BOOLEAN DEFAULT FALSE").executeUpdate();
                 session.createNativeQuery("ALTER TABLE messageoftheday ADD COLUMN IF NOT EXISTS likes INTEGER DEFAULT 0").executeUpdate();
-                // 2. Retroactive Unescape for apostrophes and quotes
-                session.createNativeQuery("UPDATE sanctuary_hope SET content = REPLACE(content, '&#39;', '''') WHERE content LIKE '%&#39;%'").executeUpdate();
-                session.createNativeQuery("UPDATE sanctuary_hope SET content = REPLACE(content, '&quot;', '\"') WHERE content LIKE '%&quot;%'").executeUpdate();
-                session.createNativeQuery("UPDATE sanctuary_hope SET content = REPLACE(content, '&amp;', '&') WHERE content LIKE '%&amp;%'").executeUpdate();
-
                 session.getTransaction().commit();
             } catch (Exception e) {
                 System.err.println("Database self-healing notice: " + e.getMessage());

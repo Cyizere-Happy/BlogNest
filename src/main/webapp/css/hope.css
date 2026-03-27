@@ -411,9 +411,10 @@
 }
 
 .modal-update-item p {
-    font-size: 0.95rem;
-    color: var(--hope-text);
-    line-height: 1.5;
+    font-size: 1rem !important;
+    color: #2d3748 !important; /* Force dark navy for maximum contrast */
+    line-height: 1.6 !important;
+    margin-top: 0.25rem !important;
 }
 
 @media (max-width: 768px) {

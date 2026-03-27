@@ -1,0 +1,291 @@
+:root {
+    --hope-white: #ffffff;
+    --hope-bg: #fdfdfd;
+    --hope-accent: #38b2ac;
+    --hope-text: #2d3748;
+    --hope-text-light: #718096;
+    --hope-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    --hope-card-width: 320px;
+}
+
+.hope-body {
+    background-color: var(--hope-bg);
+    font-family: 'Outfit', sans-serif;
+    color: var(--hope-text);
+    overflow-x: hidden;
+}
+
+.hope-hero {
+    padding: 4rem 10% 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: auto;
+}
+
+.hope-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #f1f5f9;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--hope-accent);
+    margin-bottom: 1.5rem;
+}
+
+.hope-hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -2.5px;
+}
+
+.hope-hero p {
+    font-family: 'Jost', sans-serif;
+    font-size: 1.25rem;
+    color: var(--hope-text-light);
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+.hope-actions {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* Collective Stream Area - High Density Grid */
+.hope-stream {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 5% 100px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+    position: relative;
+}
+
+.hope-stream::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+        radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+.hope-card {
+    background: var(--hope-white);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: var(--hope-shadow);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(0,0,0,0.03);
+    cursor: pointer;
+    position: relative;
+    top: auto; left: auto; /* Reset absolute positions */
+    transform: none;
+}
+
+.hope-card:nth-child(even) {
+    transform: translateY(15px);
+}
+
+.hope-card:hover {
+    transform: translateY(-10px) rotate(1deg);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.hope-card::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 14px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.hope-card .card-index {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--hope-text-light);
+    margin-bottom: 0.5rem;
+}
+
+.hope-card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--hope-text);
+}
+
+.hope-card p {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    color: var(--hope-text-light);
+    line-height: 1.5;
+}
+
+/* Journey Page Specifics */
+.journey-header {
+    background: white;
+    padding: 4rem 10%;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.journey-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 5%;
+}
+
+.btn-see-more {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 40px;
+    padding: 12px 30px;
+    border-radius: 30px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    font-weight: 700;
+    color: var(--hope-text-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-see-more:hover {
+    background: #f8fafc;
+    border-color: var(--hope-accent);
+    color: var(--hope-accent);
+}
+
+/* Modals */
+.hope-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+.hope-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    max-width: 600px;
+    width: 90%;
+    padding: 3rem;
+}
+
+.modal-content h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 1.5rem;
+    border: 2px solid #f1f5f9;
+    border-radius: 16px;
+    font-family: 'Jost';
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    resize: none;
+}
+
+.form-control:focus {
+    border-color: var(--hope-accent);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(56, 178, 172, 0.1);
+}
+
+.btn-release {
+    padding: 1rem 2.5rem;
+    background: var(--hope-accent);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-release:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(56, 178, 172, 0.3);
+}
+
+/* Timeline for updates */
+.hope-timeline {
+    margin-top: 50px;
+    border-left: 2px dashed #e2e8f0;
+    padding-left: 40px;
+    position: relative;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.timeline-event {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.timeline-event::before {
+    content: '';
+    position: absolute;
+    left: -49px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border: 3px solid var(--hope-accent);
+    border-radius: 50%;
+}
+
+.event-date {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--hope-accent);
+    margin-bottom: 5px;
+}
+
+.event-content {
+    font-family: 'Jost';
+    color: var(--hope-text-light);
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .hope-card {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        transform: none !important;
+        margin-bottom: 30px;
+    }
+    .hope-path-svg { display: none; }
+    .hope-hero h1 { font-size: 2.5rem; }
+}

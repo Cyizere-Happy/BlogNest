@@ -44,6 +44,8 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(org.example.blognest.model.ChatHistory.class);
             configuration.addAnnotatedClass(org.example.blognest.model.MessageOfTheDay.class);
             configuration.addAnnotatedClass(org.example.blognest.model.ReadingPulse.class);
+            configuration.addAnnotatedClass(org.example.blognest.model.Hope.class);
+            configuration.addAnnotatedClass(org.example.blognest.model.HopeUpdate.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties()).build();

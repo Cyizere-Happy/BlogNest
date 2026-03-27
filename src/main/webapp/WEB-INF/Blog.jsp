@@ -41,6 +41,7 @@
                 </div>
                 <div class="nav-links">
                     <a href="${pageContext.request.contextPath}/quotes" class="nav-item">Daily Quote</a>
+                    <a href="${pageContext.request.contextPath}/hope" class="nav-item">Hope Journal</a>
                 </div>
                 <div class="nav-profile">
                     <a href="javascript:void(0)" class="active-profile profile-trigger" data-logged-in="${user != null}"

@@ -53,6 +53,13 @@ public class HibernateUtil {
             
             // Self-healing: Ensure essential columns exist for Users and MoTD
             try (org.hibernate.Session session = sessionFactory.openSession()) {
+                // Nuclear Reset for both main and update tables to clear OID artifacts
+                try {
+                    session.createNativeQuery("ALTER TABLE sanctuary_hope RENAME TO sanctuary_hope_old_" + System.currentTimeMillis()).executeUpdate();
+                } catch (Exception e) {}
+                try {
+                    session.createNativeQuery("ALTER TABLE sanctuary_hope_update RENAME TO sanctuary_hope_update_old_" + System.currentTimeMillis()).executeUpdate();
+                } catch (Exception e) {}
                 session.beginTransaction();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS two_factor_secret VARCHAR(255)").executeUpdate();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_two_factor_enabled BOOLEAN DEFAULT FALSE").executeUpdate();

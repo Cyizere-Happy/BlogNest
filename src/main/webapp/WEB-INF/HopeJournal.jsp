@@ -62,7 +62,7 @@
                     <!-- Hidden testimonies for JS to pick up -->
                     <div class="hidden-updates" style="display: none;">
                         <c:forEach var="update" items="${hope.updates}">
-                            <div class="update-item" data-date="${update.timestamp.toLocalDate()}">${fn:escapeXml(update.content)}</div>
+                            <div class="update-item" data-date="${update.timestamp.toLocalDate()}">${not empty update.content ? fn:escapeXml(update.content) : "A silent testimony..."}</div>
                         </c:forEach>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
                 Array.from(updatesDiv.children).forEach(upd => {
                     const item = document.createElement('div');
                     item.className = 'modal-update-item';
-                    item.innerHTML = `<span class="update-date">${upd.getAttribute('data-date')}</span><p>${upd.innerText}</p>`;
+                    item.innerHTML = `<span class="update-date">${upd.getAttribute('data-date')}</span><p>${upd.textContent}</p>`;
                     list.appendChild(item);
                 });
                 section.style.display = 'block';

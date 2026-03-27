@@ -52,7 +52,7 @@
                         <div class="event-date">
                             <c:choose><c:when test="${not empty update.timestamp}">${update.timestamp.toLocalDate()}</c:when><c:otherwise>Recent</c:otherwise></c:choose>
                         </div>
-                        <div class="event-content">${update.content}</div>
+                        <div class="event-content">${not empty update.content ? update.content : "A silent chapter in your story..."}</div>
                     </div>
                 </c:forEach>
                 

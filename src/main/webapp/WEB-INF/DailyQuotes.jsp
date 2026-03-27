@@ -78,6 +78,15 @@
                                     <c:out value="${dailyMessage.mainMessage}" />
                                 </p>
                             </div>
+                            
+                            <div class="like-container" data-quote-id="${dailyMessage.id}" onclick="handleLike(this, event)">
+                                <button class="heart-button" id="main-heart">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </button>
+                                <span class="likes-count">${dailyMessage.likes}</span>
+                            </div>
                             <c:if test="${isHistorical}">
                                 <div style="margin-top: 20px;">
                                     <a href="quotes" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.8rem; border-color: var(--secondary-color); color: var(--secondary-color); text-decoration: none; border-radius: 30px; font-weight: 600;">Back to Present</a>
@@ -144,6 +153,15 @@
                                                 style="font-family: 'Jost'; color: #64748b; font-size: 0.9rem; line-height: 1.6;">
                                                 <c:out value="${historyMsg.mainMessage}" />
                                             </p>
+                                            
+                                            <div class="like-container" data-quote-id="${historyMsg.id}" onclick="handleLike(this, event)">
+                                                <button class="heart-button">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                                    </svg>
+                                                </button>
+                                                <span class="likes-count">${historyMsg.likes}</span>
+                                            </div>
                                         </div>
                                     </a>
                                 </c:forEach>
@@ -164,6 +182,58 @@
             <script>
                 window.chatUser = "${not empty user ? user.name : 'Guest'}";
                 window.contextPath = "${pageContext.request.contextPath}";
+
+                function handleLike(container, event) {
+                    if (event) event.preventDefault();
+                    if (event) event.stopPropagation();
+                    
+                    const quoteId = container.getAttribute('data-quote-id');
+                    const heartBtn = container.querySelector('.heart-button');
+                    const countSpan = container.querySelector('.likes-count');
+                    
+                    // Check local storage to prevent multiple likes
+                    const likedQuotes = JSON.parse(localStorage.getItem('likedQuotes') || '[]');
+                    if (likedQuotes.includes(quoteId)) {
+                        return; // Already liked
+                    }
+
+                    // Optimistic update
+                    heartBtn.classList.add('liked');
+                    const currentCount = parseInt(countSpan.textContent);
+                    countSpan.textContent = currentCount + 1;
+                    
+                    // Save to local storage
+                    likedQuotes.push(quoteId);
+                    localStorage.setItem('likedQuotes', JSON.stringify(likedQuotes));
+
+                    // Server update
+                    fetch(window.contextPath + '/quotes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'id=' + quoteId
+                    })
+                    .then(response => response.text())
+                    .then(newCount => {
+                        countSpan.textContent = newCount;
+                    })
+                    .catch(err => {
+                        console.error('Failed to like:', err);
+                        // Rollback on error if needed
+                    });
+                }
+
+                // Initial state check
+                document.addEventListener('DOMContentLoaded', () => {
+                    const likedQuotes = JSON.parse(localStorage.getItem('likedQuotes') || '[]');
+                    document.querySelectorAll('.like-container').forEach(container => {
+                        const quoteId = container.getAttribute('data-quote-id');
+                        if (likedQuotes.includes(quoteId)) {
+                            container.querySelector('.heart-button').classList.add('liked');
+                        }
+                    });
+                });
             </script>
             <script src="${pageContext.request.contextPath}/js/chat.js?v=1.2"></script>
             <jsp:include page="toast_component.jsp" />

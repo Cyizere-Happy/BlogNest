@@ -37,4 +37,19 @@ public class QuotesController extends HttpServlet {
         req.setAttribute("quoteHistory", history);
         req.getRequestDispatcher("/WEB-INF/DailyQuotes.jsp").forward(req, resp);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String idStr = req.getParameter("id");
+        if (idStr != null) {
+            try {
+                Long id = Long.parseLong(idStr);
+                int newLikes = quoteService.likeMessage(id);
+                resp.setContentType("text/plain");
+                resp.getWriter().write(String.valueOf(newLikes));
+            } catch (NumberFormatException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        }
+    }
 }

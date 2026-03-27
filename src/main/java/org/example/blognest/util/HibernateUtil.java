@@ -54,6 +54,7 @@ public class HibernateUtil {
                 session.beginTransaction();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS two_factor_secret VARCHAR(255)").executeUpdate();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_two_factor_enabled BOOLEAN DEFAULT FALSE").executeUpdate();
+                session.createNativeQuery("ALTER TABLE messageoftheday ADD COLUMN IF NOT EXISTS likes INTEGER DEFAULT 0").executeUpdate();
                 session.getTransaction().commit();
             } catch (Exception e) {
                 // Silently skip if columns already exist or other DB issues

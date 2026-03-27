@@ -26,6 +26,7 @@ public class MessageOfTheDay {
     private List<String> takeaways;
 
     private LocalDateTime timestamp;
+    private int likes = 0;
 
     public MessageOfTheDay(String title, String mainMessage, List<String> takeaways, LocalDateTime timestamp) {
         this.title = title;
@@ -38,6 +39,8 @@ public class MessageOfTheDay {
     public String getMainMessage() { return mainMessage; }
     public List<String> getTakeaways() { return takeaways; }
     public LocalDateTime getTimestamp() { return timestamp; }
+    public int getLikes() { return likes; }
+    public void setLikes(int likes) { this.likes = likes; }
     
     public boolean isExpired() {
         if (timestamp == null) return true;

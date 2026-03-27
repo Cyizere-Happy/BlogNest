@@ -68,6 +68,7 @@ public class QuoteService {
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("Failed to update daily message", e);
         }
     }
 
@@ -78,6 +79,24 @@ public class QuoteService {
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+
+    public int likeMessage(Long id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            MessageOfTheDay msg = session.get(MessageOfTheDay.class, id);
+            int newLikes = 0;
+            if (msg != null) {
+                newLikes = msg.getLikes() + 1;
+                msg.setLikes(newLikes);
+                session.merge(msg);
+            }
+            transaction.commit();
+            return newLikes;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 }

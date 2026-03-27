@@ -639,6 +639,7 @@
                                             <tr>
                                                 <th>Day</th>
                                                 <th>Title</th>
+                                                <th>Likes</th>
                                                 <th>Takeaways</th>
                                                 <th>Content</th>
                                             </tr>
@@ -649,6 +650,7 @@
                                                     <td><span class="status-badge published">${msg.formattedDay}</span>
                                                     </td>
                                                     <td style="font-weight: 700;">${msg.title}</td>
+                                                    <td style="font-weight: 700; color: #f43f5e;">❤️ ${msg.likes}</td>
                                                     <td>
                                                         <c:forEach var="t" items="${msg.takeaways}">
                                                             <span class="status-badge"

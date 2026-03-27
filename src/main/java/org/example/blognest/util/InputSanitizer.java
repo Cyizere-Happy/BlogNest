@@ -33,6 +33,7 @@ public class InputSanitizer {
      */
     public static String sanitizeRich(String input) {
         if (input == null) return null;
-        return RICH_POLICY.sanitize(input);
+        String sanitized = RICH_POLICY.sanitize(input);
+        return org.apache.commons.text.StringEscapeUtils.unescapeHtml4(sanitized);
     }
 }

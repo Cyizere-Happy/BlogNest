@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "sanctuary_hope_update")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,7 +16,7 @@ public class HopeUpdate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private LocalDateTime timestamp;

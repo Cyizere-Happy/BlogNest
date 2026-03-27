@@ -29,13 +29,13 @@
     <main>
         <header class="journey-header reveal reveal-up">
             <span class="hope-badge">Private Sanctuary</span>
-            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">"${myHope.content}"</h1>
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">"${myHope.hopeContent}"</h1>
             <p style="color: var(--hope-accent); font-weight: 700; margin-bottom: 1.5rem;">Sealed on ${myHope.timestamp.toLocalDate()}</p>
             
             <div class="reaction-strip" style="opacity: 0.9; transform: scale(0.9);">
-                <div class="btn-react" style="cursor: default;">🤝 ${myHope.comfortCount} Comforts</div>
-                <div class="btn-react" style="cursor: default;">💪 ${myHope.supportCount} Strength</div>
-                <div class="btn-react" style="cursor: default;">🫂 ${myHope.hugCount} Hugs</div>
+                <div class="btn-react" style="cursor: default;"><small>Comfort</small> ${myHope.comfortCount}</div>
+                <div class="btn-react" style="cursor: default;"><small>Strength</small> ${myHope.supportCount}</div>
+                <div class="btn-react" style="cursor: default;"><small>Care</small> ${myHope.hugCount}</div>
             </div>
         </header>
 

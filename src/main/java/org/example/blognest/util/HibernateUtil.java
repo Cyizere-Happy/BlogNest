@@ -51,22 +51,19 @@ public class HibernateUtil {
                     .applySettings(configuration.getProperties()).build();
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
             
-            // Self-healing: Force missing 2FA columns if Hibernate update fails
+            // Self-healing: Ensure essential columns exist for Users and MoTD
             try (org.hibernate.Session session = sessionFactory.openSession()) {
                 session.beginTransaction();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS two_factor_secret VARCHAR(255)").executeUpdate();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_two_factor_enabled BOOLEAN DEFAULT FALSE").executeUpdate();
                 session.createNativeQuery("ALTER TABLE messageoftheday ADD COLUMN IF NOT EXISTS likes INTEGER DEFAULT 0").executeUpdate();
-                
-                // Hope Sanctuary Migrations
-                session.createNativeQuery("ALTER TABLE hope ADD COLUMN IF NOT EXISTS emotion VARCHAR(255) DEFAULT 'HOPEFUL'").executeUpdate();
-                session.createNativeQuery("ALTER TABLE hope ADD COLUMN IF NOT EXISTS support_count INTEGER DEFAULT 0").executeUpdate();
-                session.createNativeQuery("ALTER TABLE hope ADD COLUMN IF NOT EXISTS comfort_count INTEGER DEFAULT 0").executeUpdate();
-                session.createNativeQuery("ALTER TABLE hope ADD COLUMN IF NOT EXISTS hug_count INTEGER DEFAULT 0").executeUpdate();
-                
+                // 2. Retroactive Unescape for apostrophes and quotes
+                session.createNativeQuery("UPDATE sanctuary_hope SET content = REPLACE(content, '&#39;', '''') WHERE content LIKE '%&#39;%'").executeUpdate();
+                session.createNativeQuery("UPDATE sanctuary_hope SET content = REPLACE(content, '&quot;', '\"') WHERE content LIKE '%&quot;%'").executeUpdate();
+                session.createNativeQuery("UPDATE sanctuary_hope SET content = REPLACE(content, '&amp;', '&') WHERE content LIKE '%&amp;%'").executeUpdate();
+
                 session.getTransaction().commit();
             } catch (Exception e) {
-                // Silently skip if columns already exist or other DB issues
                 System.err.println("Database self-healing notice: " + e.getMessage());
             }
         }

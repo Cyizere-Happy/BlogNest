@@ -79,19 +79,19 @@
                 <div class="emotion-grid">
                     <label class="emotion-item">
                         <input type="radio" name="emotion" value="SAD">
-                        <span class="emotion-icon">😢<br><small>Sad</small></span>
+                        <span class="emotion-icon"><small>Sadness</small></span>
                     </label>
                     <label class="emotion-item">
                         <input type="radio" name="emotion" value="ANGRY">
-                        <span class="emotion-icon">🔥<br><small>Angry</small></span>
+                        <span class="emotion-icon"><small>Anger</small></span>
                     </label>
                     <label class="emotion-item">
                         <input type="radio" name="emotion" value="SCARED">
-                        <span class="emotion-icon">😨<br><small>Scared</small></span>
+                        <span class="emotion-icon"><small>Fear</small></span>
                     </label>
                     <label class="emotion-item">
                         <input type="radio" name="emotion" value="HOPEFUL" checked>
-                        <span class="emotion-icon">✨<br><small>Hopeful</small></span>
+                        <span class="emotion-icon"><small>Hopeful</small></span>
                     </label>
                 </div>
 
@@ -132,19 +132,19 @@
                         <input type="hidden" name="action" value="react">
                         <input type="hidden" name="type" value="comfort">
                         <input type="hidden" name="id" id="view-id-comfort">
-                        <button type="submit" class="btn-react">🤝 Comfort <span id="count-comfort"></span></button>
+                        <button type="submit" class="btn-react"><small>Comfort</small> <span id="count-comfort"></span></button>
                     </form>
                     <form action="hope" method="post" style="display: inline;">
                         <input type="hidden" name="action" value="react">
                         <input type="hidden" name="type" value="support">
                         <input type="hidden" name="id" id="view-id-support">
-                        <button type="submit" class="btn-react">💪 Strength <span id="count-support"></span></button>
+                        <button type="submit" class="btn-react"><small>Strength</small> <span id="count-support"></span></button>
                     </form>
                     <form action="hope" method="post" style="display: inline;">
                         <input type="hidden" name="action" value="react">
                         <input type="hidden" name="type" value="hug">
                         <input type="hidden" name="id" id="view-id-hug">
-                        <button type="submit" class="btn-react">🫂 Hug <span id="count-hug"></span></button>
+                        <button type="submit" class="btn-react"><small>Care</small> <span id="count-hug"></span></button>
                     </form>
                 </div>
             </div>

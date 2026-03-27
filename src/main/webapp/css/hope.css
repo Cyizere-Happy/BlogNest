@@ -85,7 +85,7 @@
 }
 
 .hope-card {
-    background: var(--hope-white);
+    background-color: var(--hope-white);
     padding: 1.5rem;
     border-radius: 16px;
     box-shadow: var(--hope-shadow);
@@ -190,12 +190,16 @@
 .emotion-icon {
     display: block;
     width: 100%;
-    padding: 15px 0;
+    padding: 20px 10px;
     border-radius: 12px;
     background: #f8fafc;
     border: 2px solid transparent;
-    transition: all 0.3s ease;
-    font-size: 1.2rem;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--hope-text-light);
 }
 
 .emotion-item input:checked + .emotion-icon {
@@ -251,14 +255,16 @@
 .btn-react {
     background: white;
     border: 1px solid #e2e8f0;
-    padding: 10px 20px;
+    padding: 10px 24px;
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    color: var(--hope-text-light);
 }
 
 .btn-react:hover {

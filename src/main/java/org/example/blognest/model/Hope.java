@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "sanctuary_hope")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,10 +19,10 @@ public class Hope {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
+    @Column(name = "emotion")
     private String emotion = "HOPEFUL";
 
     @Column(name = "secret_key")

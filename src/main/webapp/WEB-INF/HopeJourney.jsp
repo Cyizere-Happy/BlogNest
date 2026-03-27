@@ -29,8 +29,10 @@
     <main>
         <header class="journey-header reveal reveal-up">
             <span class="hope-badge">Private Sanctuary</span>
-            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">"${myHope.hopeContent}"</h1>
-            <p style="color: var(--hope-accent); font-weight: 700; margin-bottom: 1.5rem;">Sealed on ${myHope.timestamp.toLocalDate()}</p>
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">"${myHope.content}"</h1>
+            <p style="color: var(--hope-accent); font-weight: 700; margin-bottom: 1.5rem;">
+                Sealed on <c:choose><c:when test="${not empty myHope.timestamp}">${myHope.timestamp.toLocalDate()}</c:when><c:otherwise>today</c:otherwise></c:choose>
+            </p>
             
             <div class="reaction-strip" style="opacity: 0.9; transform: scale(0.9);">
                 <div class="btn-react" style="cursor: default;"><small>Comfort</small> ${myHope.comfortCount}</div>
@@ -47,18 +49,20 @@
                 </div>
                 <c:forEach var="update" items="${myHope.updates}">
                     <div class="timeline-event">
-                        <div class="event-date">${update.timestamp.toLocalDate()}</div>
+                        <div class="event-date">
+                            <c:choose><c:when test="${not empty update.timestamp}">${update.timestamp.toLocalDate()}</c:when><c:otherwise>Recent</c:otherwise></c:choose>
+                        </div>
                         <div class="event-content">${update.content}</div>
                     </div>
                 </c:forEach>
                 
                 <div style="margin-top: 60px; padding: 2.5rem; background: white; border-radius: 20px; box-shadow: var(--hope-shadow);">
-                    <h3 style="margin-bottom: 1.5rem; font-weight: 800;">Add a testimony</h3>
-                    <form action="hope" method="post">
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 800;">Share your testimony</h3>
+                    <form action="${pageContext.request.contextPath}/hope" method="post">
                         <input type="hidden" name="action" value="evolve">
                         <input type="hidden" name="hopeId" value="${myHope.id}">
                         <input type="hidden" name="revisitKey" value="${myHope.secretKey}">
-                        <textarea name="updateContent" class="form-control" placeholder="What has changed? How did you grow? Has your hope been answered?" 
+                        <textarea name="updateContent" class="form-control" placeholder="How has God moved in your life? What has changed since you first released this hope?" 
                                   style="min-height: 150px;" required></textarea>
                         <button type="submit" class="btn-release">Add to My Story</button>
                     </form>

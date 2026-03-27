@@ -31,7 +31,7 @@
         <div class="hope-hero reveal reveal-up">
             <span class="hope-badge">The Sanctuary</span>
             <h1>A living timeline of faith.</h1>
-            <p>Choose the feeling that carries your hope today.</p>
+            <p>Leave a timestamp in time of what you want God to do, then return to share your testimony.</p>
             
             <div class="hope-actions">
                 <button class="btn-release" onclick="toggleModal('release-modal')">Release a Hope</button>
@@ -73,7 +73,7 @@
         <div class="modal-content">
             <button style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem;" onclick="toggleModal('release-modal')">×</button>
             <h2>How do you feel?</h2>
-            <form action="hope" method="post">
+            <form action="${pageContext.request.contextPath}/hope" method="post">
                 <input type="hidden" name="action" value="release">
                 
                 <div class="emotion-grid">
@@ -95,7 +95,7 @@
                     </label>
                 </div>
 
-                <textarea name="content" class="form-control" style="min-height: 150px;" placeholder="Describe your hope or expectation..." required></textarea>
+                <textarea name="content" class="form-control" style="min-height: 150px;" placeholder="What are you trusting God for today? Or what is on your heart?" required></textarea>
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
                     <input type="checkbox" name="isPublic" id="isPublic" checked style="width: 20px; height: 20px;">
                     <label for="isPublic" style="font-size: 0.95rem; color: var(--hope-text-light);">Share anonymously to receive comfort</label>
@@ -111,7 +111,7 @@
             <button style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem;" onclick="toggleModal('revisit-modal')">×</button>
             <h2>Return to your journal.</h2>
             <p style="margin-bottom: 2rem;">Enter your 8-character secret key to unlock your dedicated journey page.</p>
-            <form action="hope/journey" method="get">
+            <form action="${pageContext.request.contextPath}/hope/journey" method="get">
                 <input type="text" name="key" class="form-control" placeholder="e.g. A1B2C3D4" style="text-align: center; letter-spacing: 5px; font-weight: 800; text-transform: uppercase;" required>
                 <button type="submit" class="btn-release">Unlock Journey</button>
             </form>
@@ -128,19 +128,19 @@
             <div id="reaction-prompt" style="margin-top: 2rem; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
                 <p style="font-size: 0.9rem; color: var(--hope-text-light); margin-bottom: 1rem;">Offer a moment of comfort:</p>
                 <div class="reaction-strip">
-                    <form action="hope" method="post" style="display: inline;">
+                    <form action="${pageContext.request.contextPath}/hope" method="post" style="display: inline;">
                         <input type="hidden" name="action" value="react">
                         <input type="hidden" name="type" value="comfort">
                         <input type="hidden" name="id" id="view-id-comfort">
                         <button type="submit" class="btn-react"><small>Comfort</small> <span id="count-comfort"></span></button>
                     </form>
-                    <form action="hope" method="post" style="display: inline;">
+                    <form action="${pageContext.request.contextPath}/hope" method="post" style="display: inline;">
                         <input type="hidden" name="action" value="react">
                         <input type="hidden" name="type" value="support">
                         <input type="hidden" name="id" id="view-id-support">
                         <button type="submit" class="btn-react"><small>Strength</small> <span id="count-support"></span></button>
                     </form>
-                    <form action="hope" method="post" style="display: inline;">
+                    <form action="${pageContext.request.contextPath}/hope" method="post" style="display: inline;">
                         <input type="hidden" name="action" value="react">
                         <input type="hidden" name="type" value="hug">
                         <input type="hidden" name="id" id="view-id-hug">

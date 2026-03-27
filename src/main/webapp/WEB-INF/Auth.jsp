@@ -69,7 +69,7 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding: 2.5rem 5%;
+                    padding: 1.5rem 5% 1rem;
                     width: 100%;
                     z-index: 10;
                 }
@@ -127,7 +127,7 @@
                 .header-tabs {
                     display: flex;
                     gap: 2rem;
-                    margin-bottom: 3rem;
+                    margin-bottom: 2rem;
                 }
 
                 .tab {
@@ -160,7 +160,7 @@
                 .auth-form {
                     display: flex;
                     flex-direction: column;
-                    gap: 1.2rem;
+                    gap: 1rem;
                 }
 
                 .auth-form.hidden {
@@ -182,7 +182,7 @@
 
                 .input-group input {
                     width: 100%;
-                    padding: 1rem 1.2rem 1rem 3.5rem;
+                    padding: 0.9rem 1.2rem 0.9rem 3.5rem;
                     border: 1px solid #edf2f7;
                     border-radius: 100px;
                     background: var(--white);
@@ -206,9 +206,38 @@
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    gap: 1.2rem;
-                    margin-top: 1rem;
+                    gap: 1rem;
+                    margin-top: 0.5rem;
                     width: 100%;
+                }
+
+                .google-auth-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 1.2rem;
+                    margin-bottom: 1.5rem;
+                    width: 100%;
+                }
+
+                .divider {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    gap: 1rem;
+                    color: var(--text-light);
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                    letter-spacing: 1px;
+                }
+
+                .divider::before,
+                .divider::after {
+                    content: "";
+                    flex: 1;
+                    height: 1px;
+                    background: var(--text-light);
+                    opacity: 0.2;
                 }
 
                 .forgot-link {
@@ -394,7 +423,7 @@
                             <line x1="12" y1="1" x2="12" y2="3"></line>
                             <line x1="12" y1="21" x2="12" y2="23"></line>
                             <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                             <line x1="1" y1="12" x2="3" y2="12"></line>
                             <line x1="21" y1="12" x2="23" y2="12"></line>
                             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
@@ -403,6 +432,16 @@
                     </button>
                 </div>
             </header>
+
+            <!-- Google ID Configuration (Outside hidden forms to ensure initialization) -->
+        <div id="g_id_onload"
+             data-client_id="${googleClientId}"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+            <script src="https://accounts.google.com/gsi/client" async defer></script>
             <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
             <main class="container">
@@ -420,6 +459,21 @@
 
 
                     <form id="login-form" class="auth-form reveal reveal-up delay-100" action="auth" method="post">
+                        <!-- Google Sign-In Button (Top) -->
+                        <div class="google-auth-container">
+                            <div class="g_id_signin"
+                                 data-type="standard"
+                                 data-shape="pill"
+                                 data-theme="outline"
+                                 data-text="signin_with"
+                                 data-size="large"
+                                 data-logo_alignment="left">
+                            </div>
+                            <div class="divider">
+                                <span>OR</span>
+                            </div>
+                        </div>
+
                         <div class="input-group">
                             <span class="icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -444,7 +498,7 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
-                        <div style="display: flex; justify-content: center;">
+                        <div style="display: flex; justify-content: center; margin-bottom: 0.5rem;">
                             <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
                         </div>
 
@@ -458,6 +512,20 @@
                     <!-- Signup Form -->
                     <form id="signup-form" class="auth-form hidden reveal reveal-up delay-100" action="auth"
                         method="post">
+                        <!-- Google Sign-In Button (Top) -->
+                        <div class="google-auth-container">
+                            <div class="g_id_signin"
+                                 data-type="standard"
+                                 data-shape="pill"
+                                 data-theme="outline"
+                                 data-text="signup_with"
+                                 data-size="large"
+                                 data-logo_alignment="left">
+                            </div>
+                            <div class="divider">
+                                <span>OR</span>
+                            </div>
+                        </div>
                         <div class="input-group">
                             <span class="icon">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -493,7 +561,7 @@
                             <input type="password" name="password" placeholder="Password" required>
                         </div>
 
-                        <div style="display: flex; justify-content: center;">
+                        <div style="display: flex; justify-content: center; margin-bottom: 0.5rem;">
                             <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
                         </div>
 
@@ -607,6 +675,27 @@
                     if (document.getElementById('2fa-form')) document.getElementById('2fa-form').classList.add('hidden');
                     tabs.forEach(t => t.classList.remove('active'));
                 </c:if>
+
+                function handleCredentialResponse(response) {
+                    const f = document.createElement("form");
+                    f.setAttribute("method", "POST");
+                    f.setAttribute("action", "auth");
+                    
+                    const a = document.createElement("input");
+                    a.setAttribute("type", "hidden");
+                    a.setAttribute("name", "action");
+                    a.setAttribute("value", "googleLogin");
+                    f.appendChild(a);
+                    
+                    const c = document.createElement("input");
+                    c.setAttribute("type", "hidden");
+                    c.setAttribute("name", "credential");
+                    c.setAttribute("value", response.credential);
+                    f.appendChild(c);
+                    
+                    document.body.appendChild(f);
+                    f.submit();
+                }
             </script>
             <jsp:include page="toast_component.jsp" />
         </body>

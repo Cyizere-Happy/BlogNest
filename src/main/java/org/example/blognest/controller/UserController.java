@@ -7,7 +7,9 @@ import org.example.blognest.model.User;
 import org.example.blognest.services.CaptchaService;
 import org.example.blognest.services.ConfigService;
 import org.example.blognest.services.MailService;
+import org.example.blognest.services.OAuthService;
 import org.example.blognest.services.TOTPService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import org.example.blognest.services.UserService;
 import org.example.blognest.util.InputSanitizer;
 import java.io.IOException;
@@ -19,6 +21,7 @@ public class UserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("recaptchaSiteKey", ConfigService.get("RECAPTCHA_SITE_KEY"));
+        req.setAttribute("googleClientId", ConfigService.get("GOOGLE_CLIENT_ID"));
         String action = req.getParameter("action");
         if ("logout".equals(action)) {
             HttpSession session = req.getSession();
@@ -55,6 +58,7 @@ public class UserController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("recaptchaSiteKey", ConfigService.get("RECAPTCHA_SITE_KEY"));
+        req.setAttribute("googleClientId", ConfigService.get("GOOGLE_CLIENT_ID"));
         String action = req.getParameter("action");
         
         if ("register".equals(action)) {
@@ -140,6 +144,30 @@ public class UserController extends HttpServlet {
                 req.setAttribute("toastTitle", "Invalid Code");
                 req.setAttribute("toastMessage", "Invalid or expired verification code.");
                 req.setAttribute("isVerifyEmail", true);
+                req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
+            }
+        } else if ("googleLogin".equals(action)) {
+            String idTokenString = req.getParameter("credential");
+            GoogleIdToken.Payload payload = OAuthService.verifyToken(idTokenString);
+            
+            if (payload != null) {
+                String email = payload.getEmail();
+                String name = (String) payload.get("name");
+                
+                User user = userService.getUserByEmail(email);
+                if (user == null) {
+                    // Create new user if they don't exist
+                    // Use a random password as they use Google (they won't need it to login via Google)
+                    user = new User(name, email, java.util.UUID.randomUUID().toString());
+                    userService.addUser(user);
+                }
+                
+                // Complete login
+                completeLogin(req, resp, user);
+            } else {
+                req.setAttribute("toastType", "error");
+                req.setAttribute("toastTitle", "Google Login Failed");
+                req.setAttribute("toastMessage", "Invalid Google ID Token.");
                 req.getRequestDispatcher("/WEB-INF/Auth.jsp").forward(req, resp);
             }
         } else if ("login".equals(action)) {

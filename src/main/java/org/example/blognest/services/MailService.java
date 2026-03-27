@@ -8,6 +8,14 @@ import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import java.io.File;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Collections;
 import java.util.Properties;
 
 public class MailService {
@@ -23,6 +31,9 @@ public class MailService {
         this.username = ConfigService.get("SMTP_USER");
         this.password = ConfigService.get("SMTP_PASS");
     }
+    
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final String resendApiKey = ConfigService.get("RESEND_API_KEY");
 
     public static synchronized MailService getInstance() {
         if (instance == null) {
@@ -60,6 +71,7 @@ public class MailService {
     }
 
     public void sendVerificationEmail(String to, String code, String mascotPath) {
+        String htmlContent = "";
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -80,7 +92,7 @@ public class MailService {
             message.setSubject("Verify your BlogNest Account");
 
             // Create the HTML content
-            String htmlContent = "<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;\">" +
+            htmlContent = "<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;\">" +
                     "  <div style=\"text-align: center; margin-bottom: 25px;\">" +
                     "    <img src=\"cid:mascot\" alt=\"BlogNest Mascot\" style=\"width: 100px; height: auto; margin-bottom: 10px;\">" +
                     "    <h1 style=\"color: #1e293b; margin: 0; font-size: 28px;\">Blog<span style=\"color: #3b82f6;\">Nest</span></h1>" +
@@ -119,6 +131,44 @@ public class MailService {
             Transport.send(message);
             System.out.println("Enhanced verification email sent correctly to " + to);
 
+        } catch (Exception e) {
+            System.err.println("SMTP failed, attempting HTTP fallback (Resend)...");
+            e.printStackTrace();
+            sendEmailViaResend(to, "Verify your BlogNest Account", htmlContent);
+        }
+    }
+
+    private void sendEmailViaResend(String to, String subject, String htmlContent) {
+        if (resendApiKey == null || resendApiKey.isEmpty()) {
+            System.err.println("Resend API Key not configured. Email could not be sent.");
+            return;
+        }
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> body = new HashMap<>();
+            body.put("from", "BlogNest <onboarding@resend.dev>");
+            body.put("to", Collections.singletonList(to));
+            body.put("subject", subject);
+            body.put("html", htmlContent);
+
+            String json = mapper.writeValueAsString(body);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.resend.com/emails"))
+                    .header("Authorization", "Bearer " + resendApiKey)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenAccept(response -> {
+                        if (response.statusCode() == 200 || response.statusCode() == 201) {
+                            System.out.println("Email sent successfully via Resend to " + to);
+                        } else {
+                            System.err.println("Failed to send email via Resend: " + response.body());
+                        }
+                    });
         } catch (Exception e) {
             e.printStackTrace();
         }

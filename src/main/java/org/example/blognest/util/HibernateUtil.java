@@ -57,6 +57,13 @@ public class HibernateUtil {
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS two_factor_secret VARCHAR(255)").executeUpdate();
                 session.createNativeQuery("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_two_factor_enabled BOOLEAN DEFAULT FALSE").executeUpdate();
                 session.createNativeQuery("ALTER TABLE messageoftheday ADD COLUMN IF NOT EXISTS likes INTEGER DEFAULT 0").executeUpdate();
+                
+                // Hope Sanctuary Migrations
+                session.createNativeQuery("ALTER TABLE hope ADD COLUMN IF NOT EXISTS emotion VARCHAR(255) DEFAULT 'HOPEFUL'").executeUpdate();
+                session.createNativeQuery("ALTER TABLE hope ADD COLUMN IF NOT EXISTS support_count INTEGER DEFAULT 0").executeUpdate();
+                session.createNativeQuery("ALTER TABLE hope ADD COLUMN IF NOT EXISTS comfort_count INTEGER DEFAULT 0").executeUpdate();
+                session.createNativeQuery("ALTER TABLE hope ADD COLUMN IF NOT EXISTS hug_count INTEGER DEFAULT 0").executeUpdate();
+                
                 session.getTransaction().commit();
             } catch (Exception e) {
                 // Silently skip if columns already exist or other DB issues

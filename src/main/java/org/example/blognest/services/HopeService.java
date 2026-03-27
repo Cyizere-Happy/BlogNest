@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +23,13 @@ public class HopeService {
         return instance;
     }
 
-    public String createHope(String content, boolean isPublic) {
-        Hope hope = new Hope(content, isPublic);
+    public Hope createHope(String content, String emotion, boolean isPublic) {
+        Hope hope = new Hope(content, emotion, isPublic);
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
             session.persist(hope);
             tx.commit();
-            return hope.getSecretKey();
+            return hope;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -64,6 +65,22 @@ public class HopeService {
             if (hope != null) {
                 HopeUpdate update = new HopeUpdate(updateContent);
                 hope.getUpdates().add(update);
+                session.merge(hope);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void react(Long hopeId, String type) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            Hope hope = session.get(Hope.class, hopeId);
+            if (hope != null) {
+                if ("support".equals(type)) hope.setSupportCount(hope.getSupportCount() + 1);
+                else if ("comfort".equals(type)) hope.setComfortCount(hope.getComfortCount() + 1);
+                else if ("hug".equals(type)) hope.setHugCount(hope.getHugCount() + 1);
                 session.merge(hope);
             }
             tx.commit();

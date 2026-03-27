@@ -55,15 +55,27 @@ public class HopeController extends HttpServlet {
 
         if ("release".equals(action)) {
             String content = InputSanitizer.sanitizeRich(req.getParameter("content"));
+            String emotion = req.getParameter("emotion");
             boolean isPublic = req.getParameter("isPublic") != null;
-            
+
             if (content != null && !content.isEmpty()) {
-                String key = hopeService.createHope(content, isPublic);
-                session.setAttribute("newHopeKey", key);
-                session.setAttribute("toastType", "success");
-                session.setAttribute("toastTitle", "Released");
-                session.setAttribute("toastMessage", "Your wish has been sealed. Key: " + key);
+                Hope hope = hopeService.createHope(content, emotion, isPublic);
+                if (hope != null) {
+                    session.setAttribute("newHopeKey", hope.getSecretKey());
+                    session.setAttribute("toastType", "success");
+                    session.setAttribute("toastTitle", "Hope Sealed");
+                    session.setAttribute("toastMessage", "Your moment has been preserved.");
+                }
             }
+            resp.sendRedirect(req.getContextPath() + "/hope");
+        } else if ("react".equals(action)) {
+            String idStr = req.getParameter("id");
+            String type = req.getParameter("type");
+            if (idStr != null && type != null) {
+                hopeService.react(Long.parseLong(idStr), type);
+            }
+            String referer = req.getHeader("Referer");
+            resp.sendRedirect(referer != null ? referer : req.getContextPath() + "/hope");
         } else if ("evolve".equals(action)) {
             String hopeIdStr = req.getParameter("hopeId");
             String updateContent = InputSanitizer.sanitizeRich(req.getParameter("updateContent"));
@@ -78,7 +90,5 @@ public class HopeController extends HttpServlet {
                 return;
             }
         }
-
-        resp.sendRedirect("hope");
     }
 }

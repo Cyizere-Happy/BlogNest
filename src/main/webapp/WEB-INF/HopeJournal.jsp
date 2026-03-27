@@ -59,6 +59,12 @@
                             <span>❤️ ${hope.comfortCount + hope.supportCount + hope.hugCount}</span>
                         </div>
                     </div>
+                    <!-- Hidden testimonies for JS to pick up -->
+                    <div class="hidden-updates" style="display: none;">
+                        <c:forEach var="update" items="${hope.updates}">
+                            <div class="update-item" data-date="${update.timestamp.toLocalDate()}">${fn:escapeXml(update.content)}</div>
+                        </c:forEach>
+                    </div>
                 </div>
             </c:forEach>
             
@@ -148,6 +154,12 @@
                     </form>
                 </div>
             </div>
+
+            <!-- Testimonies Section -->
+            <div id="modal-testimonies" style="margin-top: 2rem; border-top: 1px solid #f1f5f9; padding-top: 2rem; text-align: left; display: none;">
+                <h4 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--hope-accent); margin-bottom: 1.5rem;">The Testimony Timeline</h4>
+                <div id="testimonies-list"></div>
+            </div>
         </div>
     </div>
 
@@ -188,6 +200,24 @@
             document.getElementById('count-comfort').innerText = comfort;
             document.getElementById('count-support').innerText = support;
             document.getElementById('count-hug').innerText = hug;
+
+            // Handle Testimonies
+            const updatesDiv = card.querySelector('.hidden-updates');
+            const list = document.getElementById('testimonies-list');
+            const section = document.getElementById('modal-testimonies');
+            list.innerHTML = '';
+            
+            if (updatesDiv && updatesDiv.children.length > 0) {
+                Array.from(updatesDiv.children).forEach(upd => {
+                    const item = document.createElement('div');
+                    item.className = 'modal-update-item';
+                    item.innerHTML = `<span class="update-date">${upd.getAttribute('data-date')}</span><p>${upd.innerText}</p>`;
+                    list.appendChild(item);
+                });
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
             
             toggleModal('view-modal');
         }

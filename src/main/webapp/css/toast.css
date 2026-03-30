@@ -150,3 +150,18 @@
         opacity: 0;
     }
 }
+
+@media (max-width: 480px) {
+    .toast-container {
+        top: max(1rem, env(safe-area-inset-top, 0px));
+        right: max(0.75rem, env(safe-area-inset-right, 0px));
+        left: max(0.75rem, env(safe-area-inset-left, 0px));
+        align-items: stretch;
+    }
+
+    .toast {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}

@@ -31,6 +31,8 @@
 html {
     font-size: 16px;
     /* Normalize rem calculations across environments */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 * {
@@ -55,6 +57,8 @@ body {
     flex-direction: column;
     padding-top: 8rem;
     /* Space for the floating navbar */
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
     transition: background-color 0.5s ease, color 0.5s ease;
     overflow-x: hidden;
 }
@@ -62,13 +66,15 @@ body {
 /* Floating Pill Navbar */
 .floating-navbar {
     position: fixed;
-    top: 2rem;
+    top: max(1rem, env(safe-area-inset-top, 0px));
     left: 0;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
 }
 
 .pill-nav {
@@ -78,10 +84,13 @@ body {
     border-radius: 100px;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 0.8rem;
     /* Reduced gap */
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
+    max-width: min(100%, calc(100vw - 1rem));
 }
 
 .dark-theme .pill-nav {
@@ -402,9 +411,9 @@ body {
     }
 }
 
-/* Responsive Design */
+/* Auth layout only — avoid reversing Blog.jsp hero / intro order */
 @media (max-width: 992px) {
-    .container {
+    .container:has(.login-section) {
         flex-direction: column-reverse;
         gap: 3rem;
         text-align: center;
@@ -423,10 +432,6 @@ body {
         width: 100%;
         height: 100%;
         right: 0;
-    }
-
-    .nav-links {
-        display: none;
     }
 }
 
@@ -1323,4 +1328,125 @@ body {
 
 .delay-3000 {
     transition-delay: 3000ms;
+}
+
+/* —— Small screens: nav, landing, forms —— */
+@media (max-width: 992px) {
+    body {
+        padding-top: 6.5rem;
+    }
+
+    .floating-navbar {
+        top: max(0.5rem, env(safe-area-inset-top, 0px));
+    }
+
+    .pill-nav {
+        gap: 0.4rem 0.5rem;
+        padding: 0.35rem 0.55rem;
+        justify-content: center;
+    }
+
+    .nav-logo {
+        margin-left: 0.35rem;
+        font-size: 0.82rem;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.15rem;
+        row-gap: 0.25rem;
+    }
+
+    .nav-item {
+        font-size: 0.65rem;
+        padding: 0.35rem 0.55rem;
+        letter-spacing: 0.4px;
+    }
+
+    .nav-theme-toggle,
+    .nav-profile {
+        padding: 0.35rem;
+        flex-shrink: 0;
+    }
+
+    .intro-actions {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 100%;
+    }
+
+    .intro-actions .btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .hero-section {
+        margin-top: 2vh;
+        height: auto;
+        min-height: 52vh;
+    }
+
+    .intro-section {
+        padding: 60px 0 80px;
+    }
+
+    .post-editor-section {
+        padding: 1.25rem;
+    }
+
+    .editor-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .editor-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .admin-content-container {
+        padding: 1.25rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-top: 5.75rem;
+    }
+
+    .container {
+        padding: 0 4%;
+    }
+
+    .hero-subtitle {
+        font-size: 0.85rem;
+        position: relative;
+        bottom: auto;
+        left: auto;
+        margin-top: 0.75rem;
+        text-align: center;
+    }
+
+    .hero-year {
+        position: relative;
+        top: auto;
+        right: auto;
+        font-size: 2.25rem;
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+
+    .hero-text-container {
+        align-items: center;
+    }
+
+    .mascot-container {
+        position: relative;
+        bottom: auto;
+        margin-top: 1rem;
+    }
 }

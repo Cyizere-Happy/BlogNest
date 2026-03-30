@@ -235,3 +235,54 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 768px) {
+    .discovery-title {
+        font-size: clamp(2.25rem, 12vw, 3.5rem);
+    }
+
+    .discovery-header {
+        padding: 1rem 4% 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .marquee-section {
+        padding: 1rem 0 3rem;
+    }
+
+    .blog-body {
+        background: linear-gradient(180deg, #ffffff 0%, #e6fffa 55%, #e6fffa 100%);
+    }
+
+    .dark-theme.blog-body {
+        background: linear-gradient(180deg, #0a1628 0%, #1e3a5f 100%);
+    }
+
+    .about-section {
+        margin: 2rem 4% 3rem;
+        padding: 2.5rem 6%;
+    }
+
+    .about-content h2 {
+        font-size: 1.35rem;
+    }
+
+    .about-content p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .discovery-label {
+        font-size: 0.7rem;
+        letter-spacing: 1.5px;
+    }
+
+    .discovery-card {
+        width: 200px;
+    }
+
+    .card-visuals {
+        height: 240px;
+    }
+}

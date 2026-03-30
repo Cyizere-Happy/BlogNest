@@ -336,6 +336,29 @@
                     }
                 }
 
+                @media (max-width: 480px) {
+                    .navbar {
+                        padding: 1rem 4% 0.75rem;
+                    }
+
+                    .logo-text {
+                        font-size: 1.45rem;
+                    }
+
+                    .container {
+                        padding: 1rem 4% 2rem;
+                        gap: 2rem;
+                    }
+
+                    .tab {
+                        font-size: 1.35rem;
+                    }
+
+                    .input-group input {
+                        font-size: 16px;
+                    }
+                }
+
                 /* Reveal Animations */
                 .reveal {
                     opacity: 0;

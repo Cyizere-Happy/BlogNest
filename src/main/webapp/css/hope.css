@@ -428,4 +428,73 @@
     }
     .hope-path-svg { display: none; }
     .hope-hero h1 { font-size: 2.5rem; }
+    .hope-hero {
+        padding: 2.5rem 5% 1.5rem;
+    }
+    .hope-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .hope-actions .btn-release,
+    .hope-actions .btn {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+    .emotion-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .reaction-strip {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .btn-react {
+        flex: 1 1 auto;
+        min-width: 0;
+        justify-content: center;
+    }
+    .key-master-popup {
+        padding: 1.75rem;
+        margin: 0 1rem;
+        max-width: calc(100vw - 2rem);
+    }
+    .key-display {
+        font-size: 1.35rem;
+        letter-spacing: 2px;
+        flex-wrap: wrap;
+        word-break: break-all;
+    }
+    .modal-content {
+        padding: 1.5rem;
+        max-height: min(90vh, 100%);
+        overflow-y: auto;
+    }
+    .modal-content h2 {
+        font-size: 1.35rem;
+    }
+    .hope-timeline {
+        padding-left: 24px;
+        margin-left: 0;
+    }
+    .timeline-event::before {
+        left: -33px;
+    }
+
+    .journey-header {
+        padding: 2.5rem 5%;
+    }
+
+    .journey-container {
+        padding: 2rem 5%;
+    }
+}
+
+@media (max-width: 380px) {
+    .emotion-grid {
+        grid-template-columns: 1fr;
+    }
+    .hope-hero h1 {
+        font-size: 2rem;
+    }
 }

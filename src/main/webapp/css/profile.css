@@ -227,3 +227,17 @@
         transform: scale(1) translateY(0);
     }
 }
+
+@media (max-width: 480px) {
+    .profile-modal-overlay {
+        padding: max(0.75rem, env(safe-area-inset-top, 0px)) max(0.5rem, env(safe-area-inset-right, 0px))
+            max(0.75rem, env(safe-area-inset-bottom, 0px)) max(0.5rem, env(safe-area-inset-left, 0px));
+        align-items: flex-end;
+    }
+
+    .profile-modal-content {
+        width: 100%;
+        max-height: 92vh;
+        border-radius: 16px 16px 0 0;
+    }
+}

@@ -180,3 +180,23 @@
     background: white;
     box-shadow: inset 0 -2px 0 var(--chat-primary);
 }
+
+@media (max-width: 480px) {
+    .chat-widget-container {
+        bottom: max(16px, env(safe-area-inset-bottom, 0px));
+        right: max(12px, env(safe-area-inset-right, 0px));
+    }
+
+    .chat-bubble-toggle {
+        width: 52px;
+        height: 52px;
+    }
+
+    .chat-window {
+        width: min(calc(100vw - 24px), 360px);
+        height: min(70vh, 500px);
+        right: 0;
+        bottom: 72px;
+        border-radius: 18px;
+    }
+}
